@@ -9,7 +9,8 @@ define(['routes',
 	function(config, dependencyResolverFor, i18n) {
 		var tutorFinder = angular.module('tutorFinder', [
 			'ngRoute',
-			'pascalprecht.translate'
+			'pascalprecht.translate'/* ,
+			'ui.bootstrap' */
 		]);
 		tutorFinder
 			.config(

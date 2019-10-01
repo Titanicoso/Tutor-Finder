@@ -1,9 +1,18 @@
-$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-// bower:scss
-@import 'bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
-// endbower
+$icon-font-path: "../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 
+//@import './modules/variables.scss';
+$theme-colors: (
+  "primary": #e09f11, //esto no hace nada y todavia no se por que
+);
+$body-bg: rgb(230, 230, 230);
+
+@import '../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
+/* // bower:scss
+ @import 'bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
+ // endbower
+ */
 @import 'partials/home';
+
 
 .browsehappy {
   margin: 0.2em 0;
@@ -14,7 +23,6 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 /* Space out content a bit */
 body {
-  padding-top: 20px;
   padding-bottom: 20px;
 }
 
@@ -68,6 +76,15 @@ body {
   p + h4 {
     margin-top: 28px;
   }
+}
+
+.home-logo {
+  width: 80px;
+}
+
+.test-border {
+  border-style: solid;
+//  border-width: 10px;
 }
 
 /* Responsive: Portrait tablets and up */

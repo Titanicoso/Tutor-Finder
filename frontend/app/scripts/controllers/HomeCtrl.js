@@ -2,6 +2,6 @@
 define(['tutorFinder'], function(tutorFinder) {
 
 	tutorFinder.controller('HomeCtrl', function($scope) {
-		$scope.homePageText = 'This is your homepage';
+		$scope.msg = 'This is your homepage';
 	});
 });
