@@ -1,9 +1,11 @@
 $icon-font-path: "../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 
-//@import './modules/variables.scss';
+@import '../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
+@import './modules/variables.scss';
+
 $theme-colors: (
-  "primary": #e09f11, //esto no hace nada y todavia no se por que
-);
+  "primary": #e09f11,  //esto no hace nada y todavia no se por que
+) !default;
 $body-bg: rgb(230, 230, 230);
 
 @import '../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
@@ -84,7 +86,7 @@ body {
 
 .test-border {
   border-style: solid;
-//  border-width: 10px;
+  border-width: 1px;
 }
 
 /* Responsive: Portrait tablets and up */
