@@ -1,5 +1,7 @@
 <div class="container">
-    <c:url value="/login" var="loginUrl" />
+    
+    <div class="alert alert-success" role="alert">{{ msg }}</div>
+    
     <!-- Default form login -->
     <h2>Login</h2>
     <form name="form" ng-submit="vm.login()" role="form">
@@ -19,30 +21,4 @@
             <a ng-href="#!/register" class="btn btn-link">Register</a>
         </div>
     </form>
-    <!-- Default form login -->
-    <!-- <form class="form" action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded">
-        <div>
-            <label class="label" for="username"><spring:message code="user.username"/></label>
-            <input class="input-request" id="username" name="username" type="text"/>
-        </div>
-        <div>
-            <label class="label" for="password"><spring:message code="user.password"/></label>
-            <input class="input-request" id="password" name="password" type="password"/>
-        </div>
-        <div>
-            <label class="label" ><input name="rememberme" type="checkbox"/><spring:message code="remember_me"/></label>
-        </div>
-        <div class="button-container">
-            <a href="<c:url value="/register" />" class="button-2"><spring:message code="register"/></a>
-            <input class="button-2" type="submit" value="<spring:message code="login"/>" />
-        </div>
-        <div class="forgot-password-link">
-            <a href="<c:url value="/forgotPassword" />"><spring:message code="forgotPassword"/></a>
-        </div>
-        <c:if test="${param.error != null}">
-            <p class="login-error">
-                <spring:message code="login.error"/>
-            </p>
-        </c:if>
-    </form> -->
 </div>

@@ -13,3 +13,4 @@ frontend/\.tmp/
 frontend/package-lock\.json
 
 frontend/.vscode/*
+.vscode/*
