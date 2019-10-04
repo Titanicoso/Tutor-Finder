@@ -1,0 +1,72 @@
+.schedule-text {
+    grid-area: schedule-text;
+    align-self: center;
+    margin-left: 25px;
+    font-size: 24px;
+}
+
+.schedule {
+    display: grid;
+    grid-area: schedule;
+    margin: 25px;
+    padding: 10px;
+    border: 2px solid #dedede;
+    justify-self: center;
+    border-radius: 5px;
+    background-color: #dedede;
+    grid-template-areas:
+            "schedule-titulo schedule-boton"
+            "schedule-desc   schedule-desc"
+            "schedule-tabla  schedule-tabla";
+}
+
+.schedule h2 {
+    grid-area: schedule-titulo;
+}
+
+.schedule input {
+    max-width: 200px;
+    justify-self: end;
+    text-align: center;
+    grid-area: schedule-boton;
+}
+
+.schedule p {
+    grid-area: schedule-desc;
+}
+
+.schedule table {
+    overflow-x: auto;
+    grid-area: schedule-tabla;
+}
+
+.schedule th {
+    padding: 10px;
+}
+
+.schedule td>div {
+    height: 20px;
+}
+
+.time-content {
+    grid-area: time-content;
+    display: grid;
+    margin: 25px;
+    grid-template-rows: 50px auto;
+    grid-template-areas:
+            "buttons"
+            "schedule"
+;
+}
+
+.time-content-other {
+    display: grid;
+    grid-template-areas:
+            "schedule";
+    grid-template-rows: auto;
+}
+
+.hour {
+    width: 105px;
+    padding: 10px;
+}

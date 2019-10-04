@@ -1,0 +1,45 @@
+
+.class-profile {
+    grid-area: class;
+    margin: 25px;
+    margin-bottom: 30px;
+}
+
+.contact {
+    grid-area: contact;
+    padding: 10px;
+    border: 2px solid #dedede;
+    border-radius: 5px;
+    background-color: #dedede;
+    justify-self: center;
+    height: fit-content;
+    width: 92%;
+    margin:0 25px;
+}
+
+.comment {
+    grid-area: coment-form;
+    padding: 10px;
+    border: 2px solid #dedede;
+    border-radius: 5px;
+    background-color: #dedede;
+    justify-self: center;
+    height: fit-content;
+    width: 92%;
+    margin: 25px;
+}
+
+.comments {
+    grid-area: coments;
+    margin: 25px;
+    padding: 10px;
+    border: 2px solid #dedede;
+    border-radius: 5px;
+    background-color: #dedede;
+}
+
+
+.comment input:disabled {
+    background-color: #F7AA88;
+    cursor: default;
+}
