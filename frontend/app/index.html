@@ -33,28 +33,56 @@
   <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
   <div class="">
-    <div class="navbar bg-primary">
-      <a ng-href="#!/home"><img class="home-logo" alt="Tu Teoria" ng-src='/images/logo_invert.jpg'/></a>
-      <ul class="nav nav-pills pull-right">
-        <li class="active"><a ng-href="#!/">Home</a></li>
-        <li><a ng-href="#!/login">Login</a></li>
-      </ul>
-    </div>
 
-    Cookie test value: '{{ myCookieVal }}'
+    <div class="navbar">
+      <a href="" class="logo-box">
+          <img alt="Tu Teoria" class="logo" src="" />
+      </a>
+  
+      <div class="search-bar">
+          <form role="search" action="" class="search-bar">
+              <input class="search-input" type="search" name="search" placeholder=""/>
+              <div class="search-dropdown">
+                  <select class="select-search-type" name="type">
+                      <option value="" selected disabled><spring:message code="search.category" /> </option>
+                      <option value="professor"><spring:message code="professor" /> </option>
+                      <option value="course"><spring:message code="course.title" /> </option>
+                      <option value="area"><spring:message code="area" /></option>
+                  </select>
+              </div>
+              <button type="submit" class="search-button">
+                  <img class="search-img" src="" />
+              </button>
+          </form>
+      </div>
+  
+      <div class="navbar-buttons" id="navbar-buttons">
+                  <div class="navbar-button dropdown relative" id="dropdown">
+                      <a class="dropdown-button" id="dropdown-button"></a>
+                      <div class="dropdown-content" id="dropdown-content">
+                                  <a href="" class="navbar-button">profile.title</a>
+                                  <a href="" class="navbar-button">classes.title</a>
+                                  <!--<a>Modificar</a>-->
+                                  <a href="" class="navbar-button">register.professor</a>
+                          <a href="" class="navbar-button">reservations.title</a>
+                          <a href="" class="navbar-button">conversations.title</a>
+                          <a href="" class="navbar-button">user.logout</a>
+                      </div>
+                  </div>
+                  <a href="" class="navbar-button">register</a>
+                  <a href="" class="navbar-button">login</a>
+      </div>
+  </div>
+  
+
     <br>
     <input type="text" ng-model="cookieVal">
-    <button ng-click="setCookie(cookieVal)">Update cookie test value</button>
 
     <div class="container test-border">
       <div class="alert alert-success" role="alert">{{ msg }}</div>
 
       <!-- Particular view that is active (home by default) -->
       <div class="test-border" ng-view=""></div>
-    </div>
-
-    <div class="footer">
-      <p class="pull-right"><span class="glyphicons glyphicons-heart" aria-hidden="true"></span>from the ITBA team</p>
     </div>
   </div>
 

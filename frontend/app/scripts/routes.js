@@ -16,6 +16,7 @@ define([], function() {
             '/register': {
                 templateUrl: '/views/register.html',
                 controller: 'RegisterCtrl',
+                controllerAs: 'vm'
             }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */
