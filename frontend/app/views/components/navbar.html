@@ -1,12 +1,12 @@
 
 
 <div class="navbar">
-    <a href="<c:url value="/" />" class="logo-box">
-        <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
+    <a ng-href="/" class="logo-box">
+        <img alt="Tu Teoria" class="logo" ng-src="/resources/images/logo_invert.jpg" />
     </a>
 
     <div class="search-bar">
-        <form role="search" action="<c:url value="/searchResults" />" class="search-bar">
+        <form role="search" action="<c:url value="/searchResults" class="search-bar">
             <input class="search-input" type="search" name="search" placeholder="<spring:message code="search"/>"/>
             <div class="search-dropdown">
                 <select class="select-search-type" name="type">
@@ -17,7 +17,7 @@
                 </select>
             </div>
             <button type="submit" class="search-button">
-                <img class="search-img" src="<c:url value="/resources/images/search.png" />" />
+                <img class="search-img" ng-src="/resources/images/search.png" />
             </button>
         </form>
     </div>
@@ -30,23 +30,23 @@
                     <div class="dropdown-content" id="dropdown-content">
                         <c:choose>
                             <c:when test="${currentUserIsProfessor == true}">
-                                <a href="<c:url value="/Profile" />" class="navbar-button"><spring:message code="profile.title"/></a>
-                                <a href="<c:url value="/classRequests?page=1" />" class="navbar-button"><spring:message code="classes.title"/></a>
+                                <a ng-href="/Profile" class="navbar-button"><spring:message code="profile.title"/></a>
+                                <a ng-href="/classRequests?page=1" class="navbar-button"><spring:message code="classes.title"/></a>
                                 <!--<a>Modificar</a>-->
                             </c:when>
                             <c:otherwise>
-                                <a href="<c:url value="/registerAsProfessor" />" class="navbar-button"><spring:message code="register.professor"/></a>
+                                <a ng-href="/registerAsProfessor" class="navbar-button"><spring:message code="register.professor"/></a>
                             </c:otherwise>
                         </c:choose>
-                        <a href="<c:url value="/reservations?page=1" />" class="navbar-button"><spring:message code="reservations.title"/></a>
-                        <a href="<c:url value="/Conversations" />" class="navbar-button"><spring:message code="conversations.title"/></a>
-                        <a href="<c:url value="/logout" />" class="navbar-button"><spring:message code="user.logout"/></a>
+                        <a ng-href="/reservations?page=1" class="navbar-button"><spring:message code="reservations.title"/></a>
+                        <a ng-href="/Conversations" class="navbar-button"><spring:message code="conversations.title"/></a>
+                        <a ng-href="/logout" class="navbar-button"><spring:message code="user.logout"/></a>
                     </div>
                 </div>
             </c:when>
             <c:otherwise>
-                <a href="<c:url value="/register" />" class="navbar-button"><spring:message code="register"/></a>
-                <a href="<c:url value="/login" />" class="navbar-button"><spring:message code="login"/></a>
+                <a ng-href="/register" class="navbar-button"><spring:message code="register"/></a>
+                <a ng-href="/login" class="navbar-button"><spring:message code="login"/></a>
             </c:otherwise>
         </c:choose>
     </div>

@@ -7,18 +7,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
-    <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
+    <link ng-href="/resources/css/fonts.css" rel='stylesheet'>
+    <link rel="stylesheet" ng-href="/resources/css/stylesheet.css">
+    <link rel="stylesheet" ng-href="/resources/css/navbar.css">
+    <link rel="stylesheet" ng-href="/resources/css/responsive.css">
     <title>Tu Teoria | <spring:message code="login" /> </title>
 </head>
 
 <body class="register">
 
 <div class="navbar">
-    <a href="<c:url value="/" />" class="logo-box">
-        <img alt="Tu Teoria" class="logo" src="<c:url value="/resources/images/logo_invert.jpg" />" />
+    <a ng-href="/" class="logo-box">
+        <img alt="Tu Teoria" class="logo" ng-src="/resources/images/logo_invert.jpg" />
     </a>
 </div>
 
@@ -40,11 +40,11 @@
                 <label class="label" ><input name="rememberme" type="checkbox"/><spring:message code="remember_me"/></label>
             </div>
             <div class="button-container">
-                <a href="<c:url value="/register" />" class="button-2"><spring:message code="register"/></a>
+                <a ng-href="/register" class="button-2"><spring:message code="register"/></a>
                 <input class="button-2" type="submit" value="<spring:message code="login"/>" />
             </div>
             <div class="forgot-password-link">
-                <a href="<c:url value="/forgotPassword" />"><spring:message code="forgotPassword"/></a>
+                <a ng-href="/forgotPassword"><spring:message code="forgotPassword"/></a>
             </div>
             <c:if test="${param.error != null}">
                 <p class="login-error">

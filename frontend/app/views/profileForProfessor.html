@@ -8,18 +8,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
-    <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
-    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/schedule.css" />">
+    <link ng-href="/resources/css/fonts.css" rel='stylesheet'>
+    <link ng-href="/resources/css/stylesheet.css" rel="stylesheet">
+    <link rel="stylesheet" ng-href="/resources/css/navbar.css">
+    <link rel="stylesheet" ng-href="/resources/css/search.css">
+    <link rel="stylesheet" ng-href="/resources/css/responsive.css">
+    <link rel="stylesheet" ng-href="/resources/css/schedule.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <title>Tu Teoria | <spring:message code="profile.title" /> </title>
-    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
-    <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
-    <script src="<c:url value="/resources/js/fromToRestriction.js" />"></script>
-    <script src="<c:url value="/resources/js/scheduleModal.js" />"></script>
+    <script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
+    <script ng-src="/resources/js/dropdownClick.js"></script>
+    <script ng-src="/resources/js/fromToRestriction.js"></script>
+    <script ng-src="/resources/js/scheduleModal.js"></script>
 </head>
 
 <body class="staticProfile">
@@ -27,19 +27,19 @@
 <%@ include file="navbar.jsp" %>
 
 <div class="content">
-    <%--<img class="profile-picture" alt="Profile picture" src="<c:url value="/resources/images/logo_invert.jpg" />" />--%>
+    <%--<img class="profile-picture" alt="Profile picture" ng-src="/resources/images/logo_invert.jpg" />--%>
     <div class="profile-profesor">
-        <img class="profile-picture" alt="Profile picture" src="<c:url value="data:image/jpeg;base64,${professor.picture}" />"/>
+        <img class="profile-picture" alt="Profile picture" ng-src="data:image/jpeg;base64,${professor.picture}"/>
         <div class="profile-name row">
             <h1 class="m-0-10 fit-content"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
-            <a class="fas fa-pen center profile-course-button" title="<spring:message code="course.modify"/>" href="<c:url value="/editProfessorProfile" />"></a>
+            <a class="fas fa-pen center profile-course-button" title="<spring:message code="course.modify"/>" ng-href="/editProfessorProfile"></a>
         </div>
         <h3 class="profile-description m-0-10"><c:out value="${professor.description}" escapeXml="true"/></h3>
     </div>
     <div class="class-content">
         <div class="row r-center">
             <div class="add-class button-2 relative">
-                <a class="class-button" href="<c:url value="/createCourse" />"></a>
+                <a class="class-button" ng-href="/createCourse"></a>
                 <spring:message code="addClass"/>
             </div>
             <div id="delete-class-modal-button" class="add-class button-2 relative">
@@ -75,12 +75,12 @@
             </div>
             <c:forEach var="course" items="${courses.results}">
                 <div class="class">
-                    <a class="class-button" href="<c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
+                    <a class="class-button" ng-href="/Course/?professor=${course.professor.id}&subject=${course.subject.id}"></a>
                     <h3 class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></h3>
                     <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
                     <div class="edit-class">
-                        <a title="<spring:message code="course.modify"/>" class="fas fa-pen center profile-course-button" href="<c:url value="/modifyCourse/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
-                        <a title="<spring:message code="files"/>" class="fas fa-file center profile-course-button" href="<c:url value="/courseFiles?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
+                        <a title="<spring:message code="course.modify"/>" class="fas fa-pen center profile-course-button" ng-href="/modifyCourse/?professor=${course.professor.id}&subject=${course.subject.id}"></a>
+                        <a title="<spring:message code="files"/>" class="fas fa-file center profile-course-button" ng-href="/courseFiles?professor=${course.professor.id}&subject=${course.subject.id}"></a>
                     </div>
                 </div>
             </c:forEach>

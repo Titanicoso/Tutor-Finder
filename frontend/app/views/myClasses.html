@@ -7,16 +7,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
-    <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
-    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
-    <link href="<c:url value="/resources/css/select2.min.css" />" rel="stylesheet" />
-    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
-    <script src="<c:url value="/resources/js/select2.min.js" />"></script>
-    <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
-    <script src="<c:url value="/resources/js/searchForm.js" />"></script>
+    <link ng-href="/resources/css/fonts.css" rel='stylesheet'>
+    <link ng-href="/resources/css/stylesheet.css" rel="stylesheet">
+    <link rel="stylesheet" ng-href="/resources/css/navbar.css">
+    <link rel="stylesheet" ng-href="/resources/css/responsive.css">
+    <link rel="stylesheet" ng-href="/resources/css/search.css">
+    <link ng-href="/resources/css/select2.min.css" rel="stylesheet" />
+    <script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
+    <script ng-src="/resources/js/select2.min.js"></script>
+    <script ng-src="/resources/js/dropdownClick.js"></script>
+    <script ng-src="/resources/js/searchForm.js"></script>
 
     <title>Tu Teoria | <spring:message code="classRequests.title" /> </title>
 </head>
@@ -38,17 +38,17 @@
                     <c:choose>
                         <c:when test="${reservation.status == 2}">
                             <div class="button-2 relative" type="submit">
-                                <a class="class-button" href="<c:url value="/approveClassRequest?classReservation=${reservation.classRequestId}" />"></a>
+                                <a class="class-button" ng-href="/approveClassRequest?classReservation=${reservation.classRequestId}"></a>
                                 <spring:message code="Approve"/>
                             </div>
                             <div class="button-2 relative" type="submit">
-                                <a class="class-button" href="<c:url value="/denyClassRequest?classReservation=${reservation.classRequestId}" />"></a>
+                                <a class="class-button" ng-href="/denyClassRequest?classReservation=${reservation.classRequestId}"></a>
                                 <spring:message code="Deny"/>
                             </div>
                         </c:when>
                         <c:otherwise>
                             <div class="button-2 relative" type="submit">
-                                <a class="class-button" href="<c:url value="/courseFiles?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}" />"></a>
+                                <a class="class-button" ng-href="/courseFiles?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}"></a>
                                 <spring:message code="files"/>
                             </div>
                         </c:otherwise>

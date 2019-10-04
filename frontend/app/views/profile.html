@@ -7,14 +7,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
-    <link href="<c:url value="/resources/css/stylesheet.css" />" rel="stylesheet">
-    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/schedule.css" />">
-    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
-    <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
+    <link ng-href="/resources/css/fonts.css" rel='stylesheet'>
+    <link ng-href="/resources/css/stylesheet.css" rel="stylesheet">
+    <link rel="stylesheet" ng-href="/resources/css/navbar.css">
+    <link rel="stylesheet" ng-href="/resources/css/search.css">
+    <link rel="stylesheet" ng-href="/resources/css/responsive.css">
+    <link rel="stylesheet" ng-href="/resources/css/schedule.css">
+    <script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
+    <script ng-src="/resources/js/dropdownClick.js"></script>
     <title>Tu Teoria | <spring:message code="profile.title" /></title>
 </head>
 
@@ -23,9 +23,9 @@
 <%@ include file="navbar.jsp" %>
 
 <div class="content">
-    <%--<img class="profile-picture" alt="Profile picture" src="<c:url value="/resources/images/logo_invert.jpg" />" />--%>
+    <%--<img class="profile-picture" alt="Profile picture" ng-src="/resources/images/logo_invert.jpg" />--%>
     <divc class="profile-profesor">
-        <img class="profile-picture" alt="Profile picture" src="<c:url value="data:image/jpeg;base64,${professor.picture}" />"/>
+        <img class="profile-picture" alt="Profile picture" ng-src="data:image/jpeg;base64,${professor.picture}"/>
         <h1 class="profile-name m-0-10"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
         <h3 class="profile-description m-0-10"><c:out value="${professor.description}" escapeXml="true"/></h3>
     </divc>
@@ -40,7 +40,7 @@
             </c:if>
             <c:forEach var="course" items="${courses.results}">
                 <div class="class">
-                    <a class="class-button" href="<c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}" />"></a>
+                    <a class="class-button" ng-href="/Course/?professor=${course.professor.id}&subject=${course.subject.id}"></a>
                     <h3 class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></h3>
                     <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
                 </div>

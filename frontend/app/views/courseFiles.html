@@ -7,18 +7,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
+    <link ng-href="/resources/css/fonts.css" rel='stylesheet'>
 
-    <link rel="stylesheet" href="<c:url value="/resources/css/course.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/conversations.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/schedule.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
-    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
-    <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
-    <script src="<c:url value="/resources/js/courseFile.js" />"></script>
+    <link rel="stylesheet" ng-href="/resources/css/course.css">
+    <link rel="stylesheet" ng-href="/resources/css/navbar.css">
+    <link rel="stylesheet" ng-href="/resources/css/search.css">
+    <link rel="stylesheet" ng-href="/resources/css/responsive.css">
+    <link rel="stylesheet" ng-href="/resources/css/conversations.css">
+    <link rel="stylesheet" ng-href="/resources/css/schedule.css">
+    <link rel="stylesheet" ng-href="/resources/css/stylesheet.css">
+    <script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
+    <script ng-src="/resources/js/dropdownClick.js"></script>
+    <script ng-src="/resources/js/courseFile.js"></script>
     <title>Tu Teoria | <spring:message code="course.files.title"/></title>
 </head>
 
@@ -35,12 +35,12 @@
             <div class="reservation-course-result">
                 <div class="search-result-img">
                     <div class="button-2 relative" type="submit">
-                        <a class="class-button" href="<c:url value="/downloadFile?courseFile=${file.id}" />"></a>
+                        <a class="class-button" ng-href="/downloadFile?courseFile=${file.id}"></a>
                         <spring:message code="download"/>
                     </div>
                     <c:if test="${param.professor == currentUser.id}">
                         <div class="button-2 relative" type="submit">
-                            <a class="class-button" href="<c:url value="/deleteFile?courseFile=${file.id}&professor=${param.professor}&subject=${param.subject}" />"></a>
+                            <a class="class-button" ng-href="/deleteFile?courseFile=${file.id}&professor=${param.professor}&subject=${param.subject}"></a>
                             <spring:message code="delete"/>
                         </div>
                     </c:if>

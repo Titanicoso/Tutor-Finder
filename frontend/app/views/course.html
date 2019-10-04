@@ -8,16 +8,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="<c:url value = "/resources/css/fonts.css" />" rel='stylesheet'>
-    <link rel="stylesheet" href="<c:url value="/resources/css/stylesheet.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/course.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/search.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/responsive.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/conversations.css" />">
-    <link rel="stylesheet" href="<c:url value="/resources/css/schedule.css" />">
-    <script src="<c:url value="/resources/js/jquery-3.3.1.min.js" />"></script>
-    <script src="<c:url value="/resources/js/dropdownClick.js" />"></script>
+    <link ng-href="/resources/css/fonts.css" rel='stylesheet'>
+    <link rel="stylesheet" ng-href="/resources/css/stylesheet.css">
+    <link rel="stylesheet" ng-href="/resources/css/course.css">
+    <link rel="stylesheet" ng-href="/resources/css/navbar.css">
+    <link rel="stylesheet" ng-href="/resources/css/search.css">
+    <link rel="stylesheet" ng-href="/resources/css/responsive.css">
+    <link rel="stylesheet" ng-href="/resources/css/conversations.css">
+    <link rel="stylesheet" ng-href="/resources/css/schedule.css">
+    <script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
+    <script ng-src="/resources/js/dropdownClick.js"></script>
     <title>Tu Teoria | <spring:message code="course.title"/></title>
 </head>
 
@@ -30,8 +30,8 @@
         <h1 class="title center-text"><c:out value="${course.subject.area.name} - ${course.subject.name}" escapeXml="true"/></h1>
         <h4 class="description center-text"><c:out value="${course.description}" escapeXml="true"/></h4>
         <div class="profile round-background">
-            <a class="profile-picture" href="<c:url value="/Professor/${course.professor.id}"/>">
-                <img class="profile-picture" alt="Profile picture" src="<c:url value="data:image/jpeg;base64,${course.professor.picture}" />"/>
+            <a class="profile-picture" ng-href="/Professor/${course.professor.id}"/>">
+                <img class="profile-picture" alt="Profile picture" ng-src="data:image/jpeg;base64,${course.professor.picture}"/>
             </a>
             <div class="profile-name"><c:out value="${course.professor.name}" escapeXml="true"/> <c:out value = "${course.professor.lastname}" escapeXml="true"/></div>
             <div class="profile-description"><c:out value="${course.professor.description}" escapeXml="true"/></div>
