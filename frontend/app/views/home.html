@@ -1,1 +1,67 @@
+<script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
+<script ng-src="/resources/js/dropdownClick.js"></script>
+<script ng-src="/resources/js/searchForm.js"></script>
+<title>{{ 'APP_NAME' | translate }} | {{ index.title | translate }}</title> <!-- TODO: add index.title in languages -->
+
+<!-- <body class="staticHome"> -->
+
+<!-- TODO: implement in navbar 
+    <div class="navbar">
+    <a ng-href="/" class="logo-box">
+        <img alt="Tu Teoria" class="logo" ng-src="images/logo_invert.jpg" />
+    </a>
+
+    <div class="search-bar"></div>
+
+    <div class="navbar-buttons">
+        <c:choose>
+            <c:when test="${currentUser != null}">
+                <div class="navbar-button dropdown" id="dropdown">
+                    <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
+                    <div class="dropdown-content" id="dropdown-content">
+                        <c:choose>
+                            <c:when test="${currentUserIsProfessor == true}">
+                                <a ng-href="/Profile" class="navbar-button"><spring:message code="profile.title"/></a>
+                                <a ng-href="/classRequests?page=1" class="navbar-button"><spring:message code="classes.title"/></a>
+                            </c:when>
+                            <c:otherwise>
+                                <a ng-href="/registerAsProfessor" class="navbar-button"><spring:message code="register.professor"/></a>
+                            </c:otherwise>
+                        </c:choose>
+                        <a ng-href="/reservations?page=1" class="navbar-button"><spring:message code="reservations.title"/></a>
+                        <a ng-href="/Conversations" class="navbar-button"><spring:message code="conversations.title"/></a>
+                        <a ng-href="/logout" class="navbar-button"><spring:message code="user.logout"/></a>
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <a ng-href="/register" class="navbar-button"><spring:message code="register"/></a>
+                <a ng-href="/login" class="navbar-button"><spring:message code="login"/></a>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</div> 
+-->
+
 <div class="alert alert-success" role="alert">{{ msg }}</div>
+
+<form:form modelAttribute="SearchForm" action="'views/searchResults.html'" method="post">
+<div class="search-box">
+    <img alt="Tu Teoria" class="search-logo" ng-src="images/logo.png" />
+    <div class="search-bar">
+        <spring:message code="search" var="searchPlaceholder"/>
+        <form:input class="search-input" type="search" path="search" placeholder="${searchPlaceholder}"/>
+        <div class="search-dropdown">
+            <form:select cssClass="select-searchbar-type" path="type" name="type">
+                <form:option value="" selected="true" disabled="true"><spring:message code="search.category" /> </form:option>
+                <form:option value="professor"><spring:message code="professor" /> </form:option>
+                <form:option value="course"><spring:message code="course.title" /> </form:option>
+                <form:option value="area"><spring:message code="area" /></form:option>
+            </form:select>
+        </div>
+        <button type="submit" class="search-button">
+            <img class="search-img" ng-src="images/search.png"/>" />
+        </button>
+    </div>
+</div>
+</form:form>

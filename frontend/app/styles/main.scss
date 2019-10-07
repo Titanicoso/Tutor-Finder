@@ -1,6 +1,5 @@
 $icon-font-path: "../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 
-@import '../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
 @import './modules/variables.scss';
 
 $theme-colors: (
@@ -10,11 +9,10 @@ $body-bg: rgb(230, 230, 230);
 
 @import '../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
 /* // bower:scss
- @import 'bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
+ @import 'bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
  // endbower
  */
 @import 'partials/home';
-
 
 .browsehappy {
   margin: 0.2em 0;
@@ -80,15 +78,6 @@ body {
   }
 }
 
-.home-logo {
-  width: 50px;
-}
-
-.test-border {
-  border-style: solid;
-  border-width: 1px;
-}
-
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {
@@ -112,4 +101,20 @@ body {
   }
 }
 
+/* End auto-generated content */
 
+
+
+
+.home-logo {
+  width: 50px;
+}
+
+.test-border {
+  border-style: solid;
+  border-width: 1px;
+}
+
+.content {
+  grid-area: content;
+}

@@ -2,13 +2,12 @@
 
 define(['tutorFinder'], function(tutorFinder) {
 	
-	tutorFinder.controller('IndexCtrl', function($scope, $cookies) {
+	tutorFinder.controller('IndexCtrl', function($scope) {
 		$scope.msg = 'This is the index view';
-		$scope.logoInvertPath = '/images/logo_invert.jpg';
+		$scope.search_input = '';
 
-		$scope.myCookieVal = $cookies.get('cookie');
-		$scope.setCookie = function(val) {
-			$cookies.put('cookie', val);
+		$scope.reminder = function() {
+			alert('TODO: search function');
 		};
 	});
 });

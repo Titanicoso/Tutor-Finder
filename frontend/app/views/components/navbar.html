@@ -1,53 +1,66 @@
+<link rel="stylesheet" type="text/css" href="styles/partials/navbar.css">
 
+<a ng-href="/" class="logo-box">
+    <img alt="Tu Teoria" class="logo" src="images/logo_invert.jpg" />
+</a>
 
-<div class="navbar">
-    <a ng-href="/" class="logo-box">
-        <img alt="Tu Teoria" class="logo" ng-src="/resources/images/logo_invert.jpg" />
-    </a>
+<div class="search-bar">
+    <form role="search" class="search-bar">
+        <input class="search-input" type="search" ng-model="search_input" placeholder="{{ 'SEARCH_PROMPT' | translate }}" />
+        <div class="search-dropdown">
+            <select class="select-search-type" name="type">
+                <option value="" selected disabled>{{ 'SEARCH_CATEGORY' | translate }}</option>
+                <option value="professor">{{ 'PROFESSOR' | translate }}</option>
+                <option value="course">{{ 'COURSE' | translate }}</option>
+                <option value="area">{{ 'AREA' | translate }}</option>
+            </select>
+        </div>
+        <button type="submit" class="search-button" ng-click="reminder()">
+            <img class="search-img" ng-src="images/search.png" />
+        </button>
+    </form>
+</div>
 
-    <div class="search-bar">
-        <form role="search" action="<c:url value="/searchResults" class="search-bar">
-            <input class="search-input" type="search" name="search" placeholder="<spring:message code="search"/>"/>
-            <div class="search-dropdown">
-                <select class="select-search-type" name="type">
-                    <option value="" selected disabled><spring:message code="search.category" /> </option>
-                    <option value="professor"><spring:message code="professor" /> </option>
-                    <option value="course"><spring:message code="course.title" /> </option>
-                    <option value="area"><spring:message code="area" /></option>
-                </select>
-            </div>
-            <button type="submit" class="search-button">
-                <img class="search-img" ng-src="/resources/images/search.png" />
-            </button>
-        </form>
-    </div>
-
-    <div class="navbar-buttons" id="navbar-buttons">
-        <c:choose>
-            <c:when test="${currentUser != null}">
-                <div class="navbar-button dropdown relative" id="dropdown">
-                    <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
-                    <div class="dropdown-content" id="dropdown-content">
-                        <c:choose>
-                            <c:when test="${currentUserIsProfessor == true}">
-                                <a ng-href="/Profile" class="navbar-button"><spring:message code="profile.title"/></a>
-                                <a ng-href="/classRequests?page=1" class="navbar-button"><spring:message code="classes.title"/></a>
-                                <!--<a>Modificar</a>-->
-                            </c:when>
-                            <c:otherwise>
-                                <a ng-href="/registerAsProfessor" class="navbar-button"><spring:message code="register.professor"/></a>
-                            </c:otherwise>
-                        </c:choose>
-                        <a ng-href="/reservations?page=1" class="navbar-button"><spring:message code="reservations.title"/></a>
-                        <a ng-href="/Conversations" class="navbar-button"><spring:message code="conversations.title"/></a>
-                        <a ng-href="/logout" class="navbar-button"><spring:message code="user.logout"/></a>
-                    </div>
+<div class="navbar-buttons pull-right" id="navbar-buttons">
+    <a ng-href="/register" class="navbar-button">
+        {{ REGISTER | translate }}</a>
+    <a ng-href="/login" class="navbar-button">
+        {{ LOGIN | translate }}</a>
+    <!-- TODO: implement buttons change for logged users -->
+    <!-- 
+    <c:choose>
+        <c:when test="${currentUser != null}">
+            <div class="navbar-button dropdown relative" id="dropdown">
+                <a class="dropdown-button" id="dropdown-button">
+                    <c:out value="${currentUser.name} " escapeXml="true" /></a>
+                <div class="dropdown-content" id="dropdown-content">
+                    <c:choose>
+                        <c:when test="${currentUserIsProfessor == true}">
+                            <a ng-href="/Profile" class="navbar-button">
+                                <spring:message code="profile.title" /></a>
+                            <a ng-href="/classRequests?page=1" class="navbar-button">
+                                <spring:message code="classes.title" /></a>
+                        </c:when>
+                        <c:otherwise>
+                            <a ng-href="/registerAsProfessor" class="navbar-button">
+                                <spring:message code="register.professor" /></a>
+                        </c:otherwise>
+                    </c:choose>
+                    <a ng-href="/reservations?page=1" class="navbar-button">
+                        <spring:message code="reservations.title" /></a>
+                    <a ng-href="/Conversations" class="navbar-button">
+                        <spring:message code="conversations.title" /></a>
+                    <a ng-href="/logout" class="navbar-button">
+                        <spring:message code="user.logout" /></a>
                 </div>
-            </c:when>
-            <c:otherwise>
-                <a ng-href="/register" class="navbar-button"><spring:message code="register"/></a>
-                <a ng-href="/login" class="navbar-button"><spring:message code="login"/></a>
-            </c:otherwise>
-        </c:choose>
-    </div>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <a ng-href="/register" class="navbar-button">
+                <spring:message code="register" /></a>
+            <a ng-href="/login" class="navbar-button">
+                <spring:message code="login" /></a>
+        </c:otherwise>
+    </c:choose> 
+    -->
 </div>

@@ -1,21 +1,9 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
-
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link ng-href="/resources/css/fonts.css" rel="stylesheet">
-    <link ng-href="/resources/css/errors.css" rel="stylesheet">
-    <link rel="stylesheet" ng-href="/resources/css/navbar.css">
-    <link rel="stylesheet" ng-href="/resources/css/responsive.css">
-    <title>Tu Teoria | <spring:message code="error.title"/></title>
-</head>
+<link rel="stylesheet" ng-href="/resources/css/errors.css">
+<title>{{ 'APP_NAME' | translate }} | {{ error.title | translate }}</title> <!-- TODO: add error.title in languages -->
 
 <div class="navbar">
     <a ng-href="/" class="logo-box">
-        <img alt="Tu Teoria" class="logo" ng-src="/resources/images/logo_invert.jpg" />
+        <img alt="Tu Teoria" class="logo" ng-src="images/logo_invert.jpg" />
     </a>
 </div>
 
@@ -28,4 +16,3 @@
         <spring:message code="${errorMessageCode}"/>
     </div>
 </div>
-</html>

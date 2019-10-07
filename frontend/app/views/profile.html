@@ -1,84 +1,58 @@
-<%@ taglib prefix="c" uri ="http://java.sun.com/jstl/core_rt" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<link rel="stylesheet" ng-href="/resources/css/schedule.css">
+<script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
+<script ng-src="/resources/js/dropdownClick.js"></script>
+<title>{{ 'APP_NAME' | translate }} | {{ profile.title | translate }}</title> <!-- TODO: add profile.title in languages -->
 
+<!-- <body class="staticProfile"> -->
 
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link ng-href="/resources/css/fonts.css" rel='stylesheet'>
-    <link ng-href="/resources/css/stylesheet.css" rel="stylesheet">
-    <link rel="stylesheet" ng-href="/resources/css/navbar.css">
-    <link rel="stylesheet" ng-href="/resources/css/search.css">
-    <link rel="stylesheet" ng-href="/resources/css/responsive.css">
-    <link rel="stylesheet" ng-href="/resources/css/schedule.css">
-    <script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
-    <script ng-src="/resources/js/dropdownClick.js"></script>
-    <title>Tu Teoria | <spring:message code="profile.title" /></title>
-</head>
-
-<body class="staticProfile">
-
-<%@ include file="navbar.jsp" %>
-
-<div class="content">
-    <%--<img class="profile-picture" alt="Profile picture" ng-src="/resources/images/logo_invert.jpg" />--%>
-    <divc class="profile-profesor">
-        <img class="profile-picture" alt="Profile picture" ng-src="data:image/jpeg;base64,${professor.picture}"/>
-        <h1 class="profile-name m-0-10"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
-        <h3 class="profile-description m-0-10"><c:out value="${professor.description}" escapeXml="true"/></h3>
-    </divc>
-    <div class="class-content">
-        <div class="classes">
-            <div>
-                <h2><spring:message code="clasesTitle"/></h2>
-                <p><spring:message code="clasesDescription" /></p>
+<divc class="profile-profesor">
+    <img class="profile-picture" alt="Profile picture" ng-src="data:image/jpeg;base64,${professor.picture}"/>
+    <h1 class="profile-name m-0-10"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
+    <h3 class="profile-description m-0-10"><c:out value="${professor.description}" escapeXml="true"/></h3>
+</divc>
+<div class="class-content">
+    <div class="classes">
+        <div>
+            <h2><spring:message code="clasesTitle"/></h2>
+            <p><spring:message code="clasesDescription" /></p>
+        </div>
+        <c:if test="${courses.results.size() == 0}">
+            <h4><spring:message code="no.courses"/></h4>
+        </c:if>
+        <c:forEach var="course" items="${courses.results}">
+            <div class="class">
+                <a class="class-button" ng-href="/Course/?professor=${course.professor.id}&subject=${course.subject.id}"></a>
+                <h3 class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></h3>
+                <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
             </div>
-            <c:if test="${courses.results.size() == 0}">
-                <h4><spring:message code="no.courses"/></h4>
+        </c:forEach>
+
+    <div class="paged-result-buttons">
+        <c:url value="/Professor/${professor.id}?page=${page - 1}" var="previous"/>
+        <c:url value="/Professor/${professor.id}?page=${page + 1}" var="next"/>
+
+            <c:if test="${page > 1}">
+                <a href="${previous}" class="previous round">&#8249;</a>
             </c:if>
-            <c:forEach var="course" items="${courses.results}">
-                <div class="class">
-                    <a class="class-button" ng-href="/Course/?professor=${course.professor.id}&subject=${course.subject.id}"></a>
-                    <h3 class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></h3>
-                    <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
-                </div>
-            </c:forEach>
-
-        <div class="paged-result-buttons">
-            <c:url value="/Professor/${professor.id}?page=${page - 1}" var="previous"/>
-            <c:url value="/Professor/${professor.id}?page=${page + 1}" var="next"/>
-
-                <c:if test="${page > 1}">
-                    <a href="${previous}" class="previous round">&#8249;</a>
-                </c:if>
-                <c:if test="${courses.hasNext}">
-                    <a href="${next}" class="next round">&#8250;</a>
-                </c:if>
-            </div>
+            <c:if test="${courses.hasNext}">
+                <a href="${next}" class="next round">&#8250;</a>
+            </c:if>
         </div>
     </div>
+</div>
 
-    <div class="time-content time-content-other">
-        <div class="schedule">
-            <h2><spring:message code="schedule.title"/></h2>
-            <p><spring:message code="schedule.description" /></p>
-            <c:choose>
-                <c:when test="${schedule.monday.isEmpty() && schedule.tuesday.isEmpty() && schedule.wednesday.isEmpty() && schedule.thursday.isEmpty() && schedule.friday.isEmpty() && schedule.saturday.isEmpty() && schedule.sunday.isEmpty()}">
-                    <h4><spring:message code="schedule.empty"/></h4>
-                </c:when>
-                <c:otherwise>
-                    <%@ include file="schedule.jsp"%>
-                </c:otherwise>
-            </c:choose>
-        </div>
+<div class="time-content time-content-other">
+    <div class="schedule">
+        <h2><spring:message code="schedule.title"/></h2>
+        <p><spring:message code="schedule.description" /></p>
+        <c:choose>
+            <c:when test="${schedule.monday.isEmpty() && schedule.tuesday.isEmpty() && schedule.wednesday.isEmpty() && schedule.thursday.isEmpty() && schedule.friday.isEmpty() && schedule.saturday.isEmpty() && schedule.sunday.isEmpty()}">
+                <h4><spring:message code="schedule.empty"/></h4>
+            </c:when>
+            <c:otherwise>
+                    <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include>
+
+            </c:otherwise>
+        </c:choose>
     </div>
-
-
 </div>
-<div class="footer">
-</div>
-</body>
-
-</html>
