@@ -47,6 +47,9 @@ define([
 
 				$translateProvider.translations('preferredLanguage', i18n);
 				$translateProvider.preferredLanguage('preferredLanguage');
+
+				$locationProvider.hashPrefix('');
+				$locationProvider.html5Mode(true);
 		}]);
 		return tutorFinder;
 	}

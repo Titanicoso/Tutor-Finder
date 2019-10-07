@@ -27,6 +27,7 @@
   <link rel="stylesheet" type="text/css" href="styles/select2.min.css">
   <!-- endbuild -->
 
+  <base href="/">
 </head>
 
 <body ng-controller="IndexCtrl">
@@ -36,11 +37,9 @@
   <![endif]-->
   <ng-include class="navbar" src="'views/components/navbar.html'"/></ng-include>
 
-  <div class="container content test-border">
-    <div class="alert alert-success" role="alert">{{ msg }}</div>
-
+  <div class="container content">
     <!-- Particular view that is active (home by default) -->
-    <div class="test-border" ng-view=""></div>
+    <div class="" ng-view=""></div>
   </div>
 
   
