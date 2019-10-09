@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>{{ 'APP_NAME' | translate }}</title>
+  <title ng-bind="title"></title>
   <meta name="description" content="">
 
   <script src="/bower_components/angular/angular.min.js"></script>
@@ -27,7 +27,6 @@
   <link rel="stylesheet" type="text/css" href="styles/select2.min.css">
   <!-- endbuild -->
 
-  <base href="/">
 </head>
 
 <body ng-controller="IndexCtrl">

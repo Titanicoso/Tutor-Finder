@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="styles/partials/navbar.css">
 
-<a ng-href="/" class="logo-box">
+<a ng-href="/#!/" class="logo-box">
     <img alt="Tu Teoria" class="logo" src="images/logo_invert.jpg" />
 </a>
 
@@ -22,10 +22,10 @@
 </div>
 
 <div class="navbar-buttons pull-right" id="navbar-buttons">
-    <a ng-href="/register" class="navbar-button">
-        {{ REGISTER | translate }}</a>
-    <a ng-href="/login" class="navbar-button">
-        {{ LOGIN | translate }}</a>
+    <a ng-href="/#!/register" class="navbar-button">
+        {{ 'REGISTER' | translate }}</a>
+    <a ng-href="/#!/login" class="navbar-button">
+        {{ 'LOGIN' | translate }}</a>
     <!-- TODO: implement buttons change for logged users -->
     <!-- 
     <c:choose>
@@ -36,29 +36,29 @@
                 <div class="dropdown-content" id="dropdown-content">
                     <c:choose>
                         <c:when test="${currentUserIsProfessor == true}">
-                            <a ng-href="/Profile" class="navbar-button">
+                            <a ng-href="/#!/Profile" class="navbar-button">
                                 <spring:message code="profile.title" /></a>
-                            <a ng-href="/classRequests?page=1" class="navbar-button">
+                            <a ng-href="/#!/classRequests?page=1" class="navbar-button">
                                 <spring:message code="classes.title" /></a>
                         </c:when>
                         <c:otherwise>
-                            <a ng-href="/registerAsProfessor" class="navbar-button">
+                            <a ng-href="/#!/registerAsProfessor" class="navbar-button">
                                 <spring:message code="register.professor" /></a>
                         </c:otherwise>
                     </c:choose>
-                    <a ng-href="/reservations?page=1" class="navbar-button">
+                    <a ng-href="/#!/reservations?page=1" class="navbar-button">
                         <spring:message code="reservations.title" /></a>
-                    <a ng-href="/Conversations" class="navbar-button">
+                    <a ng-href="/#!/Conversations" class="navbar-button">
                         <spring:message code="conversations.title" /></a>
-                    <a ng-href="/logout" class="navbar-button">
+                    <a ng-href="/#!/logout" class="navbar-button">
                         <spring:message code="user.logout" /></a>
                 </div>
             </div>
         </c:when>
         <c:otherwise>
-            <a ng-href="/register" class="navbar-button">
+            <a ng-href="/#!/register" class="navbar-button">
                 <spring:message code="register" /></a>
-            <a ng-href="/login" class="navbar-button">
+            <a ng-href="/#!/login" class="navbar-button">
                 <spring:message code="login" /></a>
         </c:otherwise>
     </c:choose> 

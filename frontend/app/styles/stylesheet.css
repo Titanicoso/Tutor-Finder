@@ -39,7 +39,7 @@ body {
 }
 
 .staticHome, .register, .staticProfile, .staticClass, .reservations {
-      grid-template-areas: "navbar navbar  navbar" "...... ....... ......" "...... content ......" "...... ....... ......";
+      grid-template-areas: "navbar navbar  navbar" "...... ....... ......" "...... content ......";
 }
 
 .reservations {

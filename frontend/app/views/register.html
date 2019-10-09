@@ -1,5 +1,3 @@
-<title>{{ 'APP_NAME' | translate }} | {{ register | translate }}</title> <!-- TODO: add register in languages -->
-
 <!-- <body class="register"> -->
 
 <!-- TODO: implement navbar
@@ -16,10 +14,9 @@
 </div> 
 -->
 
-<div class="button-container">
     <h2 class="label"><spring:message code="register" /> </h2>
 </div>
-<c:url value="/register" var="postPath"/>
+<c:url value="/#!/register" var="postPath"/>
 <form:form cssClass="form register-form" modelAttribute="registerForm" action="${postPath}" method="post">
     <div class="inputs">
     <div>

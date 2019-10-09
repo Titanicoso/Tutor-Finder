@@ -15,6 +15,8 @@ define([], function() {
 		COURSE: 'Course',
 		AREA: 'Area',
 		LOGIN: 'Login',
-		REGISTER: 'Register'
+		REGISTER: 'Register',
+
+		HOME: 'Home'
 	};
 });

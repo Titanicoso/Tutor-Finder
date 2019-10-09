@@ -3,9 +3,10 @@ define(['tutorFinder'], function(tutorFinder) {
 
 	tutorFinder.controller('RegisterCtrl', RegisterCtrl);
 	
-	RegisterCtrl.$inject = ['$scope', '$location'];
-	function RegisterCtrl($scope, $location) {
-        var vm = this;
-        vm.msg = 'This is the login view';
+	RegisterCtrl.$inject = ['$scope', '$rootScope'];
+	function RegisterCtrl($scope, $rootScope) {
+		$scope.msg = 'This is the register view';
+		
+		$rootScope.appendTitle('REGISTER');
 	};
 });

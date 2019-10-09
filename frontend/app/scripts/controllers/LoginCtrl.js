@@ -3,9 +3,10 @@ define(['tutorFinder'], function(tutorFinder) {
 
 	tutorFinder.controller('LoginCtrl', LoginCtrl);
 	
-	LoginCtrl.$inject = ['$scope', '$location'];
-	function LoginCtrl($scope, $location) {
-        var vm = this;
-        vm.msg = 'This is the login view';
+	LoginCtrl.$inject = ['$scope', '$rootScope'];
+	function LoginCtrl($scope, $rootScope) {
+		$scope.msg = 'This is the login view';
+
+		$rootScope.appendTitle('LOGIN');		
 	};
 });
