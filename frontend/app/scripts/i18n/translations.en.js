@@ -17,6 +17,7 @@ define([], function() {
 		LOGIN: 'Login',
 		REGISTER: 'Register',
 
-		HOME: 'Home'
+		HOME: 'Home',
+		PROFILE: 'Profile'
 	};
 });
