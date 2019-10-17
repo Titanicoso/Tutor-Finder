@@ -49,8 +49,12 @@ public class Area {
         return name;
     }
 
-    public String getImage() {
+    public String getBase64Image() {
         return new String(Base64.getEncoder().encode(image));
+    }
+
+    public byte[] getImage() {
+        return image;
     }
 
     @Override

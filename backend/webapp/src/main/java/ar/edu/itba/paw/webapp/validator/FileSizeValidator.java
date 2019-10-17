@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.webapp.validator;
 
-import org.springframework.web.multipart.MultipartFile;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class FileSizeValidator implements ConstraintValidator<FileSize, MultipartFile> {
+public class FileSizeValidator implements ConstraintValidator<FileSize, FormDataBodyPart> {
 
    private Long min;
 
@@ -16,9 +16,9 @@ public class FileSizeValidator implements ConstraintValidator<FileSize, Multipar
       max = constraint.max();
    }
 
-   public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
+   public boolean isValid(FormDataBodyPart file, ConstraintValidatorContext context) {
       if(file == null)
          return false;
-      return file.getSize() <= max && file.getSize() >= min;
+      return file.getContentDisposition().getSize() <= max && file.getContentDisposition().getSize() >= min;
    }
 }

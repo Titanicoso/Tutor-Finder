@@ -6,75 +6,129 @@ import ar.edu.itba.paw.interfaces.service.ConversationService;
 import ar.edu.itba.paw.models.Conversation;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.webapp.form.MessageForm;
+import ar.edu.itba.paw.webapp.dto.ConversationDTO;
+import ar.edu.itba.paw.webapp.dto.MessageDTO;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
+import ar.edu.itba.paw.webapp.dto.form.MessageForm;
+import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
-
-@Controller
-public class ConversationController extends BaseController{
+//TODO: Chequear badRequest en resultados paginados
+@Path("conversations")
+@Component
+public class ConversationController extends BaseController {
 
     @Autowired
     private ConversationService conversationService;
 
-    @RequestMapping("/Conversations")
-    public ModelAndView conversations(@ModelAttribute("currentUser") final User loggedUser,
-                                      @RequestParam(value="page", defaultValue="1") final int page) {
-        final ModelAndView mav = new ModelAndView("conversations");
+    @Autowired
+    private PaginationLinkBuilder linkBuilder;
+
+    @Context
+    private UriInfo uriInfo;
+
+    @GET
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response conversations(@DefaultValue("1") @QueryParam("page") final int page) {
+
+        final User loggedUser = loggedUser();
         final PagedResults<Conversation> conversations = conversationService.findByUserId(loggedUser.getId(), page);
 
         if(conversations == null) {
-            redirectToErrorPage("pageOutOfBounds");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
-        mav.addObject("conversations", conversations);
-        mav.addObject("page", page);
-        return mav;
+        final Link[] links = linkBuilder.buildLinks(uriInfo, conversations);
+
+        final GenericEntity<List<ConversationDTO>> entity = new GenericEntity<List<ConversationDTO>>(
+                conversations.getResults().stream()
+                        .map(conversation -> new ConversationDTO(conversation, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
     }
 
-    @RequestMapping("/Conversation")
-    public ModelAndView conversation(@RequestParam(value="id", required=true) final long id,
-                                     @ModelAttribute("messageForm") final MessageForm form,
-                                     @ModelAttribute("currentUser") final User loggedUser)
-            throws UserNotInConversationException {
+    @GET
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Path("/{id}")
+    public Response conversation(@PathParam("id") final long id) {
 
-        final ModelAndView mav = new ModelAndView("conversation");
-        final Conversation conversation = conversationService.findById(id, loggedUser.getId());
+        final User loggedUser = loggedUser();
+        final Conversation conversation;
+        try {
+            conversation = conversationService.findById(id, loggedUser.getId());
+        } catch (UserNotInConversationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
 
         if(conversation == null) {
-            redirectToErrorPage("nonExistentConversation");
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.ok(new ConversationDTO(conversation, uriInfo.getBaseUri())).build();
+    }
+
+    @GET
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Path("/{id}/messages")
+    public Response messages(@PathParam("id") final long id) {
+
+        final User loggedUser = loggedUser();
+        final Conversation conversation;
+        try {
+            conversation = conversationService.findById(id, loggedUser.getId());
+        } catch (UserNotInConversationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(conversation == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
         final Conversation ret = conversationService.initializeMessages(conversation);
 
-        mav.addObject("conversation", ret);
-        form.setConversationId(id);
-        return mav;
+        final GenericEntity<List<MessageDTO>> entity = new GenericEntity<List<MessageDTO>>(
+                ret.getMessages().stream()
+                        .map(message -> new MessageDTO(message, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).build();
     }
 
-    @RequestMapping(value = "/Conversation", method = RequestMethod.POST)
-    public ModelAndView sendMessage(@Valid @ModelAttribute("messageForm") final MessageForm form,
-                                     final BindingResult errors,
-                                     @ModelAttribute("currentUser") final User loggedUser)
-            throws UserNotInConversationException, NonexistentConversationException {
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Path("/{id}")
+    public Response sendMessage(@PathParam("id") final long id, @Valid final MessageForm message) {
 
-        if(errors.hasErrors()) {
-            return conversation(form.getConversationId(), form, loggedUser);
+        final User loggedUser = loggedUser();
+
+        final boolean sent;
+        try {
+            sent = conversationService.sendMessage(loggedUser.getId(), id, message.getMessage());
+        } catch (UserNotInConversationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (NonexistentConversationException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        final boolean sent = conversationService.sendMessage(loggedUser.getId(), form.getConversationId(), form.getBody());
-        if(sent) {
-            return redirectWithNoExposedModalAttributes("/Conversation?id=" + form.getConversationId());
+        if(!sent) {
+            final ValidationErrorDTO error = getErrors("SendMessageError");
+            return Response.status(Response.Status.BAD_GATEWAY).entity(error).build();
         }
-        errors.rejectValue("body", "SendMessageError");
-        return conversation(form.getConversationId(), form, loggedUser);
+
+        final URI uri = uriInfo.getAbsolutePathBuilder().path("/messages").build();
+        return Response.created(uri).build();
     }
 
 }

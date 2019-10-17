@@ -41,8 +41,12 @@ public class Professor extends User{
         return description;
     }
 
-    public String getPicture() {
+    public String getBase64Picture() {
         return new String(Base64.getEncoder().encode(picture));
+    }
+
+    public byte[] getPicture() {
+        return picture;
     }
 
     public List<Course> getCourses() {

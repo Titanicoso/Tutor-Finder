@@ -3,40 +3,41 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.webapp.form.ClassReservationForm;
-import ar.edu.itba.paw.webapp.form.CommentForm;
-import ar.edu.itba.paw.webapp.form.CourseForm;
-import ar.edu.itba.paw.webapp.form.MessageForm;
-import org.joda.time.Instant;
+import ar.edu.itba.paw.webapp.dto.CommentDTO;
+import ar.edu.itba.paw.webapp.dto.CourseDTO;
+import ar.edu.itba.paw.webapp.dto.ErrorDTO;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
+import ar.edu.itba.paw.webapp.dto.form.ClassReservationForm;
+import ar.edu.itba.paw.webapp.dto.form.CommentForm;
+import ar.edu.itba.paw.webapp.dto.form.CourseForm;
+import ar.edu.itba.paw.webapp.dto.form.MessageForm;
+import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
-@Controller
+//TODO: Chequear badRequest en resultados paginados
+@Path("courses")
+@Component
 public class CourseController extends BaseController{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
 
     @Autowired
-    @Qualifier("courseServiceImpl")
     private CourseService courseService;
 
     @Autowired
-    @Qualifier("subjectServiceImpl")
     private SubjectService subjectService;
 
     @Autowired
@@ -48,169 +49,192 @@ public class CourseController extends BaseController{
     @Autowired
     private ClassReservationService classReservationService;
 
-    @RequestMapping("/Course")
-    public ModelAndView course(
-            @ModelAttribute("messageForm") final MessageForm messageForm,
-            @ModelAttribute("commentForm") final CommentForm commentForm,
-            @RequestParam(value="professor", required=true) final long professorId,
-            @RequestParam(value="subject", required=true) final long subjectId,
-            @ModelAttribute("currentUser") final User loggedUser,
-            @RequestParam(value = "page", defaultValue = "1") final int page){
+    @Autowired
+    private PaginationLinkBuilder linkBuilder;
 
-        final ModelAndView mav = new ModelAndView("course");
+    @Context
+    private UriInfo uriInfo;
+
+    @GET
+    @Path("{professor}_{subject}")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response course(@PathParam("professor") final long professorId,
+                           @PathParam("subject") final long subjectId){
+
         final Course course = courseService.findCourseByIds(professorId, subjectId);
         if(course == null) {
-            return redirectToErrorPage("nonExistentCourse");
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-        mav.addObject("course", course);
+
         LOGGER.debug("Creating view for Course with professor id {} and subject id {}", professorId, subjectId);
 
-        final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
+        return Response.ok(new CourseDTO(course, uriInfo.getBaseUri())).build();
+    }
+
+    @GET
+    @Path("{professor}_{subject}/comments")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response comments(@PathParam("professor") final long professorId,
+                             @PathParam("subject") final long subjectId,
+                             @DefaultValue("1") @QueryParam("page") final int page) {
+
+        final Course course = courseService.findCourseByIds(professorId, subjectId);
+
+        if(course == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
         final PagedResults<Comment> comments = courseService.getComments(course, page);
 
         if(comments == null) {
-            redirectToErrorPage("pageOutOfBounds");
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
-        final boolean canComment = classReservationService.hasAcceptedReservation(loggedUser, course);
+        final Link[] links = linkBuilder.buildLinks(uriInfo, comments);
 
-        mav.addObject("comments", comments);
+        final GenericEntity<List<CommentDTO>> entity = new GenericEntity<List<CommentDTO>>(
+                comments.getResults().stream()
+                        .map(comment -> new CommentDTO(comment, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
 
-        mav.addObject("schedule", schedule);
-        mav.addObject("page", page);
-        mav.addObject("canComment", canComment);
-        messageForm.setProfessorId(professorId);
-        messageForm.setSubjectId(subjectId);
-        commentForm.setCommentProfessorId(professorId);
-        commentForm.setCommentSubjectId(subjectId);
-        return mav;
+        return Response.ok(entity).links(links).build();
     }
 
-    @RequestMapping(value = "/sendMessage", method = RequestMethod.POST)
-    public ModelAndView contact(
-            @ModelAttribute("commentForm") final CommentForm comment,
-            @Valid @ModelAttribute("messageForm") final MessageForm form,
-            final BindingResult errors,
-            @ModelAttribute("currentUser") final User loggedUser) throws UserNotInConversationException, NonexistentConversationException {
+    @GET
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response courses(@DefaultValue("") @QueryParam("q") final String query,
+                            @QueryParam("start") final Integer startHour,
+                            @QueryParam("end") final Integer endHour,
+                            @QueryParam("min") final Double minPrice,
+                            @QueryParam("max") final Double maxPrice,
+                            @QueryParam("days") final List<Integer> days,
+                            @DefaultValue("1") @QueryParam("page") final int page) {
+        final PagedResults<Course> courses = courseService.filterCourses(days, startHour, endHour,
+                minPrice, maxPrice, query, page);
 
-        if(errors.hasErrors()) {
-            return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser, 1);
+        if(courses == null) {
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
+
+        final Link[] links = linkBuilder.buildLinks(uriInfo, courses);
+
+        final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
+                courses.getResults().stream()
+                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
+    }
+
+    @POST
+    @Path("{professor}_{subject}/contact")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response contact(@PathParam("professor") final long professorId,
+                            @PathParam("subject") final long subjectId,
+                            @Valid final MessageForm message) {
+
+        final User loggedUser = loggedUser();
+        final Conversation conversation;
+
+        try {
+            conversation = conversationService.sendMessage(loggedUser.getId(), professorId, subjectId, message.getMessage());
+        } catch (SameUserException e) {
+            final ValidationErrorDTO error = getErrors("SameUserMessageError");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
+        } catch (UserNotInConversationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (NonexistentConversationException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if(conversation == null) {
+            final ValidationErrorDTO error = getErrors("SendMessageError");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
+        }
+
+        final URI uri = uriInfo.getBaseUriBuilder().path("/conversations/" + conversation.getId()).build();
+        return Response.created(uri).build();
+    }
+
+    @POST
+    @Path("{professor}_{subject}/comments")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response comment(@Valid final CommentForm comment,
+                            @PathParam("professor") final long professorId,
+                            @PathParam("subject") final long subjectId) {
+
+        final User loggedUser = loggedUser();
 
         final boolean sent;
         try {
-            sent = conversationService.sendMessage(loggedUser.getId(), form.getProfessorId(),
-                    form.getSubjectId(), form.getBody());
+            sent = courseService.comment(loggedUser.getId(), professorId, subjectId,
+                    comment.getCommentBody(), comment.getRating());
         } catch (SameUserException e) {
-            errors.rejectValue("body", "SameUserMessageError");
-            form.setBody(null);
-            return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
-        }
-        if(sent) {
-            errors.rejectValue("extraMessage", "MessageSent");
-            form.setBody(null);
-            return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
-        } else {
-            errors.rejectValue("body", "SendMessageError");
-        }
-        return course(form,comment, form.getProfessorId(), form.getSubjectId(), loggedUser,1);
-    }
-
-    @RequestMapping(value = "/postComment", method = RequestMethod.POST)
-    public ModelAndView comment(
-            @ModelAttribute("messageForm") final MessageForm message,
-            @Valid @ModelAttribute("commentForm") final CommentForm form,
-            final BindingResult errors,
-            @ModelAttribute("currentUser") final User loggedUser) {
-
-        if(errors.hasErrors()) {
-            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
-        }
-
-        final boolean sent;
-        try {
-            sent = courseService.comment(loggedUser.getId(), form.getCommentProfessorId(),
-                        form.getCommentSubjectId(), form.getCommentBody(), form.getRating());
-        } catch (SameUserException e) {
-            errors.rejectValue("rating", "sameUserComment");
-            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
+            final ValidationErrorDTO error = getErrors("sameUserComment");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         } catch (NonAcceptedReservationException e) {
-            errors.rejectValue("rating", "nonAcceptedReservation");
-            return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        if(sent) {
-            return redirectWithNoExposedModalAttributes("/Course/?professor=" +
-                    form.getCommentProfessorId() + "&subject=" + form.getCommentSubjectId());
-        } else {
-            errors.rejectValue("commentBody", "SendMessageError");
+        if(!sent) {
+            final ValidationErrorDTO error = getErrors("SendMessageError");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
         }
-        return course(message, form, form.getCommentProfessorId(), form.getCommentSubjectId(), loggedUser,1);
+
+        final URI uri = uriInfo.getAbsolutePathBuilder().build();
+        return Response.created(uri).build();
     }
 
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response create(@Valid final CourseForm form) {
 
-    @RequestMapping("/createCourse")
-    public ModelAndView createCourse(@ModelAttribute("CourseForm") final CourseForm form,
-                                     @ModelAttribute("currentUser") final User user) {
-        final ModelAndView mav = new ModelAndView("createCourse");
-        mav.addObject("subjects", subjectService.getAvailableSubjects(user.getId()));
-        return mav;
-    }
-
-    @RequestMapping(value = "/createCourse", method = RequestMethod.POST)
-    public ModelAndView create(@Valid @ModelAttribute("CourseForm") final CourseForm form,
-                               final BindingResult errors,
-                               @ModelAttribute("currentUser") final User user) {
-        if(errors.hasErrors()) {
-            return createCourse(form, user);
-        }
+        final User user = loggedUser();
 
         final Course course;
         try {
-            course = courseService.create(user.getId(), form.getSubjectId(), form.getDescription(), form.getPrice());
+            course = courseService.create(user.getId(), form.getSubject(), form.getDescription(), form.getPrice());
         } catch (CourseAlreadyExistsException e) {
-            return redirectToErrorPage("courseAlreadyExists");
+            final ValidationErrorDTO error = getErrors("courseAlreadyExists");
+            return Response.status(Response.Status.CONFLICT).entity(error).build();
         } catch (NonexistentProfessorException e) {
-            return redirectToErrorPage("nonExistentUser");
+            return Response.status(Response.Status.FORBIDDEN).build();
         } catch (NonexistentSubjectException e) {
-            errors.rejectValue("subjectId", "subjectDoesNotExist");
-            return createCourse(form, user);
+            final ValidationErrorDTO error = getErrors("subjectDoesNotExist");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         if(course == null) {
-            return createCourse(form, user);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        LOGGER.debug("Posting request for course creation for professor with id {} in subject with id {}", user.getId(), form.getSubjectId());
-        return redirectWithNoExposedModalAttributes("/Course/?professor=" + course.getProfessor().getId()
-                + "&subject=" + course.getSubject().getId());
+        LOGGER.debug("Posting request for course creation for professor with id {} in subject with id {}", user.getId(), form.getSubject());
+        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId()) +
+                "_" + String.valueOf(form.getSubject())).build();
+        return Response.created(uri).build();
     }
 
-    @RequestMapping(value = "/reserveClass", method = RequestMethod.GET)
-    public ModelAndView reserveClass(@ModelAttribute("currentUser") final User user,
-                                     @ModelAttribute("classReservationForm") final ClassReservationForm form,
-                                     @RequestParam("professor") final long professorId,
-                                     @RequestParam("subject") final long subjectId) {
-        final ModelAndView mav = new ModelAndView("reserveClass");
-        final Schedule schedule = scheduleService.getScheduleForProfessor(professorId);
-        mav.addObject("schedule", schedule);
-        return mav;
-    }
+    @POST
+    @Path("{professor}_{subject}/reservations")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response reserveClass(@PathParam("professor") final long professorId,
+                                 @PathParam("subject") final long subjectId,
+                                 @Valid final ClassReservationForm form) {
 
-    @RequestMapping(value = "/reserveClass", method = RequestMethod.POST)
-    public ModelAndView reserveClass(@ModelAttribute("currentUser") final User user,
-                                     @Valid @ModelAttribute("classReservationForm")
-                                     final ClassReservationForm form,
-                                     final BindingResult errors,
-                                     @RequestParam("professor") final long professorId,
-                                     @RequestParam("subject") final long subjectId) {
+        final User currentUser = loggedUser();
 
-        if(errors.hasErrors() || !form.validForm()) {
-            if(!form.validForm()) {
-                errors.rejectValue("endHour", "profile.add_schedule.timeError");
-            }
-            return reserveClass(user, form, professorId, subjectId);
+        if(!form.validForm()) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            addError(errors, "profile.add_schedule.timeError", "endHour");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
         }
 
         final LocalDate day = new LocalDate(form.getDay());
@@ -222,117 +246,81 @@ public class CourseController extends BaseController{
                 day.getDayOfMonth(), form.getEndHour(), 0);
 
         if(!startTime.isAfter(LocalDateTime.now())) {
-            errors.rejectValue("day", "futureDateError");
-            return reserveClass(user, form, professorId, subjectId);
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            addError(errors, "futureDateError", "day");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
         }
 
         final ClassReservation reservation;
         try {
             reservation = classReservationService.reserve(startTime, endTime,
-                    professorId, subjectId, user.getId());
+                    professorId, subjectId, currentUser.getId());
         } catch (SameUserException e) {
-            return redirectToErrorPage("sameUserReservation");
+            final ValidationErrorDTO error = getErrors("sameUserReservation");
+            return Response.status(Response.Status.FORBIDDEN).entity(error).build();
         } catch (NonexistentCourseException e) {
-            return redirectToErrorPage("nonExistentCourse");
+            final ValidationErrorDTO error = getErrors("nonExistentCourse");
+            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
         } catch (NonExistentUserException e) {
-            return redirectToErrorPage("nonExistentUser");
+            final ValidationErrorDTO error = getErrors("nonExistentUser");
+            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
         } catch (ReservationTimeOutOfRange reservationTimeOutOfRange) {
-            errors.rejectValue("day", "notAvailableTime");
-            return reserveClass(user, form, professorId, subjectId);
+            final ValidationErrorDTO error = getErrors("notAvailableTime");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         if(reservation == null) {
-            return reserveClass(user, form, professorId, subjectId);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        return redirectWithNoExposedModalAttributes("/reservations");
+        final URI uri = uriInfo.getBaseUriBuilder().path("/user/reservations/" + reservation.getClassRequestId()).build();
+
+        return Response.created(uri).build();
     }
 
 
-    @RequestMapping("/denyClassRequest")
-    public ModelAndView denyClassRequest(@ModelAttribute("currentUser") final User currentUser,
-                                         @RequestParam("classReservation") final long classReservationId) {
+    @PUT
+    @Path("{professor}_{subject}")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response modify(@Valid final CourseForm form,
+                           @PathParam("professor") final long professorId,
+                           @PathParam("subject") final long subjectId) {
 
-        final ClassReservation classReservation;
-        try {
-            classReservation = classReservationService.deny(classReservationId, currentUser.getId(), null);
-        } catch (UserAuthenticationException e) {
-            return redirectToErrorPage("403");
-        }
-
-        if(classReservation == null) {
-            return redirectToErrorPage("nonExistentClassReservation");
-        }
-
-        return redirectWithNoExposedModalAttributes("/classRequests");
-    }
-
-    @RequestMapping("/approveClassRequest")
-    public ModelAndView approveClassRequest(@ModelAttribute("currentUser") final User currentUser,
-                                            @RequestParam("classReservation") final long classReservationId) {
-
-        final ClassReservation classReservation;
-        try {
-            classReservation = classReservationService.confirm(classReservationId, currentUser.getId(), null);
-        } catch (UserAuthenticationException e) {
-            return redirectToErrorPage("403");
-        }
-
-        if(classReservation == null) {
-            return redirectToErrorPage("nonExistentClassReservation");
-        }
-
-        return redirectWithNoExposedModalAttributes("/classRequests");
-    }
-
-
-    @InitBinder
-    private void dateBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
-        binder.registerCustomEditor(Date.class, editor);
-    }
-
-    @RequestMapping("/modifyCourse")
-    public ModelAndView modifyCourse(@ModelAttribute("modifyForm") final CourseForm form,
-                                     @ModelAttribute("currentUser") final User user,
-                                     @RequestParam("subject") final long subjectId) {
-        final ModelAndView mav = new ModelAndView("modifyCourse");
-
-        final Course course = courseService.findCourseByIds(user.getId(), subjectId);
-
-        if(course == null) {
-            return redirectToErrorPage("nonExistentCourse");
-        }
-
-        form.setDescription(course.getDescription());
-        form.setPrice(course.getPrice());
-        form.setSubjectId(course.getSubject().getId());
-        return mav;
-    }
-
-    @RequestMapping(value = "/modifyCourse", method = RequestMethod.POST)
-    public ModelAndView modify(@Valid @ModelAttribute("modifyForm") final CourseForm form,
-                               final BindingResult errors,
-                               @ModelAttribute("currentUser") final User user) {
-        if(errors.hasErrors()) {
-            return modifyCourse(form, user, form.getSubjectId());
-        }
+        final User user = loggedUser();
 
         final Course course;
         try {
-            course = courseService.modify(user.getId(), form.getSubjectId(), form.getDescription(), form.getPrice());
+            course = courseService.modify(user.getId(), subjectId, form.getDescription(), form.getPrice());
         } catch (NonexistentCourseException e) {
-            return redirectToErrorPage("nonExistentCourse");
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
         if(course == null) {
-            return modifyCourse(form, user, form.getSubjectId());
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        LOGGER.debug("Posting request for course modification for professor with id {} in subject with id {}", user.getId(), form.getSubjectId());
-        return redirectWithNoExposedModalAttributes("/Course/?professor=" + course.getProfessor().getId()
-                + "&subject=" + course.getSubject().getId());
+        LOGGER.debug("Posting request for course modification for professor with id {} in subject with id {}", user.getId(), subjectId);
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("{professor}_{subject}")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response delete(@PathParam("professor") final long professorId,
+                           @PathParam("subject") final long subjectId) {
+
+        final User user = loggedUser();
+
+        final boolean deleted;
+        deleted = courseService.deleteCourse(user.getId(), subjectId);
+
+        if(!deleted) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        return Response.noContent().build();
     }
 
 }

@@ -9,7 +9,7 @@ import ar.edu.itba.paw.models.PagedResults;
 
 public interface ConversationService {
 
-    boolean sendMessage(final Long userId, final Long professorId, final Long subjectId, final String body)
+    Conversation sendMessage(final Long userId, final Long professorId, final Long subjectId, final String body)
             throws SameUserException, UserNotInConversationException, NonexistentConversationException;
 
     boolean sendMessage(final Long userId, final Long conversationId, final String body) throws UserNotInConversationException, NonexistentConversationException;

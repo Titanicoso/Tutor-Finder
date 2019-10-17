@@ -213,8 +213,8 @@ public class ConversationServiceImplTest {
 
         doReturn(true).when(conversationService).sendMessage(USER_ID, ID, BODY);
 
-        final boolean sent = conversationService.sendMessage(USER_ID, PROFESSOR_ID, SUBJECT_ID, BODY);
-        assertTrue(sent);
+        final Conversation created = conversationService.sendMessage(USER_ID, PROFESSOR_ID, SUBJECT_ID, BODY);
+        assertNotNull(created);
     }
 
     @Test
@@ -223,8 +223,8 @@ public class ConversationServiceImplTest {
         when(professorService.findById(PROFESSOR_ID)).thenReturn(mock(Professor.class));
         when(subjectService.findSubjectById(SUBJECT_ID)).thenReturn(mock(Subject.class));
 
-        final boolean sent = conversationService.sendMessage(INVALID_ID, PROFESSOR_ID, SUBJECT_ID, BODY);
-        assertFalse(sent);
+        final Conversation created = conversationService.sendMessage(INVALID_ID, PROFESSOR_ID, SUBJECT_ID, BODY);
+        assertNull(created);
     }
 
     @Test
@@ -233,8 +233,8 @@ public class ConversationServiceImplTest {
         when(professorService.findById(PROFESSOR_ID)).thenReturn(mock(Professor.class));
         when(subjectService.findSubjectById(INVALID_ID)).thenReturn(null);
 
-        final boolean sent = conversationService.sendMessage(USER_ID, PROFESSOR_ID, INVALID_ID, BODY);
-        assertFalse(sent);
+        final Conversation created = conversationService.sendMessage(USER_ID, PROFESSOR_ID, INVALID_ID, BODY);
+        assertNull(created);
     }
 
     @Test
@@ -243,8 +243,8 @@ public class ConversationServiceImplTest {
         when(professorService.findById(INVALID_ID)).thenReturn(null);
         when(subjectService.findSubjectById(SUBJECT_ID)).thenReturn(mock(Subject.class));
 
-        final boolean sent = conversationService.sendMessage(USER_ID, INVALID_ID, SUBJECT_ID, BODY);
-        assertFalse(sent);
+        final Conversation created = conversationService.sendMessage(USER_ID, INVALID_ID, SUBJECT_ID, BODY);
+        assertNull(created);
     }
 
     @Test(expected = SameUserException.class)
@@ -259,7 +259,7 @@ public class ConversationServiceImplTest {
 
         when(subjectService.findSubjectById(SUBJECT_ID)).thenReturn(mock(Subject.class));
 
-        final boolean sent = conversationService.sendMessage(USER_ID, USER_ID, SUBJECT_ID, BODY);
+        final Conversation created = conversationService.sendMessage(USER_ID, USER_ID, SUBJECT_ID, BODY);
     }
 
     @Test
@@ -284,8 +284,8 @@ public class ConversationServiceImplTest {
 
         doReturn(true).when(conversationService).sendMessage(USER_ID, ID, BODY);
 
-        final boolean sent = conversationService.sendMessage(USER_ID, PROFESSOR_ID, SUBJECT_ID, BODY);
-        assertTrue(sent);
+        final Conversation created = conversationService.sendMessage(USER_ID, PROFESSOR_ID, SUBJECT_ID, BODY);
+        assertNotNull(created);
     }
 
 

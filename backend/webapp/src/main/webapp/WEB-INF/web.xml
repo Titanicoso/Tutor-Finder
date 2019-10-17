@@ -50,23 +50,13 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
   <filter-mapping>
     <filter-name>encoding-filter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </filter-mapping>
-
-  <error-page>
-    <error-code>404</error-code>
-    <location>/404</location>
-  </error-page>
-
-  <error-page>
-    <error-code>500</error-code>
-    <location>/500</location>
-  </error-page>
 
   <jsp-config>
     <jsp-property-group>
@@ -76,21 +66,25 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
   </jsp-config>
 
   <servlet>
-    <servlet-name>dispatcher</servlet-name>
+    <servlet-name>jersey-servlet</servlet-name>
     <servlet-class>
-      org.springframework.web.servlet.DispatcherServlet
+      org.glassfish.jersey.servlet.ServletContainer
     </servlet-class>
     <init-param>
-      <param-name>contextClass</param-name>
+      <param-name>jersey.config.server.provider.packages</param-name>
       <param-value>
-        org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+        ar.edu.itba.paw.webapp.controller;
+        ar.edu.itba.paw.webapp.providers
       </param-value>
+    </init-param>
+    <init-param>
+      <param-name>jersey.config.server.provider.classnames</param-name>
+      <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-
   <servlet-mapping>
-    <servlet-name>dispatcher</servlet-name>
-    <url-pattern>/</url-pattern>
+    <servlet-name>jersey-servlet</servlet-name>
+    <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
 </web-app>

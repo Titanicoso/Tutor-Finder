@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.old_controller;
 
 import ar.edu.itba.paw.interfaces.service.AreaService;
 import ar.edu.itba.paw.interfaces.service.CourseService;
@@ -22,7 +22,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 
 @Controller
 public class SearchController extends BaseController{

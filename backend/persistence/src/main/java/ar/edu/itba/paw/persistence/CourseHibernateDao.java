@@ -99,7 +99,7 @@ public class CourseHibernateDao implements CourseDao {
 
         List<Predicate> predicates = new ArrayList<>();
 
-        if(days != null) {
+        if(days != null && days.size() != 0) {
             final Stream<Predicate> dayPredicates = days.stream().map(day -> builder.equal(timeslots.get("day"), day));
             final Predicate dayPredicate = builder.or(dayPredicates.toArray(Predicate[]::new));
             predicates.add(dayPredicate);
@@ -154,7 +154,7 @@ public class CourseHibernateDao implements CourseDao {
 
         List<Predicate> predicates = new ArrayList<>();
 
-        if(days != null) {
+        if(days != null && days.size() != 0) {
             final Stream<Predicate> dayPredicates = days.stream().map(day -> builder.equal(timeslots.get("day"), day));
             final Predicate dayPredicate = builder.or(dayPredicates.toArray(Predicate[]::new));
             predicates.add(dayPredicate);

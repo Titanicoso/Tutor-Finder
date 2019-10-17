@@ -47,7 +47,7 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Transactional
     @Override
-    public boolean sendMessage(final Long userId, final Long professorId, final Long subjectId, final String body)
+    public Conversation sendMessage(final Long userId, final Long professorId, final Long subjectId, final String body)
             throws SameUserException, UserNotInConversationException, NonexistentConversationException {
 
         final User user = userService.findUserById(userId);
@@ -56,12 +56,12 @@ public class ConversationServiceImpl implements ConversationService {
 
         if(user == null || professor == null || subject == null) {
             LOGGER.error("Attempted to send message with invalid parameters");
-            return false;
+            return null;
         }
 
         if(body == null || body.length() < 1 || body.length() > 1024) {
             LOGGER.error("Attempted to send message invalid body size");
-            return false;
+            return null;
         }
 
         if(user.getId().equals(professor.getId())) {
@@ -77,9 +77,12 @@ public class ConversationServiceImpl implements ConversationService {
             LOGGER.debug("Conversation belonging to user with id {} and professor with id {} about subject with id {} does not exist, " +
                     "creating conversation", userId, professorId, subjectId);
             final Conversation conversationCreated = conversationDao.create(user, professor, subject);
-            return sendMessage(user.getId(), conversationCreated.getId(), body);
-        } else
-            return sendMessage(user.getId(), conversation.getId(), body);
+            final boolean sent = sendMessage(user.getId(), conversationCreated.getId(), body);
+            return sent ? conversationCreated : null;
+        } else {
+            final boolean sent = sendMessage(user.getId(), conversation.getId(), body);
+            return sent ? conversation : null;
+        }
     }
     
     @Override

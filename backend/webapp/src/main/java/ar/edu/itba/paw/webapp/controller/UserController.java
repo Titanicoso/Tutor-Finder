@@ -3,419 +3,342 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.webapp.form.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ar.edu.itba.paw.webapp.dto.ClassReservationDTO;
+import ar.edu.itba.paw.webapp.dto.CourseDTO;
+import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
+import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
+import ar.edu.itba.paw.webapp.dto.form.EditProfessorProfileForm;
+import ar.edu.itba.paw.webapp.dto.form.RegisterAsProfessorForm;
+import ar.edu.itba.paw.webapp.dto.form.RegisterForm;
+import ar.edu.itba.paw.webapp.dto.form.ResetPasswordRequestForm;
+import ar.edu.itba.paw.webapp.form.ResetPasswordForm;
+import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Controller
-public class UserController extends BaseController{
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-
-    @Autowired
-    @Qualifier("userServiceImpl")
-    private UserService us;
+@Path("user")
+@Component
+public class UserController extends BaseController {
 
     @Autowired
-    @Qualifier("professorServiceImpl")
-    private ProfessorService ps;
+    private ProfessorService professorService;
 
     @Autowired
-    @Qualifier("courseServiceImpl")
-    private CourseService cs;
+    private ClassReservationService classReservationService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private UserService userService;
 
     @Autowired
-    private HttpSessionRequestCache cache;
-
-    @Autowired
-    private ScheduleService ss;
+    private PaginationLinkBuilder linkBuilder;
 
     @Autowired
     private PasswordResetService passwordResetService;
 
-    @RequestMapping("/register")
-    public ModelAndView register(@ModelAttribute("registerForm") final RegisterForm form) {
-        return new ModelAndView("register");
-    }
+    @Autowired
+    private CourseService courseService;
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView create(@Valid @ModelAttribute("registerForm") final RegisterForm form,
-                               final BindingResult errors, HttpServletRequest request, HttpServletResponse response) {
-        if(errors.hasErrors() || !form.checkRepeatPassword()) {
-            if(!form.checkRepeatPassword()) {
-                errors.rejectValue("repeatPassword", "RepeatPassword");
-            }
-            return register(form);
-        }
-        final User u;
+    @Context
+    private UriInfo uriInfo;
 
-        try {
-            u = us.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
-        } catch (EmailAlreadyInUseException e) {
-            errors.rejectValue("email", "RepeatedEmail");
-            return register(form);
-        } catch (UsernameAlreadyInUseException e) {
-            errors.rejectValue("username", "RepeatedUsername");
-            return register(form);
-        } catch (UsernameAndEmailAlreadyInUseException e){
-            errors.rejectValue("email", "RepeatedEmail");
-            errors.rejectValue("username", "RepeatedUsername");
-            return register(form);
-        }
 
-        if(u == null) {
-            return register(form);
-        }
+    @GET
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response profile() {
 
-        LOGGER.debug("Authenticating user with id {}", u.getId());
-        authenticateRegistered(request, u.getUsername(), u.getPassword());
-        final SavedRequest savedRequest = cache.getRequest(request, response);
+        final User loggedUser = loggedUser();
+        final Professor professor = professorService.findById(loggedUser.getId());
 
-        final String redirect = savedRequest == null ? "/" : savedRequest.getRedirectUrl();
-
-        return redirectWithNoExposedModalAttributes(redirect);
-    }
-
-    @RequestMapping("/login")
-    public ModelAndView login() {
-        return new ModelAndView("login");
-    }
-
-    @RequestMapping("/Professor/{id}")
-    public ModelAndView professorProfile(@PathVariable(value = "id") long id,
-                                         @ModelAttribute("currentUser") final User loggedUser,
-                                         @ModelAttribute("currentUserIsProfessor") final boolean isProfessor,
-                                         @RequestParam(value = "page", defaultValue = "1") final int page) {
-        if(loggedUser != null && loggedUser.getId() == id && isProfessor) {
-            return redirectWithNoExposedModalAttributes("/Profile");
-        }
-
-        final Professor professor = ps.findById(id);
         if(professor == null) {
-            return redirectToErrorPage("nonExistentProfessor");
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
-
-        final ModelAndView mav = new ModelAndView("profile");
-        final Schedule schedule = ss.getScheduleForProfessor(professor.getId());
-
-        final PagedResults<Course> courses = cs.findCourseByProfessorId(id, page);
-
-        if(courses == null) {
-            redirectToErrorPage("pageOutOfBounds");
-        }
-
-        mav.addObject("courses", courses);
-        mav.addObject("page", page);
-        mav.addObject("schedule", schedule);
-        mav.addObject("professor", professor);
-        return mav;
+        return Response.ok(new ProfessorDTO(professor, uriInfo)).build();
     }
 
-    @RequestMapping("/Profile")
-    public ModelAndView profile(
-            @ModelAttribute("deleteCourseForm") final DeleteCourseForm deleteCourseForm,
-            @ModelAttribute("currentUser") final User loggedUser,
-            @ModelAttribute("addScheduleForm") final ScheduleForm addScheduleForm,
-            @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
-            @RequestParam(value = "page", defaultValue = "1") final int page
-    ) throws NonexistentProfessorException {
-        final Professor professor = ps.findById(loggedUser.getId());
-        if(professor == null) {
-            throw new NonexistentProfessorException();
-        }
+    @PUT
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Consumes(value = { MediaType.MULTIPART_FORM_DATA, })
+    public Response modify(@Valid @BeanParam final EditProfessorProfileForm form) {
 
-        final ModelAndView mav = new ModelAndView("profileForProfessor");
-
-        final Schedule schedule = ss.getScheduleForProfessor(professor.getId());
-
-        final PagedResults<Course> courses = cs.findCourseByProfessorId(professor.getId(), page);
-
-        final List<Course> deletable = ps.initializeCourses(professor).getCourses();
-
-        if(courses == null) {
-            redirectToErrorPage("pageOutOfBounds");
-        }
-
-        mav.addObject("courses", courses);
-        mav.addObject("subjects", deletable);
-        mav.addObject("professor", professor);
-        mav.addObject("schedule", schedule);
-        mav.addObject("page", page);
-        return mav;
-    }
-    
-    private void authenticateRegistered(HttpServletRequest request, String username, String password) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
-        authToken.setDetails(new WebAuthenticationDetails(request));
-
-        Authentication authentication = authenticationManager.authenticate(authToken);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-
-    @RequestMapping(value = "/registerAsProfessor", method = RequestMethod.POST)
-    public ModelAndView createProfessor(@ModelAttribute("currentUser") final User loggedUser,
-                                        @Valid @ModelAttribute("registerAsProfessorForm") final RegisterProfessorForm form,
-                                        final BindingResult errors, final HttpServletRequest request) throws ProfessorWithoutUserException {
-        if(errors.hasErrors()) {
-            return registerProfessor(form);
-        }
-
-        final Professor p;
-        try {
-            p = ps.create(loggedUser.getId(), form.getDescription(), form.getPicture().getBytes());
-        } catch (IOException | DownloadFileException e) {
-            return redirectToErrorPage("fileUploadError");
-        }
-
-        if(p == null) {
-            return registerProfessor(form);
-        }
-
-        authenticateRegistered(request, p.getUsername(), p.getPassword());
-        return redirectWithNoExposedModalAttributes("/");
-    }
-
-    @RequestMapping("/registerAsProfessor")
-    public ModelAndView registerProfessor(@ModelAttribute("registerAsProfessorForm")
-                                              final RegisterProfessorForm form) {
-
-        return new ModelAndView("registerAsProfessorForm");
-    }
-
-    @RequestMapping(value="/editProfessorProfile", method = RequestMethod.POST)
-    public ModelAndView editProfessor(@ModelAttribute("currentUser") final User loggedUser,
-                                      @Valid @ModelAttribute("editProfessorProfileForm") final EditProfessorProfileForm form,
-                                      final BindingResult errors ) throws NonexistentProfessorException {
-        if(errors.hasErrors()) {
-            return editProfessor(form, loggedUser);
-        }
-
+        final User loggedUser = loggedUser();
         final Professor professor;
+
         try {
-            professor = ps.modify(loggedUser.getId(), form.getDescription(), form.getPic().getBytes());
-        } catch (IOException | DownloadFileException e) {
-            return redirectToErrorPage("fileUploadError");
+            professor = professorService.modify(loggedUser.getId(), form.getDescription(),
+                    form.getPictureBytes());
+        } catch (DownloadFileException e) {
+            final ValidationErrorDTO error = getErrors("fileUploadError");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
         } catch (NonexistentProfessorException | ProfessorWithoutUserException e) {
-            return redirectToErrorPage("oops");
-        }
-        return redirectWithNoExposedModalAttributes("/Profile");
-    }
-
-    @RequestMapping(value = "/editProfessorProfile", method = RequestMethod.GET)
-    public ModelAndView editProfessor(@ModelAttribute("editProfessorProfileForm") final EditProfessorProfileForm form,
-                                      @ModelAttribute("currentUser") final User loggedUser) {
-        final Professor professor = ps.findById(loggedUser.getId());
-        form.setDescription(professor.getDescription());
-        return new ModelAndView("modifyProfessorProfileForm");
-    }
-
-    @RequestMapping(value = "/CreateTimeSlot", method = RequestMethod.POST)
-    public ModelAndView createTimeslot(
-            @ModelAttribute("deleteCourseForm") final DeleteCourseForm deleteCourseForm,
-            @ModelAttribute("currentUser") final User loggedUser,
-            @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
-            @Valid @ModelAttribute("addScheduleForm") final ScheduleForm form,
-            final BindingResult errors
-    ) throws NonexistentProfessorException {
-        if(errors.hasErrors() || !form.validForm()) {
-            if(!form.validForm()) {
-                errors.rejectValue("endHour", "profile.add_schedule.timeError");
-            }
-            return profile(deleteCourseForm, loggedUser, form, deleteScheduleForm, 1);
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        final List<Timeslot> timeslots;
+        return Response.ok(new ProfessorDTO(professor, uriInfo)).build();
+    }
 
+    @GET
+    @Path("/courses")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response courses(@DefaultValue("1") @QueryParam("page") final int page) {
+
+        final User loggedUser = loggedUser();
+
+        final PagedResults<Course> results = courseService.findCourseByProfessorId(loggedUser.getId(), page);
+
+        if(results == null) {
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
+        }
+
+        final Link[] links = linkBuilder.buildLinks(uriInfo, results);
+
+        final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
+                results.getResults().stream()
+                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
+    }
+
+
+    @GET
+    @Path("/schedule")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response schedule(){
+        //TODO fill in when schedule model is revised.
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @GET
+    @Path("/reservations")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response reservations(@DefaultValue("1") @QueryParam("page") final int page) {
+        final User loggedUser = loggedUser();
+
+        final PagedResults<ClassReservation> classReservations =  userService.pagedReservations(loggedUser.getId(), page);
+
+        if(classReservations == null) {
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
+        }
+
+        final Link[] links = linkBuilder.buildLinks(uriInfo, classReservations);
+
+        final GenericEntity<List<ClassReservationDTO>> entity = new GenericEntity<List<ClassReservationDTO>>(
+                classReservations.getResults().stream()
+                        .map(reservation -> new ClassReservationDTO(reservation, uriInfo))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
+    }
+
+    @GET
+    @Path("/reservations/{id}")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response reservation(@PathParam("id") final long id) {
+        final User loggedUser = loggedUser();
+
+        final ClassReservation classReservation = classReservationService.findById(id);
+
+        if(classReservation == null)
+            return Response.status(Response.Status.NOT_FOUND).build();
+
+        if(!classReservation.getStudent().getId().equals(loggedUser.getId())) {
+            final ValidationErrorDTO error = getErrors("sameUserReservation");
+            return Response.status(Response.Status.FORBIDDEN).entity(error).build();
+        }
+
+        return Response.ok(new ClassReservationDTO(classReservation, uriInfo)).build();
+    }
+
+    @GET
+    @Path("/requests")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response requests(@DefaultValue("1") @QueryParam("page") final int page) {
+        final User loggedUser = loggedUser();
+
+        final PagedResults<ClassReservation> classRequests;
         try {
-            timeslots = ss.reserveTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
+            classRequests = professorService.getPagedClassRequests(loggedUser.getId(), page);
         } catch (NonexistentProfessorException e) {
-            return redirectToErrorPage("nonExistentUser");
-        } catch (TimeslotAllocatedException e) {
-            errors.rejectValue("endHour", "TimeslotAllocatedError");
-            return profile(deleteCourseForm, loggedUser, form, new ScheduleForm(),1);
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        if(timeslots == null) {
-            return profile(deleteCourseForm, loggedUser, form, new ScheduleForm(), 1);
+        if(classRequests == null) {
+            final ValidationErrorDTO error = getErrors("pageOutOfBounds");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
-        return redirectWithNoExposedModalAttributes("/Profile");
+        final Link[] links = linkBuilder.buildLinks(uriInfo, classRequests);
+
+        final GenericEntity<List<ClassReservationDTO>> entity = new GenericEntity<List<ClassReservationDTO>>(
+                classRequests.getResults().stream()
+                        .map(request -> new ClassReservationDTO(request, uriInfo))
+                        .collect(Collectors.toList())
+        ){};
+
+        return Response.ok(entity).links(links).build();
     }
 
+    @GET
+    @Path("/requests/{id}")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response request(@PathParam("id") final long id) {
+        return reservation(id);
+    }
 
-    @RequestMapping(value = "/RemoveTimeSlot", method = RequestMethod.POST)
-    public ModelAndView RemoveTimeslot(
-            @ModelAttribute("deleteCourseForm") final DeleteCourseForm deleteCourseForm,
-            @ModelAttribute("currentUser") final User loggedUser,
-            @ModelAttribute("addScheduleForm") final ScheduleForm addScheduleForm,
-            @Valid @ModelAttribute("deleteScheduleForm") final ScheduleForm form,
-            final BindingResult errors
-    ) throws NonexistentProfessorException {
-        if(errors.hasErrors() || !form.validForm()) {
-            if(!form.validForm()) {
-                errors.rejectValue("endHour", "profile.add_schedule.timeError");
-            }
-            return profile(deleteCourseForm, loggedUser, addScheduleForm, form, 1);
-        }
+    @PUT
+    @Path("/requests/{id}")
+    public Response approveClassRequest(@PathParam("id") final long id) {
+
+        final User currentUser = loggedUser();
+
+        final ClassReservation classReservation;
         try {
-            ss.removeTimeSlot(loggedUser.getId(), form.getDay(), form.getStartHour(), form.getEndHour());
-        } catch (NonexistentProfessorException e) {
-            return redirectToErrorPage("nonExistentUser");
+            classReservation = classReservationService.confirm(id, currentUser.getId(), null);
+        } catch (UserAuthenticationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        return redirectWithNoExposedModalAttributes("/Profile");
-    }
-
-    @RequestMapping(value = "/forgotPassword")
-    public ModelAndView forgotPassword(@ModelAttribute("resetPasswordForm") final ResetPasswordRequestForm form) {
-        return new ModelAndView("forgotPassword");
-    }
-
-    @RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
-    public ModelAndView forgotPassword(@Valid @ModelAttribute("resetPasswordForm") final ResetPasswordRequestForm form,
-                                       final BindingResult errors) {
-        if(errors.hasErrors()) {
-            return forgotPassword(form);
+        if(classReservation == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/requests/{id}")
+    public Response denyClassRequest(@PathParam("id") final long id) {
+
+        final User currentUser = loggedUser();
+
+        final ClassReservation classReservation;
+        try {
+            classReservation = classReservationService.deny(id, currentUser.getId(), null);
+        } catch (UserAuthenticationException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(classReservation == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/forgot_password")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response forgotPassword(@Valid final ResetPasswordRequestForm form) {
 
         final boolean created;
         try {
             created = passwordResetService.createToken(form.getEmail());
         } catch (TokenCrationException e) {
-            errors.rejectValue("email", "mailSendError");
-            return forgotPassword(form);
+            final ValidationErrorDTO error = getErrors("SendMessageError");
+            return Response.status(Response.Status.BAD_GATEWAY).entity(error).build();
         }
 
         if(!created) {
-            errors.rejectValue("email", "forgotPasswordError");
-            return forgotPassword(form);
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-        errors.rejectValue("successMessage", "forgotPasswordSuccess");
-        form.setEmail("");
-        return forgotPassword(form);
+
+        return Response.ok().build();
     }
 
-    @RequestMapping("/resetPassword")
-    public ModelAndView resetPassword(@ModelAttribute("resetPasswordForm") final ResetPasswordForm form,
-                                      @RequestParam(value="token", required=true) final String token) {
-
-        if(token.isEmpty()) {
-            return redirectToErrorPage("invalidToken");
-        }
-
-        final PasswordResetToken passwordResetToken = passwordResetService.findByToken(token);
-
-        if(passwordResetToken == null) {
-            return redirectToErrorPage("invalidToken");
-        }
-
-        return new ModelAndView("resetPassword");
-    }
-
-
-    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
-    public ModelAndView resetPassword(@ModelAttribute("resetPasswordForm") final ResetPasswordForm form,
-                                      final BindingResult errors,
-                                      @RequestParam(value="token", required=true) final String token,
-                                      HttpServletRequest request) {
-        if(errors.hasErrors() || !form.checkRepeatPassword()) {
-            if(!form.checkRepeatPassword()) {
-                errors.rejectValue("repeatPassword", "RepeatPassword");
-            }
-            return resetPassword(form, token);
-        }
+    //TODO: Maybe url encoded
+    //TODO: Frontend has to check password repetition
+    //TODO: Automatic authentication?
+    @POST
+    @Path("/forgot_password/{token}")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response forgotPassword(@Valid final ResetPasswordForm form,
+                                   @PathParam("token") final String token) {
 
         final User changedUser;
         try {
             changedUser = passwordResetService.changePassword(token, form.getPassword());
         } catch (InvalidTokenException e) {
-            return redirectToErrorPage("invalidToken");
+            final ValidationErrorDTO error = getErrors("invalidToken");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
         if(changedUser == null) {
-            return redirectToErrorPage("changePasswordError");
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        authenticateRegistered(request, changedUser.getUsername(), form.getPassword());
-        return redirectWithNoExposedModalAttributes("/");
+        return Response.ok().build();
     }
+    
+    //TODO: Maybe change to /users
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response register(@Valid final RegisterForm form) {
 
-    @RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
-    public ModelAndView deleteCourse(
-            @ModelAttribute("deleteScheduleForm") final ScheduleForm deleteScheduleForm,
-            @ModelAttribute("addScheduleForm") final ScheduleForm addScheduleForm,
-            @ModelAttribute("currentUser") final User loggedUser,
-            @Valid @ModelAttribute("deleteCourseForm") final DeleteCourseForm form,
-            final BindingResult errors) throws NonexistentProfessorException{
-
-        if(errors.hasErrors()) {
-            return profile(form, loggedUser, addScheduleForm, deleteScheduleForm, 1);
-        }
-
-        final Professor professor = ps.findById(loggedUser.getId());
-        if(professor == null) {
-            return redirectToErrorPage("nonExistentUser");
-        }
-
-        final boolean deleted = cs.deleteCourse(professor.getId(), form.getSubject());
-
-        if(!deleted) {
-            return redirectToErrorPage("nonExistentCourse");
-        }
-
-        return redirectWithNoExposedModalAttributes("/Profile");
-    }
-
-    @RequestMapping("/reservations")
-    public ModelAndView userReservations(@ModelAttribute("currentUser") final User loggedUser,
-                                         @RequestParam(value = "page", defaultValue = "1") final int page) {
-        ModelAndView mav = new ModelAndView("reservations");
-        PagedResults<ClassReservation> classReservations =  us.pagedReservations(loggedUser.getId(), page);
-        mav.addObject("reservations", classReservations.getResults());
-        mav.addObject("hasNext", classReservations.isHasNext());
-        mav.addObject("page", page);
-        return mav;
-    }
-
-    @RequestMapping("/classRequests")
-    public ModelAndView classReservations(@ModelAttribute("currentUser") final User loggedUser,
-                                         @RequestParam(value = "page", defaultValue = "1") final int page) {
-        ModelAndView mav = new ModelAndView("myClasses");
-
-        PagedResults<ClassReservation> classReservations;
+        final User user;
         try {
-            classReservations = ps.getPagedClassRequests(loggedUser.getId(), page);
-        } catch (NonexistentProfessorException e) {
-            return redirectToErrorPage("nonExistentProfessor");
+            user = userService.create(form.getUsername(), form.getPassword(), form.getEmail(), form.getName(), form.getLastname());
+        } catch (EmailAlreadyInUseException e) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            addError(errors, "RepeatedEmail", "email");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
+        } catch (UsernameAndEmailAlreadyInUseException e) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            addError(errors, "RepeatedEmail", "email");
+            addError(errors, "RepeatedUsername", "username");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
+        } catch (UsernameAlreadyInUseException e) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            addError(errors, "RepeatedUsername", "username");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
         }
-        mav.addObject("reservations", classReservations.getResults());
-        mav.addObject("hasNext", classReservations.isHasNext());
-        mav.addObject("page", page);
-        return mav;
+
+        if(user == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        final URI uri = uriInfo.getBaseUri().resolve("/user");
+        return Response.created(uri).build();
     }
 
+    //TODO: Check if modify can be the same form
+    @POST
+    @Consumes(value = { MediaType.MULTIPART_FORM_DATA, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Path("/upgrade")
+    public Response upgrade(@Valid @BeanParam final RegisterAsProfessorForm form) {
+
+        final User loggedUser = loggedUser();
+
+        final Professor professor;
+        try {
+            professor = professorService.create(loggedUser.getId(), form.getDescription(),
+                    form.getPicture().getValueAs(byte[].class));
+        } catch (DownloadFileException e) {
+            final ValidationErrorDTO error = getErrors("fileUploadError");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
+        } catch (ProfessorWithoutUserException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(professor == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        final URI uri = uriInfo.getBaseUri().resolve("/user");
+        return Response.created(uri).build();
+    }
 }

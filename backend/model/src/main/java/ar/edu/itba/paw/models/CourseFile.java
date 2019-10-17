@@ -12,7 +12,7 @@ import java.util.Objects;
 public class CourseFile {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long Id;
+    private Long id;
 
     @Column(name = "name", length = 100, nullable = false)
     private String name;
@@ -32,11 +32,11 @@ public class CourseFile {
     private byte[] content;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        this.Id = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -84,7 +84,7 @@ public class CourseFile {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CourseFile that = (CourseFile) o;
-        return Objects.equals(Id, that.Id) &&
+        return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(type, that.type) &&
@@ -94,7 +94,7 @@ public class CourseFile {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(Id, name, description, type, course);
+        int result = Objects.hash(id, name, description, type, course);
         result = 31 * result + Arrays.hashCode(content);
         return result;
     }
@@ -102,7 +102,7 @@ public class CourseFile {
     @Override
     public String toString() {
         return "CourseFile{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", type='" + type + '\'' +
