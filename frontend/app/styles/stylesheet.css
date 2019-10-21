@@ -29,12 +29,15 @@ body {
   display: grid;
   -ms-grid-columns: 25fr 50fr 25fr;
       grid-template-columns: 25fr 50fr 25fr;
-  -ms-grid-rows: 65px 25px auto;
-      grid-template-rows: 65px 25px auto;
-      grid-template-areas: "navbar  navbar  navbar" "------- ------- -------" "content content content";
+  -ms-grid-rows: 65px 25px auto auto;
+      grid-template-rows: 65px 25px auto auto;
+      grid-template-areas: "navbar  navbar  navbar" "------- ------- -------" "content content content" "testlinks testlinks testlinks";
 }
 
 .test-links {
+  -ms-grid-row: 4;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 3;
   grid-area: testlinks;
 }
 
@@ -43,7 +46,7 @@ body {
 }
 
 .staticHome, .register, .staticProfile, .staticClass, .reservations {
-      grid-template-areas: "navbar navbar  navbar" "...... ....... ......" "...... content ......";
+      grid-template-areas: "navbar navbar  navbar" "------- ------- -------" "------- content -------" "testlinks testlinks testlinks";
 }
 
 .reservations {
