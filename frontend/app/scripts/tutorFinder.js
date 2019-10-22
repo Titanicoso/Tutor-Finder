@@ -5,14 +5,12 @@ define([
 	'i18n/i18nLoader!',
 	'angular',
 	'angular-route',
-	'angular-cookies',
 	'bootstrap',
 	'angular-translate'
 	],
 	function(config, dependencyResolverFor, i18n) {
 		var tutorFinder = angular.module('tutorFinder', [
 			'ngRoute',
-			'ngCookies',
 			'pascalprecht.translate'/* ,
 			'ui.bootstrap' */
 		]);
