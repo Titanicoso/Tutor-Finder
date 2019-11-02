@@ -4,9 +4,18 @@ define(['tutorFinder','services/sampleService'], function(tutorFinder) {
 	tutorFinder.controller('HomeCtrl', HomeCtrl);
 	
 	HomeCtrl.inject = ['$scope', '$rootScope','sampleService'];
-	function HomeCtrl($scope, $rootScope, service) {
+	function HomeCtrl($scope, $rootScope, sampleService) {
 		$rootScope.appendTitle('HOME');
-		service.areas();
+		sampleService.get('areas')
+		.then(
+			function(data) {
+				$scope.areas = data;
+			}
+		).catch(
+			function(err) {
+				console.log(err);
+			}
+		);
 		$scope.msg = 'This is your homepage';
 	};
 });

@@ -1,14 +1,14 @@
 'use strict';
 define(['tutorFinder'], function(tutorFinder) {
 
-	tutorFinder.service('SampleService',['$http', '$q', 'apiBaseUrl', function($http, $q, apiBaseUrl) {
-		this.areas = function() {
-			$http.get(apiBaseUrl + '/areas')
+	tutorFinder.service('sampleService',['$http', '$q', 'apiBaseUrl', function($http, $q, apiBaseUrl) {
+		this.get = function(url) {
+			return $http.get(apiBaseUrl + '/' + url)
 				.then(function(response) {
-					console.log(response);
+					return response.data;
 				})
 				.catch(function(response) {
-					console.log(response);
+					$q.reject(response);
 				});
 			};
 		}]);
