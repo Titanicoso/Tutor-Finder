@@ -20,7 +20,7 @@ define(['tutorFinder'], function(tutorFinder) {
 		};
 		
 		$scope.reminder = function() {
-			alert('TODO: search function');
+			// alert('TODO: search function');
 		};
 	};
 });

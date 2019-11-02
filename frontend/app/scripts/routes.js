@@ -10,67 +10,67 @@ define([], function() {
             },
             '/conversations': {
                 templateUrl: '/views/conversations.html',
-                controller: 'ConversationsCtrl',
+                controller: 'ConversationsCtrl'
             },
             '/course': {
                 templateUrl: '/views/course.html',
-                controller: 'CourseCtrl',
+                controller: 'CourseCtrl'
             },
             '/createCourse': {
                 templateUrl: '/views/createCourse.html',
-                controller: 'CreateCourseCtrl',
+                controller: 'CreateCourseCtrl'
             },
             '/forgotPassword': {
                 templateUrl: '/views/forgotPassword.html',
-                controller: 'ForgotPasswordCtrl',
+                controller: 'ForgotPasswordCtrl'
             },
             '/login': {
                 templateUrl: '/views/login.html',
-                controller: 'LoginCtrl',
+                controller: 'LoginCtrl'
             },
             '/modifyCourse': {
                 templateUrl: '/views/modifyCourse.html',
-                controller: 'ModifyCourseCtrl',
+                controller: 'ModifyCourseCtrl'
             },
             '/modifyProfessorProfile': {
                 templateUrl: '/views/modifyProfessorProfileForm.html',
-                controller: 'ModifyProfessorProfileCtrl',
+                controller: 'ModifyProfessorProfileCtrl'
             },
             '/myClasses': {
                 templateUrl: '/views/myClasses.html',
-                controller: 'MyClassesCtrl',
+                controller: 'MyClassesCtrl'
             },
             '/profile': {
                 templateUrl: '/views/profile.html',
-                controller: 'ProfileCtrl',
+                controller: 'ProfileCtrl'
             },
             '/profileForProfessor': { // TODO: route should be just '/profile'
                 templateUrl: '/views/profileForProfessor.html',
-                controller: 'ProfessorProfileCtrl',
+                controller: 'ProfessorProfileCtrl'
             },
             '/register': {
                 templateUrl: '/views/register.html',
-                controller: 'RegisterCtrl',
+                controller: 'RegisterCtrl'
             },
             '/registerAsProfessor': {
                 templateUrl: '/views/registerAsProfessorForm.html',
-                controller: 'RegisterAsProfessorCtrl',
+                controller: 'RegisterAsProfessorCtrl'
             },
             '/reservations': {
                 templateUrl: '/views/reservations.html',
-                controller: 'ReservationsCtrl',
+                controller: 'ReservationsCtrl'
             },
             '/reserveClass': {
                 templateUrl: '/views/reserveClass.html',
-                controller: 'ReserveClassCtrl',
+                controller: 'ReserveClassCtrl'
             },
             '/resetPassword': {
                 templateUrl: '/views/resetPassword.html',
-                controller: 'ResetPasswordCtrl',
+                controller: 'ResetPasswordCtrl'
             },
             '/searchResults': {
                 templateUrl: '/views/searchResults.html',
-                controller: 'SearchResultsCtrl',
+                controller: 'SearchResultsCtrl'
             }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */

@@ -8,7 +8,7 @@ define([], function() {
 		
 		APP_NAME: 'tutorFinder',
 
-		//navbar
+		// navbar
 		SEARCH_PROMPT: 'Search..',
 		SEARCH_CATEGORY: 'Category',
 		PROFESSOR: 'Professor',
