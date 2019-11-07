@@ -3,10 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.webapp.dto.ClassReservationDTO;
-import ar.edu.itba.paw.webapp.dto.CourseDTO;
-import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
-import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
+import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.dto.form.EditProfessorProfileForm;
 import ar.edu.itba.paw.webapp.dto.form.RegisterAsProfessorForm;
 import ar.edu.itba.paw.webapp.dto.form.RegisterForm;
@@ -57,7 +54,7 @@ public class UserController extends BaseController {
         final Professor professor = professorService.findById(loggedUser.getId());
 
         if(professor == null) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            return Response.ok(new UserDTO(loggedUser, uriInfo.getBaseUri(), false)).build();
         }
         return Response.ok(new ProfessorDTO(professor, uriInfo)).build();
     }
@@ -101,7 +98,7 @@ public class UserController extends BaseController {
 
         final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
                 results.getResults().stream()
-                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .map(course -> new CourseDTO(course, uriInfo))
                         .collect(Collectors.toList())
         ){};
 

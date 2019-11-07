@@ -68,7 +68,7 @@ public class CourseController extends BaseController{
 
         LOGGER.debug("Creating view for Course with professor id {} and subject id {}", professorId, subjectId);
 
-        return Response.ok(new CourseDTO(course, uriInfo.getBaseUri())).build();
+        return Response.ok(new CourseDTO(course, uriInfo)).build();
     }
 
     @GET
@@ -123,7 +123,7 @@ public class CourseController extends BaseController{
 
         final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
                 courses.getResults().stream()
-                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .map(course -> new CourseDTO(course, uriInfo))
                         .collect(Collectors.toList())
         ){};
 

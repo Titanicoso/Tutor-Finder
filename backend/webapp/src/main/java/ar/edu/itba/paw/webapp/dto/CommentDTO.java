@@ -11,7 +11,7 @@ import java.net.URI;
 public class CommentDTO {
 
     private long id;
-//    private UserDTO sender;
+    private UserDTO sender;
     private String comment;
     //TODO: Check created data type
     private String created;
@@ -28,6 +28,7 @@ public class CommentDTO {
         this.id = comment.getId();
         this.created = comment.getCreated().toString();
         this.comment = comment.getComment();
+        this.sender = new UserDTO(comment.getUser(), baseUri, false);
 
         final Course course = comment.getCourse();
 
@@ -82,5 +83,13 @@ public class CommentDTO {
 
     public void setUrl(URI url) {
         this.url = url;
+    }
+
+    public UserDTO getSender() {
+        return sender;
+    }
+
+    public void setSender(UserDTO sender) {
+        this.sender = sender;
     }
 }

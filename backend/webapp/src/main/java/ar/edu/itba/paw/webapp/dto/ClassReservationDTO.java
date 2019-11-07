@@ -13,7 +13,7 @@ import java.net.URI;
 public class ClassReservationDTO {
 
     private long id;
-//    private UserDTO student;
+    private UserDTO student;
 
     @XmlElement(name = "course_url")
     private URI courseUrl;
@@ -40,6 +40,7 @@ public class ClassReservationDTO {
         this.comment = cs.getComment();
         this.endTime = cs.getEndTime().toString();
         this.startTime = cs.getStartTime().toString();
+        this.student = new UserDTO(cs.getStudent(), uriInfo.getBaseUri(), false);
 
         switch(cs.getStatus()) {
             case 0: this.status = ClassReservationStatus.APPROVED; break;
@@ -108,5 +109,13 @@ public class ClassReservationDTO {
 
     public void setUrl(URI url) {
         this.url = url;
+    }
+
+    public UserDTO getStudent() {
+        return student;
+    }
+
+    public void setStudent(UserDTO student) {
+        this.student = student;
     }
 }

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Conversation;
 
+import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
@@ -11,8 +12,8 @@ import java.net.URI;
 public class ConversationDTO {
 
     private long id;
-//    private UserDTO user;
-//    private ProfessorDTO professor;
+    private UserDTO user;
+    private ProfessorDTO professor;
     private SubjectDTO subject;
 
     @XmlElement(name = "messages_url")
@@ -24,11 +25,13 @@ public class ConversationDTO {
     public ConversationDTO() {
     }
 
-    public ConversationDTO(final Conversation conversation, final URI baseUri) {
+    public ConversationDTO(final Conversation conversation, final UriInfo uriInfo) {
         this.id = conversation.getId();
-        this.subject = new SubjectDTO(conversation.getSubject(), baseUri);
+        this.subject = new SubjectDTO(conversation.getSubject(), uriInfo.getBaseUri());
         this.latestMessage = conversation.getLatestMessage().toString();
-        this.messagesUrl = baseUri.resolve("conversations/" + id +"/messages");
+        this.messagesUrl = uriInfo.getBaseUri().resolve("conversations/" + id +"/messages");
+        this.user = new UserDTO(conversation.getUser(), uriInfo.getBaseUri(), false);
+        this.professor = new ProfessorDTO(conversation.getProfessor(), uriInfo);
     }
 
     public long getId() {
@@ -61,5 +64,21 @@ public class ConversationDTO {
 
     public void setSubject(SubjectDTO subject) {
         this.subject = subject;
+    }
+
+    public UserDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
+
+    public ProfessorDTO getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(ProfessorDTO professor) {
+        this.professor = professor;
     }
 }

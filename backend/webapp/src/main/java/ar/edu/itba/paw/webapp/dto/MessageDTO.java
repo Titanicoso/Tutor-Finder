@@ -10,7 +10,7 @@ import java.net.URI;
 public class MessageDTO {
 
     private long id;
-//    private UserDTO sender;
+    private UserDTO sender;
     private String text;
     //TODO: Check created data type
     private String created;
@@ -26,6 +26,7 @@ public class MessageDTO {
         this.id = message.getId();
         this.created = message.getCreated().toString();
         this.text = message.getText();
+        this.sender = new UserDTO(message.getSender(), baseUri, false);
 
         this.conversationUrl = baseUri.resolve("/conversations/" + message.getConversation().getId());
         this.url = baseUri.resolve(this.conversationUrl + "/messages");
@@ -69,5 +70,13 @@ public class MessageDTO {
 
     public void setUrl(URI url) {
         this.url = url;
+    }
+
+    public UserDTO getSender() {
+        return sender;
+    }
+
+    public void setSender(UserDTO sender) {
+        this.sender = sender;
     }
 }

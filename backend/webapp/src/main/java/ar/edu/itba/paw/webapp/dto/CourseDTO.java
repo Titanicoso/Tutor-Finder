@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Course;
 
+import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
@@ -9,7 +10,7 @@ import java.net.URI;
 @XmlRootElement
 public class CourseDTO {
 
-//    private ProfessorDTO professor;
+    private ProfessorDTO professor;
     private SubjectDTO subject;
     private String description;
     private Double price;
@@ -26,15 +27,18 @@ public class CourseDTO {
     public CourseDTO() {
     }
 
-    public CourseDTO(final Course course, final URI baseUri) {
+    public CourseDTO(final Course course, final UriInfo uriInfo) {
         this.description = course.getDescription();
         this.price = course.getPrice();
         this.rating = course.getRating();
+
+        final URI baseUri = uriInfo.getBaseUri();
 
         this.subject = new SubjectDTO(course.getSubject(), baseUri);
         this.url = baseUri.resolve("/courses/" + course.getProfessor().getId() + "_" + course.getSubject().getId());
         this.courseCommentsUrl = baseUri.resolve(this.url + "/comments");
         this.courseFilesUrl = baseUri.resolve(this.url + "/files");
+        this.professor = new ProfessorDTO(course.getProfessor(), uriInfo);
     }
 
     public String getDescription() {
@@ -91,5 +95,13 @@ public class CourseDTO {
 
     public void setSubject(SubjectDTO subject) {
         this.subject = subject;
+    }
+
+    public ProfessorDTO getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(ProfessorDTO professor) {
+        this.professor = professor;
     }
 }
