@@ -14,7 +14,13 @@ define(['tutorFinder'], function(tutorFinder) {
 		};
 		
 		this.getAuthHeaders = function() {
-			return {headers: {'Authorization': 'Bearer' + this.getAccessToken()}};
+
+			let token = this.getAccessToken();
+			if (!token || token === "") {
+				return null;
+			}
+
+			return {headers: {'Authorization': 'Bearer' + token}};
 		};
 
         this.setAccessToken = function(authorization, mustPersist) {
@@ -36,8 +42,10 @@ define(['tutorFinder'], function(tutorFinder) {
             return $http.get(apiUrl + '/authenticate?username=' + username + '&password=' + password)
 				.then(function(response) {
 					service.setAccessToken(response.headers('Authorization'), rememberMe);
-					// TODO: add user get to know role
 					return $http.get(apiUrl + '/user', service.getAuthHeaders());
+				})
+				.then(function(response) {
+					return response.data;
 				})
 				.catch(function(response) {
 					return $q.reject(response);
