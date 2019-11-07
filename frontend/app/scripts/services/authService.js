@@ -15,8 +15,8 @@ define(['tutorFinder'], function(tutorFinder) {
 		
 		this.getAuthHeaders = function() {
 
-			let token = this.getAccessToken();
-			if (!token || token === "") {
+			var token = this.getAccessToken();
+			if (!token || token === '') {
 				return null;
 			}
 
