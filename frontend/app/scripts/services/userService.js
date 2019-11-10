@@ -27,7 +27,7 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
             return restService.post('user/', {name: name, lastname: lastname, email: email, username: username, password: password});
         };
 
-        //TODO: modify and upgrade
+        // TODO: modify and upgrade
     }]);
 
 });

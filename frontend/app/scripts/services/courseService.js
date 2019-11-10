@@ -13,7 +13,7 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
 
         this.filterCourses = function(query, startHour, endHour, minPrice, maxPrice, days, page) {
 
-            let parameters = '?page=' + page;
+            var parameters = '?page=' + page;
 
             if (query && query.length > 0) {
                 parameters = parameters + '&q=' + query;
@@ -42,7 +42,7 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
             }
 
             return restService.get('courses/' + parameters, true);
-        }
+        };
 
         this.contact = function(professorId, subjectId, message) {
             return restService.post('courses/' + professorId + '_' + subjectId, {message: message});

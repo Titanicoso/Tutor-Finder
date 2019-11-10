@@ -3,6 +3,9 @@ define(['tutorFinder'], function(tutorFinder) {
 
     tutorFinder.service('authService', ['$window', '$http', '$q', 'apiBaseUrl', function($window, $http, $q, apiUrl) {
 
+		var currentUser;
+		var self = this;
+
         this.getAccessToken = function() {
             var accessToken = $window.localStorage.getItem('access_token');
 
@@ -20,7 +23,7 @@ define(['tutorFinder'], function(tutorFinder) {
 				return null;
 			}
 
-			return {headers: {'Authorization': 'Bearer' + token}};
+			return {headers: {'Authorization': 'Bearer ' + token}};
 		};
 
         this.setAccessToken = function(authorization, mustPersist) {
@@ -35,22 +38,59 @@ define(['tutorFinder'], function(tutorFinder) {
         this.clearSession = function() {
             $window.localStorage.clear();
             $window.sessionStorage.clear();
-        };
+		};
 
         this.login = function(username, password, rememberMe) {
 			var service = this;
-            return $http.get(apiUrl + '/authenticate?username=' + username + '&password=' + password)
+			return $http.post(apiUrl + '/authenticate', {username: username, password: password},
+			 	{
+					headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+					transformRequest: function(req) {
+						var urlencoded = [];
+						for (var data in req) {
+							urlencoded.push(encodeURIComponent(data) + '=' + encodeURIComponent(req[data]));
+						}
+						return urlencoded.join('&');
+					}
+				})
 				.then(function(response) {
 					service.setAccessToken(response.headers('Authorization'), rememberMe);
 					return $http.get(apiUrl + '/user', service.getAuthHeaders());
 				})
 				.then(function(response) {
-					return response.data;
+					this.currentUser = response.data;
+					$window.sessionStorage.setItem('current_user', JSON.stringify(this.currentUser));
+					return this.currentUser;
 				})
 				.catch(function(response) {
 					return $q.reject(response);
 				});
 		};
+
+		this.logout = function() {
+			self.clearSession();
+		};
+
+		this.getCurrentUser = function() {
+			if (this.currentUser) {
+				return this.currentUser;
+			}
+
+			var currentUser = JSON.parse($window.sessionStorage.getItem('current_user'));
+
+			if (currentUser) {
+				this.currentUser = currentUser;
+				return currentUser;
+			}
+
+			$http.get(apiUrl + '/user', service.getAuthHeaders())
+			.then(function(response) {
+				this.currentUser = response.data;
+				$window.sessionStorage.setItem('current_user', JSON.stringify(this.currentUser));
+				return this.currentUser;
+			});
+		};
+
     }]);
 
 });

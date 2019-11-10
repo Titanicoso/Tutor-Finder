@@ -7,7 +7,7 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
             return restService.get('courses/' + professorId + '_' + subjectId + '/files', false);
         };
 
-        //TODO: GET AND PUT
+        // TODO: GET AND PUT
 
         this.delete = function(professorId, subjectId, id) {
             return restService.delete('courses/' + professorId + '_' + subjectId + '/files/' + id);
