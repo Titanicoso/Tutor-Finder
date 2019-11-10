@@ -8,7 +8,7 @@ import ar.edu.itba.paw.webapp.dto.form.EditProfessorProfileForm;
 import ar.edu.itba.paw.webapp.dto.form.RegisterAsProfessorForm;
 import ar.edu.itba.paw.webapp.dto.form.RegisterForm;
 import ar.edu.itba.paw.webapp.dto.form.ResetPasswordRequestForm;
-import ar.edu.itba.paw.webapp.form.ResetPasswordForm;
+import ar.edu.itba.paw.webapp.dto.form.ResetPasswordForm;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

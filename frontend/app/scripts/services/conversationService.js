@@ -16,7 +16,7 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
         };
 
         this.sendMessage = function(id, message) {
-            return restService.post('conversations/' + id, {message: message}, false);
+            return restService.post('conversations/' + id, {message: message});
         };
     }]);
 
