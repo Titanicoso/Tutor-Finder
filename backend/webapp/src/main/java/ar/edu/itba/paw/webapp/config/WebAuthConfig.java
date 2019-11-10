@@ -1,16 +1,16 @@
 package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.CorsFilter;
-import ar.edu.itba.paw.webapp.auth.JwtAuthenticationFilter;
 import ar.edu.itba.paw.webapp.auth.JwtAuthorizationFilter;
+import ar.edu.itba.paw.webapp.auth.StatelessSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -19,12 +19,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebSecurity
@@ -83,21 +80,25 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                     .addFilter(new JwtAuthorizationFilter(authenticationManager()))
                 .exceptionHandling()
                     .authenticationEntryPoint(entryPoint)
                     .accessDeniedPage("/403")
                 .and().authorizeRequests()
-                    .antMatchers("/login/**", "/register/**", "/forgotPassword/**", "/resetPassword/**").anonymous()
-                    .antMatchers("/logout/**", "/sendMessage/**", "/Conversations/**", "/api/register/**",
-                            "/Conversation/**", "/reserveClass/**", "/reservations/**", "/postComment/**", "/courseFiles/**",
-                            "/downloadFile/**").authenticated()
-                    .antMatchers("/registerAsProfessor/**").hasRole("USER")
-                    .antMatchers("/createCourse/**", "/Profile/**", "/CreateTimeSlot/**",
-                            "/editProfessorProfile/**", "/RemoveTimeSlot/**", "/deleteCourse/**", "/classRequests/**",
-                            "/denyClassRequest/**", "/approveClassRequest/**", "/uploadFiles/**", "/deleteFile/**").hasRole("PROFESSOR")
+                    .antMatchers(HttpMethod.POST, "/api/authenticate/**", "/api/user", "/api/user/password_reset/**").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/conversations/**", "/api/courses/*/contact", "/api/courses/*/comments", "/api/courses/*/reservations").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/conversations/**", "/api/courses/*/files/**", "/api/user", "/api/user/reservations/**").authenticated()
+                    .antMatchers(HttpMethod.POST,"api/user/upgrade").hasRole("USER")
+                    .antMatchers(HttpMethod.GET, "/api/user/requests/**", "/api/user/courses", "/api/user/schedule").hasRole("PROFESSOR")
+                    .antMatchers(HttpMethod.DELETE, "/api/user/requests/**", "/api/courses/*/files/**", "/api/courses/*").hasRole("PROFESSOR")
+                    .antMatchers(HttpMethod.PUT, "/api/user/requests/**", "/api/courses/*", "/api/courses/*/files/**", "/api/user").hasRole("PROFESSOR")
+                    .antMatchers(HttpMethod.POST, "/api/courses").hasRole("PROFESSOR")
                     .anyRequest().permitAll()
+                .and().formLogin()
+                    .usernameParameter("username").passwordParameter("password")
+                    .loginProcessingUrl("/api/authenticate")
+                    .successHandler(new StatelessSuccessHandler())
+                    .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 .and().csrf().disable();
     }
 
