@@ -58,8 +58,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsFilter corsFilter() {
-        CorsFilter filter = new CorsFilter();
-        return filter;
+        return new CorsFilter();
     }
 
     @Bean
@@ -73,7 +72,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 
-    // TODO verify if the antmatchers should not be removed
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService)

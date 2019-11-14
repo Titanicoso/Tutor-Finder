@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Conversation;
+import ar.edu.itba.paw.webapp.utils.LocalDateTimeXmlAdapter;
+import org.joda.time.LocalDateTime;
 
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.net.URI;
 
 //TODO: Check latestMessage type
@@ -20,7 +23,8 @@ public class ConversationDTO {
     private URI messagesUrl;
 
     @XmlElement(name = "latest_message")
-    private String latestMessage;
+    @XmlJavaTypeAdapter(type = LocalDateTime.class, value = LocalDateTimeXmlAdapter.class)
+    private LocalDateTime latestMessage;
 
     public ConversationDTO() {
     }
@@ -28,7 +32,7 @@ public class ConversationDTO {
     public ConversationDTO(final Conversation conversation, final UriInfo uriInfo) {
         this.id = conversation.getId();
         this.subject = new SubjectDTO(conversation.getSubject(), uriInfo.getBaseUri());
-        this.latestMessage = conversation.getLatestMessage().toString();
+        this.latestMessage = conversation.getLatestMessage();
         this.messagesUrl = uriInfo.getBaseUri().resolve("conversations/" + id +"/messages");
         this.user = new UserDTO(conversation.getUser(), uriInfo.getBaseUri(), false);
         this.professor = new ProfessorDTO(conversation.getProfessor(), uriInfo);
@@ -50,11 +54,11 @@ public class ConversationDTO {
         this.messagesUrl = messagesUrl;
     }
 
-    public String getLatestMessage() {
+    public LocalDateTime getLatestMessage() {
         return latestMessage;
     }
 
-    public void setLatestMessage(String latestMessage) {
+    public void setLatestMessage(LocalDateTime latestMessage) {
         this.latestMessage = latestMessage;
     }
 

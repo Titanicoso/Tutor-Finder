@@ -26,7 +26,6 @@ public class PawUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //TODO:Streamify
 
         final Professor professor = ps.findByUsername(username);
 

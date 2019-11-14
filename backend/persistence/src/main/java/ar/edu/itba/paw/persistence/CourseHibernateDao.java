@@ -203,7 +203,6 @@ public class CourseHibernateDao implements CourseDao {
             em.flush();
             return course;
         }
-        //TODO specify exception
         catch (PersistenceException e) {
             LOGGER.error("Course with user_id {} and subject_id {} already exists", professor.getId(), subject.getId());
             throw new CourseAlreadyExistsException();

@@ -54,7 +54,7 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
-                    <%--TODO: add buttons--%>
+
                 <a class="search-result-title">
                     <c:out value="${reservation.course.subject.area.name} - ${reservation.course.subject.name}" escapeXml="true" /></a>
                 <a class="search-result-professor" >

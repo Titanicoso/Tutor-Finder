@@ -256,7 +256,6 @@ public class UserController extends BaseController {
 
     //TODO: Maybe url encoded
     //TODO: Frontend has to check password repetition
-    //TODO: Automatic authentication?
     @POST
     @Path("/forgot_password/{token}")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
@@ -279,7 +278,6 @@ public class UserController extends BaseController {
         return Response.ok().build();
     }
     
-    //TODO: Maybe change to /users
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON, })
     @Produces(value = { MediaType.APPLICATION_JSON, })
