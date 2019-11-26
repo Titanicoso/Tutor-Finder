@@ -100,6 +100,9 @@ define(['tutorFinder'], function(tutorFinder) {
 				$window.sessionStorage.setItem('current_user', JSON.stringify(service.currentUser));
 				$rootScope.$broadcast('user_update');
 				return service.currentUser;
+			})
+			.catch(function() {
+				return null;
 			});
 		};
 
