@@ -1,12 +1,12 @@
 'use strict';
-define(['tutorFinder','services/sampleService'], function(tutorFinder) {
+define(['tutorFinder','services/areaService'], function(tutorFinder) {
 
 	tutorFinder.controller('HomeCtrl', HomeCtrl);
 	
-	HomeCtrl.inject = ['$scope', '$rootScope','sampleService'];
-	function HomeCtrl($scope, $rootScope, sampleService) {
+	HomeCtrl.inject = ['$scope', '$rootScope','areaService'];
+	function HomeCtrl($scope, $rootScope, areaService) {
 		$rootScope.appendTitle('HOME');
-		sampleService.get('areas')
+		areaService.getAreas('', 1)
 		.then(
 			function(data) {
 				$scope.areas = data;

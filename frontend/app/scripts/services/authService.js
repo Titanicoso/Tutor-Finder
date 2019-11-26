@@ -1,18 +1,23 @@
 'use strict';
 define(['tutorFinder'], function(tutorFinder) {
 
-    tutorFinder.service('authService', ['$window', '$http', '$q', 'apiBaseUrl', function($window, $http, $q, apiUrl) {
+    tutorFinder.service('authService', ['$window', '$http', '$q', '$rootScope', 'apiBaseUrl', function($window, $http, $q, $rootScope, apiUrl) {
 
 		var currentUser;
+		var accessToken;
 		var self = this;
 
         this.getAccessToken = function() {
+
+			if (this.accessToken) {
+				return this.accessToken;
+			}
+
             var accessToken = $window.localStorage.getItem('access_token');
 
             if (!accessToken) {
                 accessToken = $window.sessionStorage.getItem('access_token');
             }
-
             return accessToken;
 		};
 		
@@ -33,11 +38,14 @@ define(['tutorFinder'], function(tutorFinder) {
 			} else {
 				$window.sessionStorage.setItem('access_token', token);
 			}
+			this.accessToken = token;
         };
         
         this.clearSession = function() {
             $window.localStorage.clear();
-            $window.sessionStorage.clear();
+			$window.sessionStorage.clear();
+			this.currentUser = undefined;
+			this.accessToken = undefined;
 		};
 
         this.login = function(username, password, rememberMe) {
@@ -58,9 +66,10 @@ define(['tutorFinder'], function(tutorFinder) {
 					return $http.get(apiUrl + '/user', service.getAuthHeaders());
 				})
 				.then(function(response) {
-					this.currentUser = response.data;
-					$window.sessionStorage.setItem('current_user', JSON.stringify(this.currentUser));
-					return this.currentUser;
+					service.currentUser = response.data;
+					$window.sessionStorage.setItem('current_user', JSON.stringify(service.currentUser));
+					$rootScope.$broadcast('user_update');
+					return service.currentUser;
 				})
 				.catch(function(response) {
 					return $q.reject(response);
@@ -69,6 +78,7 @@ define(['tutorFinder'], function(tutorFinder) {
 
 		this.logout = function() {
 			self.clearSession();
+			$rootScope.$broadcast('user_update');
 		};
 
 		this.getCurrentUser = function() {
@@ -83,11 +93,13 @@ define(['tutorFinder'], function(tutorFinder) {
 				return currentUser;
 			}
 
+			var service = this;
 			$http.get(apiUrl + '/user', service.getAuthHeaders())
 			.then(function(response) {
-				this.currentUser = response.data;
-				$window.sessionStorage.setItem('current_user', JSON.stringify(this.currentUser));
-				return this.currentUser;
+				service.currentUser = response.data;
+				$window.sessionStorage.setItem('current_user', JSON.stringify(service.currentUser));
+				$rootScope.$broadcast('user_update');
+				return service.currentUser;
 			});
 		};
 

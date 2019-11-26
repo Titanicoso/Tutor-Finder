@@ -6,7 +6,7 @@
 
 <div class="search-bar">
     <form role="search" class="search-bar">
-        <input class="search-input" type="search" ng-model="search_input" placeholder="{{ 'SEARCH_PROMPT' | translate }}" />
+        <input class="search-input" type="search" ng-model="search_input" placeholder="{{ 'SEARCH' | translate }}" />
         <div class="search-dropdown">
             <select class="select-search-type" name="type">
                 <option value="" selected disabled>{{ 'SEARCH_CATEGORY' | translate }}</option>
@@ -22,45 +22,23 @@
 </div>
 
 <div class="navbar-buttons pull-right" id="navbar-buttons">
-    <a ng-href="/#!/register" class="navbar-button">
-        {{ 'REGISTER' | translate }}</a>
-    <a ng-href="/#!/login" class="navbar-button">
-        {{ 'LOGIN' | translate }}</a>
-    <!-- TODO: implement buttons change for logged users -->
-    <!-- 
-    <c:choose>
-        <c:when test="${currentUser != null}">
-            <div class="navbar-button dropdown relative" id="dropdown">
-                <a class="dropdown-button" id="dropdown-button">
-                    <c:out value="${currentUser.name} " escapeXml="true" /></a>
-                <div class="dropdown-content" id="dropdown-content">
-                    <c:choose>
-                        <c:when test="${currentUserIsProfessor == true}">
-                            <a ng-href="/#!/Profile" class="navbar-button">
-                                <spring:message code="profile.title" /></a>
-                            <a ng-href="/#!/classRequests?page=1" class="navbar-button">
-                                <spring:message code="classes.title" /></a>
-                        </c:when>
-                        <c:otherwise>
-                            <a ng-href="/#!/registerAsProfessor" class="navbar-button">
-                                <spring:message code="register.professor" /></a>
-                        </c:otherwise>
-                    </c:choose>
-                    <a ng-href="/#!/reservations?page=1" class="navbar-button">
-                        <spring:message code="reservations.title" /></a>
-                    <a ng-href="/#!/Conversations" class="navbar-button">
-                        <spring:message code="conversations.title" /></a>
-                    <a ng-href="/#!/logout" class="navbar-button">
-                        <spring:message code="user.logout" /></a>
-                </div>
+    <div ng-if="currentUser" class="navbar-button dropdown relative" id="dropdown">
+        <a class="dropdown-button" ng-click="toggleDropdown()" ng-bind="currentUser.name"></a>
+        <div class="dropdown-content" ng-show="showDropdown">
+            <div ng-if="currentUser.professor">
+                <a ng-href="/#!/Profile" class="navbar-button" ng-bind="'PROFILE' | translate"></a>
+                <a ng-href="/#!/classRequests?page=1" class="navbar-button" ng-bind="'CLASS_REQUESTS' | translate"></a>
             </div>
-        </c:when>
-        <c:otherwise>
-            <a ng-href="/#!/register" class="navbar-button">
-                <spring:message code="register" /></a>
-            <a ng-href="/#!/login" class="navbar-button">
-                <spring:message code="login" /></a>
-        </c:otherwise>
-    </c:choose> 
-    -->
+            <div ng-if="!currentUser.professor">
+                <a ng-href="/#!/registerAsProfessor" class="navbar-button" ng-bind="'REGISTER_PROFESSOR' | translate"></a>
+            </div>
+            <a ng-href="/#!/reservations?page=1" class="navbar-button" ng-bind="'RESERVATIONS' | translate"></a>
+            <a ng-href="/#!/Conversations" class="navbar-button" ng-bind="'CONVERSATIONS' | translate"></a>
+            <a ng-click="logout()" class="navbar-button" ng-bind="'LOGOUT' | translate"></a>
+        </div>
+    </div>
+    <div ng-if="!currentUser">
+        <a ng-href="/#!/register" class="navbar-button">{{ 'REGISTER' | translate }}</a>
+        <a ng-href="/#!/login" class="navbar-button">{{ 'LOGIN' | translate }}</a>
+    </div> 
 </div>

@@ -1,12 +1,31 @@
 'use strict';
-define(['tutorFinder'], function(tutorFinder) {
+define(['tutorFinder', 'services/authService'], function(tutorFinder) {
 
 	tutorFinder.controller('LoginCtrl', LoginCtrl);
 	
-	LoginCtrl.$inject = ['$scope', '$rootScope'];
-	function LoginCtrl($scope, $rootScope) {
-		$scope.msg = 'This is the login view';
+	LoginCtrl.$inject = ['$scope', '$rootScope', '$location', 'authService'];
+	function LoginCtrl($scope, $rootScope, $location, authService) {
+		$rootScope.appendTitle('LOGIN');
 
-		$rootScope.appendTitle('LOGIN');		
+		$scope.loginForm = { 
+			username: '', 
+			password: '', 
+			rememberMe: false 
+		};
+
+		$scope.error = false;
+				
+		$scope.login = function() {
+			if ($scope.form.$valid) {
+				
+				authService.login($scope.loginForm.username, $scope.loginForm.password, $scope.loginForm.rememberMe)
+				.then(function() {
+					$location.url('/');
+				})
+				.catch(function(err) {
+					$scope.error = true;
+				});
+			}
+		};
 	};
 });

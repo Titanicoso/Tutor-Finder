@@ -1,12 +1,15 @@
 'use strict';
 
-define(['tutorFinder'], function(tutorFinder) {
+define(['tutorFinder', 'services/authService'], function(tutorFinder) {
 	
 	tutorFinder.controller('IndexCtrl', IndexCtrl);
 	
-	IndexCtrl.inject = ['$scope', '$rootScope', '$translate'];
-	function IndexCtrl($scope, $rootScope, $translate) {
+	IndexCtrl.inject = ['$scope', '$rootScope', '$translate', 'authService'];
+	function IndexCtrl($scope, $rootScope, $translate, authService) {
 		$scope.msg = 'This is the index view';
+		$scope.currentUser = authService.getCurrentUser();
+
+		$scope.showDropdown = false;
 		
 		$rootScope.appName = $translate.instant('APP_NAME');
 		$rootScope.title = $rootScope.appName;
@@ -17,6 +20,18 @@ define(['tutorFinder'], function(tutorFinder) {
 		$rootScope.appendTitle = function(subtitle) {
 			$rootScope.title = $rootScope.appName + ' | ' + 
 								$translate.instant(subtitle);
+		};
+
+		$scope.$on('user_update', function() {
+			$scope.currentUser = authService.getCurrentUser();
+		});
+
+		$scope.toggleDropdown = function() {
+			$scope.showDropdown = !$scope.showDropdown;
+		};
+
+		$scope.logout = function() {
+			authService.logout();
 		};
 		
 		$scope.reminder = function() {

@@ -1,41 +1,27 @@
-
-
-<!-- <body class="register"> -->
-
-<!-- TODO: navbar only with logo 
-    <div class="navbar">
-    <a href="<c:url value="/" />" class="logo-box">
-        <img alt="Tu Teoria" class="logo" ng-src="images/logo_invert.jpg" />
-    </a>
-</div> 
--->
-
-<div class="button-container">
-    <h1 class="label"><spring:message code="login"/></h1>
-</div>
-<c:url value="/login" var="loginUrl" />
-<form class="form" action="${loginUrl}" method="post" enctype="application/x-www-form-urlencoded">
-    <div>
-        <label class="label" for="username"><spring:message code="user.username"/></label>
-        <input class="input-request" id="username" name="username" type="text"/>
-    </div>
-    <div>
-        <label class="label" for="password"><spring:message code="user.password"/></label>
-        <input class="input-request" id="password" name="password" type="password"/>
-    </div>
-    <div>
-        <label class="label" ><input name="rememberme" type="checkbox"/><spring:message code="remember_me"/></label>
-    </div>
+<div class="content">
     <div class="button-container">
-        <a href="<c:url value="/register" />" class="button-2"><spring:message code="register"/></a>
-        <input class="button-2" type="submit" value='<spring:message code="login"/>' />
+        <h1 class="label" ng-bind="'LOGIN' | translate"></h1>
     </div>
-    <div class="forgot-password-link">
-        <a href='<c:url value="/forgotPassword" />'><spring:message code="forgotPassword"/></a>
-    </div>
-    <c:if test="${param.error != null}">
-        <p class="login-error">
-            <spring:message code="login.error"/>
-        </p>
-    </c:if>
-</form>
+
+    <form ng-submit="login()" name="form" novalidate>
+		<div>
+            <label class="label" for="username" ng-bind="'USERNAME' | translate"></label>
+			<input type="text" name="username" id="username" ng-model="loginForm.username" class="input-request" required>
+		</div>
+		<div>
+            <label class="label" for="password" ng-bind="'PASSWORD' | translate"></label>
+			<input type="password" id="password" name="password" ng-model="loginForm.password" class="input-request" required>
+        </div>
+        <div>
+            <label class="label"><input type="checkbox" ng-model="loginForm.rememberMe"> {{'REMEMBER_ME' | translate}}</label>
+        </div>
+        <div class="button-container">
+            <a ng-href="#/register" class="button-2" ng-bind="'REGISTER' | translate"></a>
+            <input class="button-2" type="submit" value="{{'LOGIN' | translate}}">
+        </div>
+        <div class="forgot-password-link">
+            <a ng-href="#/forgotPassword" ng-bind="'FORGOT_PASSWORD' | translate"></a>
+        </div>
+        <p class="login-error" ng-if="error">{{'LOGIN_ERROR' | translate}}</p>
+	</form>
+</div>

@@ -130,7 +130,7 @@ body {
 }
 
 .dropdown-content {
-  display: none;
+  display: block;
   position: absolute;
   top: 65px;
   right: 22px;
