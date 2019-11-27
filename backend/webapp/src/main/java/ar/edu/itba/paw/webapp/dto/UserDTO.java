@@ -25,7 +25,7 @@ public class UserDTO {
         this.lastname = user.getLastname();
         this.email = user.getEmail();
         this.isProfessor = isProfessor;
-        this.url = baseUri.resolve("/user");
+        this.url = baseUri.resolve("user");
     }
 
     public UserDTO(Long id, String username, String name, String lastName, String email, boolean isProfessor, URI baseUri) {
@@ -35,7 +35,7 @@ public class UserDTO {
         this.lastname = lastName;
         this.email = email;
         this.isProfessor = isProfessor;
-        this.url = baseUri.resolve("/user");
+        this.url = baseUri.resolve("user");
     }
 
     public long getId() {

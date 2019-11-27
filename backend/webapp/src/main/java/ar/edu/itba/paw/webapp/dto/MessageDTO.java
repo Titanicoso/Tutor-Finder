@@ -32,7 +32,7 @@ public class MessageDTO {
         this.text = message.getText();
         this.sender = new UserDTO(message.getSender(), baseUri, false);
 
-        this.conversationUrl = baseUri.resolve("/conversations/" + message.getConversation().getId());
+        this.conversationUrl = baseUri.resolve("conversations/" + message.getConversation().getId());
         this.url = baseUri.resolve(this.conversationUrl + "/messages");
     }
 

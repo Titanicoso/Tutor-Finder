@@ -28,7 +28,7 @@ public class ProfessorDTO extends UserDTO {
                 professor.getLastname(), professor.getEmail(), true, uriInfo.getBaseUri());
 
         this.description = professor.getDescription();
-        this.imageUrl = uriInfo.getBaseUri().resolve("/professors/" + professor.getUsername() + "/image");
+        this.imageUrl = uriInfo.getBaseUri().resolve("professors/" + professor.getUsername() + "/image");
         this.coursesUrl = uriInfo.getAbsolutePathBuilder().path("/courses").build();
         this.scheduleUrl = uriInfo.getAbsolutePathBuilder().path("/schedule").build();
     }

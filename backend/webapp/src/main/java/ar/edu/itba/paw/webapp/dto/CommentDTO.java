@@ -36,7 +36,7 @@ public class CommentDTO {
 
         final Course course = comment.getCourse();
 
-        this.courseUrl = baseUri.resolve("/courses/" + course.getProfessor().getId() + "_" +
+        this.courseUrl = baseUri.resolve("courses/" + course.getProfessor().getId() + "_" +
                 course.getSubject().getId());
         this.url = baseUri.resolve(this.courseUrl + "/comments");
     }

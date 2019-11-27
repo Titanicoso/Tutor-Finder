@@ -35,7 +35,7 @@ public class CourseDTO {
         final URI baseUri = uriInfo.getBaseUri();
 
         this.subject = new SubjectDTO(course.getSubject(), baseUri);
-        this.url = baseUri.resolve("/courses/" + course.getProfessor().getId() + "_" + course.getSubject().getId());
+        this.url = baseUri.resolve("courses/" + course.getProfessor().getId() + "_" + course.getSubject().getId());
         this.courseCommentsUrl = baseUri.resolve(this.url + "/comments");
         this.courseFilesUrl = baseUri.resolve(this.url + "/files");
         this.professor = new ProfessorDTO(course.getProfessor(), uriInfo);

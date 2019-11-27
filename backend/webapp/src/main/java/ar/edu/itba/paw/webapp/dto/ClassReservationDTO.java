@@ -52,7 +52,7 @@ public class ClassReservationDTO {
         }
 
         final Course course = cs.getCourse();
-        this.courseUrl = uriInfo.getBaseUri().resolve("/courses/" + course.getProfessor().getId() + "_" +
+        this.courseUrl = uriInfo.getBaseUri().resolve("courses/" + course.getProfessor().getId() + "_" +
                 course.getSubject().getId());
 
         this.url = uriInfo.getAbsolutePathBuilder().path(String.valueOf(id)).build();
