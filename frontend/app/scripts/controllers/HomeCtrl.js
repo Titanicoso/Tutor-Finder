@@ -1,21 +1,17 @@
 'use strict';
-define(['tutorFinder','services/areaService'], function(tutorFinder) {
+define(['tutorFinder', 'directives/search'], function(tutorFinder) {
 
 	tutorFinder.controller('HomeCtrl', HomeCtrl);
 	
-	HomeCtrl.inject = ['$scope', '$rootScope','areaService'];
-	function HomeCtrl($scope, $rootScope, areaService) {
+	HomeCtrl.inject = ['$scope', '$rootScope'];
+	function HomeCtrl($scope, $rootScope) {
 		$rootScope.appendTitle('HOME');
-		areaService.getAreas('', 1)
-		.then(
-			function(data) {
-				$scope.areas = data;
-			}
-		).catch(
-			function(err) {
-				console.log(err);
-			}
-		);
-		$scope.msg = 'This is your homepage';
+
+		$scope.searchTerm = '';
+		$scope.selectOption = 'course';
+		$scope.complete = false;
+
+		$scope.search = function() {
+		};
 	};
 });

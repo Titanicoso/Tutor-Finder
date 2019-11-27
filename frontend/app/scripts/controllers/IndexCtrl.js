@@ -6,17 +6,12 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
 	
 	IndexCtrl.inject = ['$scope', '$rootScope', '$translate', 'authService'];
 	function IndexCtrl($scope, $rootScope, $translate, authService) {
-		$scope.msg = 'This is the index view';
-		$scope.currentUser = authService.getCurrentUser();
-
-		$scope.showDropdown = false;
-		
 		$rootScope.appName = $translate.instant('APP_NAME');
 		$rootScope.title = $rootScope.appName;
+
+		$scope.currentUser = authService.getCurrentUser();
+		$scope.showDropdown = false;
 		
-		/** Appends text to page title 
-		 * subtitle: a valid key from the translations.XX.js file
-		 */
 		$rootScope.appendTitle = function(subtitle) {
 			$rootScope.title = $rootScope.appName + ' | ' + 
 								$translate.instant(subtitle);

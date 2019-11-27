@@ -1,116 +1,84 @@
 
-<link rel="stylesheet" ng-href="/resources/css/course.css">
-<link rel="stylesheet" ng-href="/resources/css/conversations.css">
-<link rel="stylesheet" ng-href="/resources/css/schedule.css">
-<script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
-<script ng-src="/resources/js/dropdownClick.js"></script>
+<link rel="stylesheet" type="text/css" ng-href="styles/partials/course.css">
+<link rel="stylesheet" type="text/css" ng-href="styles/partials/conversations.css">
+<link rel="stylesheet" type="text/css" ng-href="styles/partials/schedule.css">
 
-
-<!-- <body class="staticClass"> -->
-
-<!-- <div class="content course"></div> -->
-
-<div class="class-profile">
-    <h1 class="title center-text"><c:out value="${course.subject.area.name} - ${course.subject.name}" escapeXml="true"/></h1>
-    <h4 class="description center-text"><c:out value="${course.description}" escapeXml="true"/></h4>
-    <div class="profile round-background">
-        <a class="profile-picture" ng-href="/Professor/${course.professor.id}"/>">
-            <img class="profile-picture" alt="Profile picture" ng-src="data:image/jpeg;base64,${course.professor.picture}"/>
-        </a>
-        <div class="profile-name"><c:out value="${course.professor.name}" escapeXml="true"/> <c:out value = "${course.professor.lastname}" escapeXml="true"/></div>
-        <div class="profile-description"><c:out value="${course.professor.description}" escapeXml="true"/></div>
-    </div>
-</div>
-<div class="contact">
-    <div class="button-container">
-        <h2 class="label"><spring:message code="course.contact"/></h2>
-    </div>
-<c:url value="/sendMessage" var="postPath"/>
-<form:form cssClass="form" modelAttribute="messageForm" action="${postPath}" method="post">
-    <form:hidden path="professorId" />
-    <form:hidden path="subjectId" />
-    <div>
-        <form:label cssClass="label" path="body"><spring:message code="contact.body"/></form:label>
-        <form:textarea cssClass="input-request chat-box" type="text" path="body" rows="5" cols="5"/>
-        <form:errors cssClass="error-text" path="body" element="p"/>
-    </div>
-    <div>
-        <form:hidden path="extraMessage"/>
-        <form:errors cssClass="success-text no-margin" path="extraMessage" element="p"/>
-    </div>
-    <div class="button-container">
-        <input class="button-2 no-margin" type="submit" value='<spring:message code="send"/>'/>
-    </div>
-</form:form>
-</div>
-
-<div class="comment">
-    <div class="button-container">
-        <h2 class="label"><spring:message code="course.comment"/></h2>
-    </div>
-    <c:url value="/postComment" var="postPath"/>
-        <form:form cssClass="form" modelAttribute="commentForm" action="${postPath}" method="post">
-        <form:hidden path="commentProfessorId" />
-        <form:hidden path="commentSubjectId" />
-        <div>
-            <form:label cssClass="label" path="commentBody"><spring:message code="comment.body"/></form:label>
-            <form:textarea cssClass="input-request chat-box" type="text" path="commentBody" rows="5" cols="5"/>
-            <form:errors cssClass="error-text" path="commentBody" element="p"/>
+<div ng-if="course">
+    <div class="class-profile">
+        <h1 class="title center-text" ng-bind="course.subject.name"></h1>
+        <h4 class="description center-text" ng-bind="course.description"></h4>
+        <div class="profile round-background">
+            <a class="profile-picture" ng-href="/professor/course.professor.id">
+                <img class="profile-picture" alt="Profile picture" ng-src="{{ course.professor.image_url }}"/>
+            </a>
+            <div class="profile-name" ng-bind="course.professor.name + ' ' + course.professor.lastname"></div>
+            <div class="profile-description" ng-bind="course.professor.description"></div>
         </div>
-        <div>
-            <form:label cssClass="label" path="rating"><spring:message code="comment.rating"/></form:label>
-            <form:input cssClass="input-request" type="number" step="1" min="1" max="5" path="rating"/>
-            <form:errors cssClass="error-text" path="rating" element="p"/>
-        </div>
-
-        <c:choose>
-            <c:when test="${canComment == false}">
-                <c:set var="disabled" value="disabled" />
-            </c:when>
-            <c:otherwise>
-                <c:set var="disabled" value="" />
-            </c:otherwise>
-        </c:choose>
-
+    </div>
+    <div class="contact" ng-if="currentUser == null || currentUser.id != professorId">
         <div class="button-container">
-            <input class="button-2" type="submit" ${disabled} value='<spring:message code="send"/>'/>
+            <h2 class="label" ng-bind="'CONTACT' | translate"></h2>
         </div>
-    </form:form>
-</div>
-
-<div class="comments">
-
-    <div>
-        <h2><spring:message code="commentTitle"/></h2>
+        <form class="form" ng-submit="contact(contactForm)" name="contactForm" novalidate>
+            <div>
+                <label class="label" for="body" ng-bind="'BODY' | translate"></label>
+                <textarea class="input-request chat-box" type="text" name="body" rows="5" cols="5" ng-required="true" ng-maxlength="1024" ng-model="contactInput.body"></textarea>
+                <p class="error-text" ng-show="contactForm.$dirty && contactForm.$invalid">{{'MESSAGE_SIZE_ERROR' | translate: '{ min: 1, max: 1024 }'}}</p>
+            </div>
+            <div>
+                <p class="success-text no-margin" ng-show="contactSuccess" ng-bind="'CONTACT_SUCCESS' | translate"></p>
+            </div>
+            <div class="button-container">
+                <input class="button-2 no-margin" type="submit" ng-disabled="contactForm.$invalid" value="{{'SEND' | translate}}"/>
+            </div>
+        </form>
     </div>
-    <c:forEach var="comment" items="${comments.results}">
-        <div class="message message-comment">
-            <h5 class="message-text"><c:out value="${comment.user.username}: ${comment.comment}" escapeXml="true"/></h5>
-            <h6 class="conversation-last-time message-comment-time">
-                <spring:message code="time.sent" arguments="${comment.day},${comment.month},${comment.year},${comment.hours},${comment.minutes}"/>
-            </h6>
+
+    <div class="comment" ng-if="currentUser == null || currentUser.id != professorId">
+        <div class="button-container">
+            <h2 class="label" ng-bind="'COMMENT' | translate"></h2>
         </div>
-    </c:forEach>
+        <form class="form" ng-submit="comment(commentForm)" name="commentForm" novalidate>
+            <div>
+                <label class="label" for="body" ng-bind="'COMMENT_BODY' | translate"></label>
+                <textarea class="input-request chat-box" type="text" name="body" rows="5" cols="5" ng-required="true" ng-maxlength="1024" ng-model="commentInput.body"></textarea>
+                <p class="error-text" ng-show="commentForm.body.$dirty && commentForm.body.$invalid">{{'COMMENT_SIZE_ERROR' | translate: '{ min: 1, max: 1024 }'}}</p>
+            </div>
+            <div>
+                <label class="label" for="rating" ng-bind="'RATING' | translate"></label>
+                <input class="input-request" type="number" name="rating" step="1" ng-min="1" ng-max="5" min="1" max="5" ng-required="true" ng-model="commentInput.rating"/>
+                <p class="error-text" ng-show="commentForm.rating.$dirty && commentForm.rating.$invalid">{{'RATING_ERROR' | translate: '{ min: 1, max: 5 }'}}</p>
+                <p class="error-text" ng-show="commentError">{{commentError | translate}}</p>
+            </div>
 
-    <div class="paged-result-buttons">
-        <c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}&page=${page - 1}" var="previous"/>
-        <c:url value="/Course/?professor=${course.professor.id}&subject=${course.subject.id}&page=${page + 1}" var="next"/>
-
-        <c:if test="${page > 1}">
-            <a href="${previous}" class="previous round">&#8249;</a>
-        </c:if>
-        <c:if test="${comments.hasNext}">
-            <a href="${next}" class="next round">&#8250;</a>
-        </c:if>
+            <div class="button-container">
+                <input class="button-2" type="submit" ng-disabled="commentForm.$invalid" value="{{'SEND' | translate}}"/>
+            </div>
+        </form:form>
     </div>
-</div>
 
-<div class="schedule w-92">
-    <h2><spring:message code="schedule.title"/></h2>
-    <c:if test="${currentUser == null || (currentUser != null && currentUser.id != course.professor.id)}">
-        <input  class="button-2" type="button" value="<spring:message code="reservations.action"/>" onclick="location.href='<c:url value="/reserveClass?professor=${course.professor.id}&subject=${course.subject.id}" />'"/>
-    </c:if>
-    <p><spring:message code="schedule.description" /></p>
-    <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include>
+    <div class="comments" ng-if="comments && comments.data.length > 0">
+        <div>
+            <h2 ng-bind="'COMMENT_TITLE' | translate"></h2>
+        </div>
+        <div class="message message-comment" ng-repeat="comment in comments.data">
+            <h5 class="message-text" ng-bind="comment.sender.username + ': ' + comment.comment"></h5>
+            <h6 class="conversation-last-time message-comment-time">{{ 'SENT_TIME' | translate }}{{ comment.created | date:'medium' }}</h6>
+        </div>
 
+        <div class="paged-result-buttons">
+            <a href="javascript:;" ng-if="comments.links.prev" ng-click="getPage(comments.links.prev.number)" class="previous round">&#8249;</a>
+            <a href="javascript:;" ng-if="comments.links.next" ng-click="getPage(comments.links.next.number)" class="next round">&#8250;</a>
+        </div>
+    </div>
+
+<!--     <div class="schedule w-92">
+        <h2><spring:message code="schedule.title"/></h2>
+        <c:if test="${currentUser == null || (currentUser != null && currentUser.id != course.professor.id)}">
+            <input  class="button-2" type="button" value="<spring:message code="reservations.action"/>" onclick="location.href='<c:url value="/reserveClass?professor=${course.professor.id}&subject=${course.subject.id}" />'"/>
+        </c:if>
+        <p><spring:message code="schedule.description" /></p>
+        <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include>
+
+    </div> -->
 </div>

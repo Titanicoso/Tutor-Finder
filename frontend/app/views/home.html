@@ -1,65 +1,24 @@
-<script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
+<!-- <script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
 <script ng-src="/resources/js/dropdownClick.js"></script>
-<script ng-src="/resources/js/searchForm.js"></script>
+<script ng-src="/resources/js/searchForm.js"></script> -->
 
-<!-- <body class="staticHome"> -->
-
-<!-- TODO: implement in navbar 
-    <div class="navbar">
-    <a ng-href="/" class="logo-box">
-        <img alt="Tu Teoria" class="logo" ng-src="images/logo_invert.jpg" />
-    </a>
-
-    <div class="search-bar"></div>
-
-    <div class="navbar-buttons">
-        <c:choose>
-            <c:when test="${currentUser != null}">
-                <div class="navbar-button dropdown" id="dropdown">
-                    <a class="dropdown-button" id="dropdown-button"><c:out value="${currentUser.name} " escapeXml="true"/></a>
-                    <div class="dropdown-content" id="dropdown-content">
-                        <c:choose>
-                            <c:when test="${currentUserIsProfessor == true}">
-                                <a ng-href="/Profile" class="navbar-button"><spring:message code="profile.title"/></a>
-                                <a ng-href="/classRequests?page=1" class="navbar-button"><spring:message code="classes.title"/></a>
-                            </c:when>
-                            <c:otherwise>
-                                <a ng-href="/registerAsProfessor" class="navbar-button"><spring:message code="register.professor"/></a>
-                            </c:otherwise>
-                        </c:choose>
-                        <a ng-href="/reservations?page=1" class="navbar-button"><spring:message code="reservations.title"/></a>
-                        <a ng-href="/Conversations" class="navbar-button"><spring:message code="conversations.title"/></a>
-                        <a ng-href="/logout" class="navbar-button"><spring:message code="user.logout"/></a>
-                    </div>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <a ng-href="/register" class="navbar-button"><spring:message code="register"/></a>
-                <a ng-href="/login" class="navbar-button"><spring:message code="login"/></a>
-            </c:otherwise>
-        </c:choose>
-    </div>
-</div> 
--->
-
-<form:form modelAttribute="SearchForm" action="'views/searchResults.html'" method="post">
-<div class="search-box">
+<div class="search-box" ng-if="!complete">
     <img alt="{{ 'APP_NAME' | translate }}" class="search-logo" ng-src="images/logo.png" />
-    <div class="search-bar">
-        <spring:message code="search" var="searchPlaceholder"/>
-        <form:input class="search-input" type="search" path="search" placeholder="${searchPlaceholder}"/>
-        <div class="search-dropdown">
-            <form:select cssClass="select-searchbar-type" path="type" name="type">
-                <form:option value="" selected="true" disabled="true"><spring:message code="search.category" /> </form:option>
-                <form:option value="professor"><spring:message code="professor" /> </form:option>
-                <form:option value="course"><spring:message code="course.title" /> </form:option>
-                <form:option value="area"><spring:message code="area" /></form:option>
-            </form:select>
+    <form ng-submit="search()" novalidate>
+        <div class="search-bar">
+            <input class="search-input" type="search" placeholder="{{ 'SEARCH' | translate }}" ng-model="searchTerm">
+            <div class="search-dropdown">
+                <select class="select-searchbar-type" ng-model="selectOption">
+                    <option value="" disabled="true" ng-bind="'SEARCH_CATEGORY' | translate"></option>
+                    <option value="professor" ng-bind="'PROFESSOR' | translate"></option>
+                    <option value="course" ng-bind="'COURSE' | translate"></option>
+                    <option value="area" ng-bind="'AREA' | translate"></option>
+                </select>
+            </div>
+            <button type="submit" class="search-button">
+                <img class="search-img" ng-src="images/search.png"/>
+            </button>
         </div>
-        <button type="submit" class="search-button">
-            <img class="search-img" ng-src="images/search.png"/>
-        </button>
-    </div>
-    <span ng-repeat="area in areas">{{area.id}}</span>
+    </form>
 </div>
-</form:form>
+<search ng-if="complete" category="selectOption" term="searchTerm"></search>

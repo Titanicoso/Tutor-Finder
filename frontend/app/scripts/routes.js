@@ -70,7 +70,7 @@ define([], function() {
             },
             '/searchResults': {
                 templateUrl: '/views/searchResults.html',
-                controller: 'SearchResultsCtrl'
+                controller: 'SearchCtrl'
             }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */

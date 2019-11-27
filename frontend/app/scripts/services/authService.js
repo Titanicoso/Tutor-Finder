@@ -67,7 +67,6 @@ define(['tutorFinder'], function(tutorFinder) {
 				})
 				.then(function(response) {
 					service.currentUser = response.data;
-					$window.sessionStorage.setItem('current_user', JSON.stringify(service.currentUser));
 					$rootScope.$broadcast('user_update');
 					return service.currentUser;
 				})
@@ -86,18 +85,10 @@ define(['tutorFinder'], function(tutorFinder) {
 				return this.currentUser;
 			}
 
-			var currentUser = JSON.parse($window.sessionStorage.getItem('current_user'));
-
-			if (currentUser) {
-				this.currentUser = currentUser;
-				return currentUser;
-			}
-
 			var service = this;
 			$http.get(apiUrl + '/user', service.getAuthHeaders())
 			.then(function(response) {
 				service.currentUser = response.data;
-				$window.sessionStorage.setItem('current_user', JSON.stringify(service.currentUser));
 				$rootScope.$broadcast('user_update');
 				return service.currentUser;
 			})

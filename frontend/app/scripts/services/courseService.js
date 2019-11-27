@@ -45,11 +45,11 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
         };
 
         this.contact = function(professorId, subjectId, message) {
-            return restService.post('courses/' + professorId + '_' + subjectId, {message: message});
+            return restService.post('courses/' + professorId + '_' + subjectId + '/contact', {message: message});
         };
 
         this.comment = function(professorId, subjectId, message, rating) {
-            return restService.post('courses/' + professorId + '_' + subjectId, {commentBody: message, rating: rating});
+            return restService.post('courses/' + professorId + '_' + subjectId + '/comments', {commentBody: message, rating: rating});
         };
 
         this.create = function(subjectId, description, price) {

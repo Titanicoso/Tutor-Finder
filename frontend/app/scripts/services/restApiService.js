@@ -11,12 +11,18 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
             }
 
             var links = header.split(',');
-            var resolved = [];
+            var resolved = {next: undefined, prev: undefined, first: undefined, last: undefined};
             links.forEach(function (link) {
                 var url = link.match('<.*>')[0].replace(/<(.*)>/, '$1').trim();
                 var number = url.match(/page=([0-9]+)/)[1];
                 var rel = link.match('rel=.*')[0].replace(/rel="(.*)"/, '$1').trim();
-                resolved.push({url: url, number: number, rel: rel});
+
+                switch (rel) {
+                    case 'next': resolved.next = {url: url, number: number}; break;
+                    case 'prev': resolved.prev = {url: url, number: number}; break;
+                    case 'last': resolved.last = {url: url, number: number}; break;
+                    default: resolved.first = {url: url, number: number}; break;
+                }
             });
 
             return resolved;

@@ -20,6 +20,21 @@ define([], function() {
 		RESERVATIONS: 'Mis Reservas',
 		CONVERSATIONS: 'Conversaciones',
 		LOGOUT: 'Cerrar Sesión',
-		APP_NAME: 'tutorFinder',
+		CONTACT: 'Contactar',
+ 		COMMENT: 'Comentar',
+		COMMENT_TITLE: 'Comentarios',
+		SENT_TIME: 'Enviado: ',
+		SEND: 'Enviar',
+		BODY: 'Mensaje:',
+		APP_NAME: 'Tu Teoria',
+		COMMENT_BODY: 'Comentario:',
+		RATING: 'Puntaje:',
+
+		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
+		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
+
+		MESSAGE_SIZE_ERROR: 'El mensaje debe tener entre {{min}} y {{max}} caracteres',
+		COMMENT_SIZE_ERROR: 'El comentario debe tener entre {{min}} y {{max}} caracteres',
+		RATING_ERROR: 'El rating debe estar entre entre {{min}} y {{max}}'
 	};
 });
