@@ -61,8 +61,8 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
                     {startHour: startHour, endHour: endHour, day: day});
         };
 
-        this.modify = function(subjectId, description, price) {
-            return restService.put('courses', {subject: subjectId, description: description, price: price});
+        this.modify = function(professorId, subjectId, description, price) {
+            return restService.put('courses/' + professorId + '_' + subjectId, {subject: subjectId, description: description, price: price});
         };
 
         this.delete = function(professorId, subjectId) {

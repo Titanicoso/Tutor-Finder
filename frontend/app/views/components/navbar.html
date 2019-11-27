@@ -26,15 +26,15 @@
         <a class="dropdown-button" ng-click="toggleDropdown()" ng-bind="currentUser.name"></a>
         <div class="dropdown-content" ng-show="showDropdown">
             <div ng-if="currentUser.professor">
-                <a ng-href="/#!/Profile" class="navbar-button" ng-bind="'PROFILE' | translate"></a>
-                <a ng-href="/#!/classRequests?page=1" class="navbar-button" ng-bind="'CLASS_REQUESTS' | translate"></a>
+                <a ng-href="/#!/profile" ng-click="toggleDropdown()" class="navbar-button" ng-bind="'PROFILE' | translate"></a>
+                <a ng-href="/#!/classRequests?page=1" ng-click="toggleDropdown()" class="navbar-button" ng-bind="'CLASS_REQUESTS' | translate"></a>
             </div>
             <div ng-if="!currentUser.professor">
-                <a ng-href="/#!/registerAsProfessor" class="navbar-button" ng-bind="'REGISTER_PROFESSOR' | translate"></a>
+                <a ng-href="/#!/registerAsProfessor" ng-click="toggleDropdown()" class="navbar-button" ng-bind="'REGISTER_PROFESSOR' | translate"></a>
             </div>
-            <a ng-href="/#!/reservations?page=1" class="navbar-button" ng-bind="'RESERVATIONS' | translate"></a>
-            <a ng-href="/#!/Conversations" class="navbar-button" ng-bind="'CONVERSATIONS' | translate"></a>
-            <a ng-click="logout()" class="navbar-button" ng-bind="'LOGOUT' | translate"></a>
+            <a ng-href="/#!/reservations?page=1" ng-click="toggleDropdown()" class="navbar-button" ng-bind="'RESERVATIONS' | translate"></a>
+            <a ng-href="/#!/conversations" ng-click="toggleDropdown()" class="navbar-button" ng-bind="'CONVERSATIONS' | translate"></a>
+            <a ng-click="logout()" ng-click="toggleDropdown()" class="navbar-button" ng-bind="'LOGOUT' | translate"></a>
         </div>
     </div>
     <div ng-if="!currentUser">

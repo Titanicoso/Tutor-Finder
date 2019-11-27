@@ -16,10 +16,6 @@ define([], function() {
                 templateUrl: '/views/course.html',
                 controller: 'CourseCtrl'
             },
-            '/createCourse': {
-                templateUrl: '/views/createCourse.html',
-                controller: 'CreateCourseCtrl'
-            },
             '/forgotPassword': {
                 templateUrl: '/views/forgotPassword.html',
                 controller: 'ForgotPasswordCtrl'
@@ -28,13 +24,9 @@ define([], function() {
                 templateUrl: '/views/login.html',
                 controller: 'LoginCtrl'
             },
-            '/modifyCourse': {
-                templateUrl: '/views/modifyCourse.html',
-                controller: 'ModifyCourseCtrl'
-            },
-            '/modifyProfessorProfile': {
-                templateUrl: '/views/modifyProfessorProfileForm.html',
-                controller: 'ModifyProfessorProfileCtrl'
+            '/course/files': {
+                templateUrl: '/views/courseFiles.html',
+                controller: 'CourseFilesCtrl'
             },
             '/myClasses': {
                 templateUrl: '/views/myClasses.html',
@@ -44,9 +36,9 @@ define([], function() {
                 templateUrl: '/views/profile.html',
                 controller: 'ProfileCtrl'
             },
-            '/profileForProfessor': { // TODO: route should be just '/profile'
-                templateUrl: '/views/profileForProfessor.html',
-                controller: 'ProfessorProfileCtrl'
+            '/professor/:username': {
+                templateUrl: '/views/profile.html',
+                controller: 'ProfileCtrl'
             },
             '/register': {
                 templateUrl: '/views/register.html',

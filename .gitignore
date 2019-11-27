@@ -15,3 +15,5 @@ frontend/package-lock\.json
 
 frontend/.vscode/*
 .vscode/*
+
+frontend/.sass-cache/

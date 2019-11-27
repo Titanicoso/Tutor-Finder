@@ -1,17 +1,14 @@
 $icon-font-path: "../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$fa-font-path: '../../bower_components/components-font-awesome/fonts';
 
 @import './modules/variables.scss';
 
-$theme-colors: (
-  "primary": #e09f11,  //esto no hace nada y todavia no se por que
-) !default;
-$body-bg: rgb(230, 230, 230);
+@import '../../bower_components/components-font-awesome/scss/font-awesome.scss';
 
-@import '../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
-/* // bower:scss
- @import 'bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
- // endbower
- */
+// bower:scss
+@import 'bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
+// endbower
+
 @import 'partials/home';
 
 .browsehappy {

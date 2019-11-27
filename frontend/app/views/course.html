@@ -8,7 +8,7 @@
         <h1 class="title center-text" ng-bind="course.subject.name"></h1>
         <h4 class="description center-text" ng-bind="course.description"></h4>
         <div class="profile round-background">
-            <a class="profile-picture" ng-href="/professor/course.professor.id">
+            <a class="profile-picture" ng-href="/#!/professor/{{ course.professor.username }}">
                 <img class="profile-picture" alt="Profile picture" ng-src="{{ course.professor.image_url }}"/>
             </a>
             <div class="profile-name" ng-bind="course.professor.name + ' ' + course.professor.lastname"></div>

@@ -87,7 +87,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/conversations/**", "/api/courses/*/contact", "/api/courses/*/comments", "/api/courses/*/reservations").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/conversations/**", "/api/courses/*/files/**", "/api/user", "/api/user/reservations/**").authenticated()
                     .antMatchers(HttpMethod.POST,"api/user/upgrade").hasRole("USER")
-                    .antMatchers(HttpMethod.GET, "/api/user/requests/**", "/api/user/courses", "/api/user/schedule").hasRole("PROFESSOR")
+                    .antMatchers(HttpMethod.GET, "/api/user/requests/**", "/api/user/courses", "/api/user/schedule", "/api/subjects/available").hasRole("PROFESSOR")
                     .antMatchers(HttpMethod.DELETE, "/api/user/requests/**", "/api/courses/*/files/**", "/api/courses/*").hasRole("PROFESSOR")
                     .antMatchers(HttpMethod.PUT, "/api/user/requests/**", "/api/courses/*", "/api/courses/*/files/**", "/api/user").hasRole("PROFESSOR")
                     .antMatchers(HttpMethod.POST, "/api/courses").hasRole("PROFESSOR")

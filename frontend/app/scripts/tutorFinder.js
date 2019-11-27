@@ -5,14 +5,19 @@ define([
 	'i18n/i18nLoader!',
 	'angular',
 	'angular-route',
+	'angular-material',
+	'angular-animate',
+	'angular-aria',
 	'bootstrap',
+	'angular-bootstrap',
 	'angular-translate'
 	],
 	function(config, dependencyResolverFor, i18n) {
 		var tutorFinder = angular.module('tutorFinder', [
 			'ngRoute',
-			'pascalprecht.translate'/* ,
-			'ui.bootstrap' */
+			'ngMaterial',
+			'pascalprecht.translate',
+			'ui.bootstrap'
 		]);
 		tutorFinder.config([
 			'$routeProvider',

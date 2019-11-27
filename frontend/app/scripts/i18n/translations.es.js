@@ -29,12 +29,32 @@ define([], function() {
 		APP_NAME: 'Tu Teoria',
 		COMMENT_BODY: 'Comentario:',
 		RATING: 'Puntaje:',
+		MODIFY_PROFESSOR: 'Modifica tu perfil',
+		PROFILE_COURSES: 'Tus Clases',
+		PROFILE_COURSES_DESCRIPTION: 'Esta es la lista de clases que usted da',
+		PROFESSOR_COURSES: 'Clases del profesor', 
+		PROFESSOR_COURSES_DESCRIPTION: 'Aquí puede ver las clases dictadas por el profesor.',
+		ADD_COURSE: 'Agregar Clase',
+		DELETE_COURSE: 'Eliminar Clase',
+		FILES: 'Ver Material',
+		MODIFY_COURSE: 'Modificar Curso',
+		NO_COURSES: 'El profesor no dicta ningun curso',
+		SUBJECT: 'Materia:',
+		SELECT_SUBJECT: 'Seleccione una materia',
+		DESCRIPTION: 'Descripción: ',
+		PRICE: 'Precio por hora:',
+		MODIFY: 'Modificar',
+		CREATE: 'Crear',
+
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
 
 		MESSAGE_SIZE_ERROR: 'El mensaje debe tener entre {{min}} y {{max}} caracteres',
+		DESCRIPTION_SIZE_ERROR: 'La descripción debe tener entre {{min}} y {{max}} caracteres',
 		COMMENT_SIZE_ERROR: 'El comentario debe tener entre {{min}} y {{max}} caracteres',
-		RATING_ERROR: 'El rating debe estar entre entre {{min}} y {{max}}'
+		RATING_ERROR: 'El rating debe estar entre entre {{min}} y {{max}}',
+		PRICE_ERROR: 'El precio debe ser mayor que {{min}}',
+		SUBJECT_ERROR: 'Debe seleccionar una materia'
 	};
 });

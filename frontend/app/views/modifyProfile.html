@@ -1,0 +1,21 @@
+<div class="button-container">
+    <h2 class="label"><spring:message code="modify.professor" /> </h2>
+</div>
+<c:url value="/editProfessorProfile" var="postPath" />
+<form:form cssClass="form" modelAttribute="editProfessorProfileForm" action="${postPath}" enctype="multipart/form-data" method="post">
+    <div>
+        <form:label cssClass="label" path="description"><spring:message code="profile.modify.description"/></form:label>
+        <form:textarea cssClass="input-request" type="text" path="description" rows="5" cols="5"/>
+        <form:errors cssClass="error-text" path="description" element="p"/>
+    </div>
+    <div id="pictureDiv">
+        <form:label cssClass="label" path="pic"><spring:message code="profile.modify.picture"/></form:label>
+        <form:input cssClass="input-request" type="file" path="pic" accept="image/jpeg, image/png" id="pic"/>
+        <form:errors cssClass="error-text" path="pic" element="p"/>
+        <p id="pictureError" class="error-text"><spring:message code="FileSize.registerAsProfessorForm.picture" /></p>
+    </div>
+
+    <div class="button-container">
+        <input class="button-2" type="submit" id="modifyProfessorSubmit" value='<spring:message code="modify"/>'/>
+    </div>
+</form:form>

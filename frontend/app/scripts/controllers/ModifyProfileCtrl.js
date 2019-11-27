@@ -2,10 +2,10 @@
 'use strict';
 define(['tutorFinder'], function(tutorFinder) {
 
-	tutorFinder.controller('ModifyProfessorProfileCtrl', ModifyProfessorProfileCtrl);
+	tutorFinder.controller('ModifyProfileCtrl', ModifyProfileCtrl);
 	
 	ModifyProfessorProfileCtrl.$inject = ['$scope', '$rootScope'];
-	function ModifyProfessorProfileCtrl($scope, $rootScope) {
+	function ModifyProfileCtrl($scope, $rootScope) {
 
 		$rootScope.appendTitle('MODIFY_PROFESSOR_PROFILE');
 	};

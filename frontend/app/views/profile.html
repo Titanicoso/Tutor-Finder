@@ -1,58 +1,59 @@
-<link rel="stylesheet" ng-href="/resources/css/schedule.css">
-<script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
-<script ng-src="/resources/js/dropdownClick.js"></script>
+<link rel="stylesheet" ng-href="/styles/partials/schedule.css">
 
-
-<!-- <body class="staticProfile"> -->
-
-<divc class="profile-profesor">
-    <img class="profile-picture" alt="Profile picture" ng-src="data:image/jpeg;base64,${professor.picture}"/>
-    <h1 class="profile-name m-0-10"><c:out value="${professor.name} ${professor.lastname}" escapeXml="true"/></h1>
-    <h3 class="profile-description m-0-10"><c:out value="${professor.description}" escapeXml="true"/></h3>
-</divc>
-<div class="class-content">
-    <div class="classes">
-        <div>
-            <h2><spring:message code="clasesTitle"/></h2>
-            <p><spring:message code="clasesDescription" /></p>
+<div ng-if="professor">
+    <div class="profile-profesor">
+        <img class="profile-picture" alt="Profile picture" ng-src="{{ professor.image_url }}"/>
+        <div class="profile-name row">
+            <h1 class="m-0-10 fit-content" ng-bind="professor.name + ' ' + professor.lastname"></h1>
+            <a ng-if="showEditOptions" class="fa fa-pencil center profile-course-button" title="{{'MODIFY_PROFESSOR' | translate}}" href="javascript:;" ng-click="editProfile()"></a>
         </div>
-        <c:if test="${courses.results.size() == 0}">
-            <h4><spring:message code="no.courses"/></h4>
-        </c:if>
-        <c:forEach var="course" items="${courses.results}">
-            <div class="class">
-                <a class="class-button" ng-href="/Course/?professor=${course.professor.id}&subject=${course.subject.id}"></a>
-                <h3 class="class-title"><c:out value="${course.subject.name}" escapeXml="true"/></h3>
-                <div class="class-description"><c:out value="${course.description}" escapeXml="true"/></div>
+        <h3 class="profile-description m-0-10" ng-bind="professor.description"></h3>
+    </div>
+    <div class="class-content">
+        <div class="row r-center" ng-if="showEditOptions">
+            <div class="add-class button-2 relative">
+                <a class="class-button" href="javascript:;" ng-click="modifyCourse()"></a>
+                {{ 'ADD_COURSE' | translate }}
             </div>
-        </c:forEach>
+        </div>
+        <div class="classes" ng-if="courses">
+            <div>
+                <h2 ng-bind="(showEditOptions ? 'PROFILE_COURSES' : 'PROFESSOR_COURSES') | translate"></h2>
+                <p ng-bind="(showEditOptions ? 'PROFILE_COURSES_DESCRIPTION' : 'PROFESSOR_COURSES_DESCRIPTION') | translate"></p>
+            </div>
+            <h4 ng-if="!showEditOptions && courses.data.length < 1" ng-bind="'NO_COURSES' | translate"></h4>
 
-    <div class="paged-result-buttons">
-        <c:url value="/Professor/${professor.id}?page=${page - 1}" var="previous"/>
-        <c:url value="/Professor/${professor.id}?page=${page + 1}" var="next"/>
+            <div class="class" ng-repeat="course in courses.data">
+                <a class="class-button" ng-href="/#!/course/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}"></a>
+                <h3 class="class-title" ng-bind="course.subject.name"></h3>
+                <div class="class-description" ng-bind="course.description"></div>
+                <div class="edit-class" ng-if="showEditOptions">
+                    <a title="{{ 'MODIFY_COURSE' | translate }}" href="javascript:;" ng-click="modifyCourse(course)" class="fa fa-pencil center profile-course-button"></a>
+                    <a title="{{ 'FILES' | translate }}" href="javascript:;" class="fa fa-file center profile-course-button"></a>
+                    <a title="{{ 'DELETE_COURSE' | translate }}" ng-href="/#!/course/files/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}" ng-click="deleteCourse(course)" class="fa fa-trash center profile-course-button"></a>
+                </div>
+            </div>
 
-            <c:if test="${page > 1}">
-                <a href="${previous}" class="previous round">&#8249;</a>
-            </c:if>
-            <c:if test="${courses.hasNext}">
-                <a href="${next}" class="next round">&#8250;</a>
-            </c:if>
+            <div class="paged-result-buttons">
+                <a href="javascript:;" ng-if="courses.links.prev" ng-click="getPage(courses.links.prev.number)" class="previous round">&#8249;</a>
+                <a href="javascript:;" ng-if="courses.links.next" ng-click="getPage(courses.links.next.number)" class="next round">&#8250;</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="time-content time-content-other">
-    <div class="schedule">
-        <h2><spring:message code="schedule.title"/></h2>
-        <p><spring:message code="schedule.description" /></p>
-        <c:choose>
-            <c:when test="${schedule.monday.isEmpty() && schedule.tuesday.isEmpty() && schedule.wednesday.isEmpty() && schedule.thursday.isEmpty() && schedule.friday.isEmpty() && schedule.saturday.isEmpty() && schedule.sunday.isEmpty()}">
-                <h4><spring:message code="schedule.empty"/></h4>
-            </c:when>
-            <c:otherwise>
-                    <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include>
+    <!-- <div class="time-content time-content-other">
+        <div class="schedule">
+            <h2><spring:message code="schedule.title"/></h2>
+            <p><spring:message code="schedule.description" /></p>
+            <c:choose>
+                <c:when test="${schedule.monday.isEmpty() && schedule.tuesday.isEmpty() && schedule.wednesday.isEmpty() && schedule.thursday.isEmpty() && schedule.friday.isEmpty() && schedule.saturday.isEmpty() && schedule.sunday.isEmpty()}">
+                    <h4><spring:message code="schedule.empty"/></h4>
+                </c:when>
+                <c:otherwise>
+                        <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include>
 
-            </c:otherwise>
-        </c:choose>
-    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div> -->
 </div>
