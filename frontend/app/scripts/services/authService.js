@@ -48,6 +48,24 @@ define(['tutorFinder'], function(tutorFinder) {
 			this.accessToken = undefined;
 		};
 
+		this.forgotPassword = function(password, token) {
+            return $http.post(apiUrl + '/user/forgot_password/' + token, JSON.stringify({password: password}));
+        };
+
+		this.refreshAccessToken = function(response) {
+			var service = this;
+			service.setAccessToken(response.headers('Authorization'), false);
+			$http.get(apiUrl + '/user', service.getAuthHeaders())
+			.then(function(response) {
+				service.currentUser = response.data;
+				$rootScope.$broadcast('user_update');
+				return service.currentUser;
+			})
+			.catch(function(response) {
+				return $q.reject(response);
+			});
+		};
+
         this.login = function(username, password, rememberMe) {
 			var service = this;
 			return $http.post(apiUrl + '/authenticate', {username: username, password: password},
@@ -75,6 +93,10 @@ define(['tutorFinder'], function(tutorFinder) {
 				});
 		};
 
+		this.register = function(name, lastname, email, username, password) {
+        	return $http.post(apiUrl + '/user/', JSON.stringify({name: name, lastname: lastname, email: email, username: username, password: password}));
+        };
+
 		this.logout = function() {
 			self.clearSession();
 			$rootScope.$broadcast('user_update');
@@ -86,6 +108,10 @@ define(['tutorFinder'], function(tutorFinder) {
 			}
 
 			var service = this;
+			if (!service.getAccessToken()) {
+				return null;
+			}
+
 			$http.get(apiUrl + '/user', service.getAuthHeaders())
 			.then(function(response) {
 				service.currentUser = response.data;

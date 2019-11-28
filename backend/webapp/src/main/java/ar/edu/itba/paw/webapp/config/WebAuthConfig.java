@@ -46,6 +46,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationEntryPoint entryPoint;
 
+    @Autowired
+    private StatelessSuccessHandler statelessSuccessHandler;
+
+    @Autowired
+    private JwtAuthorizationFilter authorizationFilter;
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -78,11 +84,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager()))
+                    .addFilterAfter(authorizationFilter, CorsFilter.class)
                 .exceptionHandling()
                     .authenticationEntryPoint(entryPoint)
                     .accessDeniedPage("/403")
                 .and().authorizeRequests()
+                    .antMatchers(HttpMethod.GET, "/api/user/password_reset/**").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/authenticate/**", "/api/user", "/api/user/password_reset/**").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/conversations/**", "/api/courses/*/contact", "/api/courses/*/comments", "/api/courses/*/reservations").authenticated()
                     .antMatchers(HttpMethod.GET, "/api/conversations/**", "/api/courses/*/files/**", "/api/user", "/api/user/reservations/**").authenticated()
@@ -95,7 +102,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin()
                     .usernameParameter("username").passwordParameter("password")
                     .loginProcessingUrl("/api/authenticate")
-                    .successHandler(new StatelessSuccessHandler())
+                    .successHandler(statelessSuccessHandler)
                     .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 .and().csrf().disable();
     }

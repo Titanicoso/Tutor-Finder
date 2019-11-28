@@ -3,6 +3,9 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.webapp.auth.JwtTokenManager;
+import ar.edu.itba.paw.webapp.auth.SecurityConstants;
+import ar.edu.itba.paw.webapp.auth.StatelessSuccessHandler;
 import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.dto.form.EditProfessorProfileForm;
 import ar.edu.itba.paw.webapp.dto.form.RegisterAsProfessorForm;
@@ -41,6 +44,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private JwtTokenManager tokenManager;
 
     @Context
     private UriInfo uriInfo;
@@ -275,6 +281,29 @@ public class UserController extends BaseController {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
+        final String jwtToken = tokenManager.generateToken(changedUser.getUsername());
+
+        return Response
+                .ok()
+                .header(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + jwtToken)
+                .build();
+    }
+
+    @GET
+    @Path("/forgot_password/{token}")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response tokenValidity(@PathParam("token") final String token) {
+
+        if(token.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        final PasswordResetToken passwordResetToken = passwordResetService.findByToken(token);
+
+        if(passwordResetToken == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
         return Response.ok().build();
     }
     
@@ -305,8 +334,13 @@ public class UserController extends BaseController {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
+        final String token = tokenManager.generateToken(user.getUsername());
+
         final URI uri = uriInfo.getBaseUri().resolve("/user");
-        return Response.created(uri).build();
+        return Response
+                .created(uri)
+                .header(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token)
+                .build();
     }
 
     //TODO: Check if modify can be the same form

@@ -48,7 +48,9 @@ define([], function() {
 		MODIFY_DESCRIPTION: 'Modifica tu descripción',
 		MODIFY_PICTURE: 'Sube una nueva foto de perfil',
 		REGISTER_PICTURE: 'Foto de perfil:',
-
+		RESTORE_PASSWORD: 'Restaurar contraseña',
+		EMAIL: 'Correo:',
+		FORGOT_PASSWORD_SENT: 'Se envió un correo electrónico a su cuenta, siga los pasos para restaurar su contraseña',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
@@ -59,6 +61,13 @@ define([], function() {
 		RATING_ERROR: 'El rating debe estar entre entre {{min}} y {{max}}',
 		PRICE_ERROR: 'El precio debe ser mayor que {{min}}',
 		SUBJECT_ERROR: 'Debe seleccionar una materia',
-		PICTURE_ERROR: 'Debe subir una foto de perfil con un tamaño máximo de {{size}}'
+		PICTURE_ERROR: 'Debe subir una foto de perfil con un tamaño máximo de {{size}}',
+		EMAIL_FORMAT_ERROR: 'La direccion de correo electronica debe ser valida',
+		EMAIL_SIZE_ERROR: 'La dirección de correo electrónico debe tener entre {{min}} y {{max}} caracteres',
+		FORGOT_PASSWORD_ERROR: 'El correo electrónico no se encuentra registrado',
+		PASSWORD_SIZE_ERROR: 'La contraseña debe tener entre {{min}} y {{max}} caracteres',
+		REPEAT_PASSWORD_ERROR: 'Las contraseñas deben coincidir',
+		INVALID_TOKEN: 'El token para restaurar la contraseña es inválido.',
+		PASSWORD_RESTORE_ERROR: 'Ocurrió un error al restaurar la contraseña'
 	};
 });

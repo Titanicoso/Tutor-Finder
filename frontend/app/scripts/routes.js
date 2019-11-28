@@ -52,10 +52,6 @@ define([], function() {
                 templateUrl: '/views/reserveClass.html',
                 controller: 'ReserveClassCtrl'
             },
-            '/resetPassword': {
-                templateUrl: '/views/resetPassword.html',
-                controller: 'ResetPasswordCtrl'
-            },
             '/searchResults': {
                 templateUrl: '/views/searchResults.html',
                 controller: 'SearchCtrl'

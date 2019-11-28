@@ -19,12 +19,8 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
             return restService.post('user/forgot_password', {email: email});
         };
 
-        this.forgotPassword = function(password, token) {
-            return restService.post('user/forgot_password/' + token, {password: password});
-        };
-
-        this.register = function(name, lastname, email, username, password) {
-            return restService.post('user/', {name: name, lastname: lastname, email: email, username: username, password: password});
+        this.forgotPasswordValidity = function(token) {
+            return restService.get('user/forgot_password/' + token);
         };
 
         this.modify = function(description, picture) {
