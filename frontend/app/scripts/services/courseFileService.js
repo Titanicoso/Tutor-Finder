@@ -26,10 +26,10 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
             }
         
             return new Blob(byteArrays);
-          }
+          };
 
         this.downloadFile = function(file, data) {
-            const a = document.createElement("a");
+            var a = document.createElement('a');
 			document.body.appendChild(a);
 			var blob = this.convertBase64ToBlob(data);
             var url = window.URL.createObjectURL(blob);
