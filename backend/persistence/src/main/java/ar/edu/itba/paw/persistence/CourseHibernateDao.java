@@ -94,7 +94,7 @@ public class CourseHibernateDao implements CourseDao {
         final Root<Course> root = criteria.from(Course.class);
         final Join<Course, Subject> subject = root.join("subject");
         final Join<Course, Professor> professors = root.join("professor");
-        final Join<Professor, Timeslot> timeslots = professors.join("timeslots");
+        final Join<Professor, Timeslot> timeslots = professors.join("timeslots", JoinType.LEFT);
         criteria.select(root).distinct(true);
 
         List<Predicate> predicates = new ArrayList<>();
@@ -149,7 +149,7 @@ public class CourseHibernateDao implements CourseDao {
         final Root<Course> root = criteria.from(Course.class);
         final Join<Course, Subject> subject = root.join("subject");
         final Join<Course, Professor> professors = root.join("professor");
-        final Join<Professor, Timeslot> timeslots = professors.join("timeslots");
+        final Join<Professor, Timeslot> timeslots = professors.join("timeslots", JoinType.LEFT);
         criteria.select(builder.countDistinct(root));
 
         List<Predicate> predicates = new ArrayList<>();
