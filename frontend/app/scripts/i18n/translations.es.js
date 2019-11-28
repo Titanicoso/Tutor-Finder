@@ -24,7 +24,7 @@ define([], function() {
 		CONTACT: 'Contactar',
  		COMMENT: 'Comentar',
 		COMMENT_TITLE: 'Comentarios',
-		SENT_TIME: 'Enviado: ',
+		SENT_TIME: 'Enviado: {{date | date: "dd/MM/yy hh:mm:ss"}}',
 		SEND: 'Enviar',
 		BODY: 'Mensaje:',
 		APP_NAME: 'Tu Teoria',
@@ -54,6 +54,20 @@ define([], function() {
 		FORGOT_PASSWORD_SENT: 'Se envió un correo electrónico a su cuenta, siga los pasos para restaurar su contraseña',
 		NAME: 'Nombre:',
 		LASTNAME: 'Apellido:',
+		NO_RESERVATIONS: 'No tiene reservas',
+		RESERVATION_DAY: 'Día {{date | date: "dd/MM/yy"}}',
+		RESERVATION_FROM: 'Horario: {{date | date: "hh:mm"}}',
+		RESERVATION_TO: '-{{date | date: "hh:mm"}}',
+		PENDING: 'Pendiente',
+		DENIED: 'Rechazada',
+		APPROVED: 'Aceptada',
+		REQUESTS: 'Tus pedidos de clases',
+		NO_REQUESTS: 'No tiene pedidos de clases',
+		DENY: 'Rechazar',
+		APPROVE: 'Aceptar',
+		RESERVATION_PROFESSOR: 'Profesor: {{name}}',
+		REQUEST_STUDENT: 'Alumno: {{name}}',
+		PRICE_SPEC: '$ {{price}} /hr',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
@@ -76,6 +90,6 @@ define([], function() {
 		LASTNAME_SIZE_ERROR: 'El apellido debe tener entre {{min}} y {{max}} caracteres',
 		USERNAME_SIZE_ERROR: 'El usuario debe tener entre {{min}} y {{max}} caracteres',
 		NAME_PATTERN_ERROR: 'El nombre debe contener unicamente caracteres alfabeticos',
-		LASTNAME_PATTERN_ERROR: 'El apellido debe contener unicamente caracteres alfabeticos',
+		LASTNAME_PATTERN_ERROR: 'El apellido debe contener unicamente caracteres alfabeticos'
 	};
 });

@@ -22,6 +22,9 @@ public class CourseDTO {
     @XmlElement(name = "course_files_url")
     private URI courseFilesUrl;
 
+    @XmlElement(name = "image_url")
+    private URI imageUrl;
+
     private URI url;
 
     public CourseDTO() {
@@ -39,6 +42,7 @@ public class CourseDTO {
         this.courseCommentsUrl = baseUri.resolve(this.url + "/comments");
         this.courseFilesUrl = baseUri.resolve(this.url + "/files");
         this.professor = new ProfessorDTO(course.getProfessor(), uriInfo);
+        this.imageUrl = baseUri.resolve("areas/" + course.getSubject().getArea().getId() + "/image");
     }
 
     public String getDescription() {
@@ -103,5 +107,13 @@ public class CourseDTO {
 
     public void setProfessor(ProfessorDTO professor) {
         this.professor = professor;
+    }
+
+    public URI getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(URI imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

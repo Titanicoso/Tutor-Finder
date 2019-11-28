@@ -63,7 +63,7 @@
         </div>
         <div class="message message-comment" ng-repeat="comment in comments.data">
             <h5 class="message-text" ng-bind="comment.sender.username + ': ' + comment.comment"></h5>
-            <h6 class="conversation-last-time message-comment-time">{{ 'SENT_TIME' | translate }}{{ comment.created | date:'medium' }}</h6>
+            <h6 class="conversation-last-time message-comment-time">{{ 'SENT_TIME' | translate: { date: comment.created } }}</h6>
         </div>
 
         <div class="paged-result-buttons">

@@ -123,7 +123,8 @@ public class UserController extends BaseController {
     @GET
     @Path("/reservations")
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response reservations(@DefaultValue("1") @QueryParam("page") final int page) {
+    public Response reservations(@DefaultValue("1") @QueryParam("page") final int page,
+                                 @DefaultValue("false") @QueryParam("fullDetail") final boolean fullDetail) {
         final User loggedUser = loggedUser();
 
         final PagedResults<ClassReservation> classReservations =  userService.pagedReservations(loggedUser.getId(), page);
@@ -135,11 +136,20 @@ public class UserController extends BaseController {
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, classReservations);
 
-        final GenericEntity<List<ClassReservationDTO>> entity = new GenericEntity<List<ClassReservationDTO>>(
-                classReservations.getResults().stream()
-                        .map(reservation -> new ClassReservationDTO(reservation, uriInfo))
-                        .collect(Collectors.toList())
-        ){};
+        final GenericEntity<?> entity;
+        if (fullDetail) {
+            entity = new GenericEntity<List<FullDetailClassReservationDTO>>(
+                    classReservations.getResults().stream()
+                            .map(reservation -> new FullDetailClassReservationDTO(reservation, uriInfo))
+                            .collect(Collectors.toList())
+            ) { };
+        } else {
+            entity = new GenericEntity<List<ClassReservationDTO>>(
+                    classReservations.getResults().stream()
+                            .map(reservation -> new ClassReservationDTO(reservation, uriInfo))
+                            .collect(Collectors.toList())
+            ) { };
+        }
 
         return Response.ok(entity).links(links).build();
     }
@@ -147,7 +157,8 @@ public class UserController extends BaseController {
     @GET
     @Path("/reservations/{id}")
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response reservation(@PathParam("id") final long id) {
+    public Response reservation(@PathParam("id") final long id,
+                                @DefaultValue("false") @QueryParam("fullDetail") final boolean fullDetail) {
         final User loggedUser = loggedUser();
 
         final ClassReservation classReservation = classReservationService.findById(id);
@@ -160,13 +171,18 @@ public class UserController extends BaseController {
             return Response.status(Response.Status.FORBIDDEN).entity(error).build();
         }
 
+        if (fullDetail) {
+            return Response.ok(new FullDetailClassReservationDTO(classReservation, uriInfo)).build();
+        }
+
         return Response.ok(new ClassReservationDTO(classReservation, uriInfo)).build();
     }
 
     @GET
     @Path("/requests")
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response requests(@DefaultValue("1") @QueryParam("page") final int page) {
+    public Response requests(@DefaultValue("1") @QueryParam("page") final int page,
+                             @DefaultValue("false") @QueryParam("fullDetail") final boolean fullDetail) {
         final User loggedUser = loggedUser();
 
         final PagedResults<ClassReservation> classRequests;
@@ -183,11 +199,20 @@ public class UserController extends BaseController {
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, classRequests);
 
-        final GenericEntity<List<ClassReservationDTO>> entity = new GenericEntity<List<ClassReservationDTO>>(
-                classRequests.getResults().stream()
-                        .map(request -> new ClassReservationDTO(request, uriInfo))
-                        .collect(Collectors.toList())
-        ){};
+        final GenericEntity<?> entity;
+        if (fullDetail) {
+            entity = new GenericEntity<List<FullDetailClassReservationDTO>>(
+                    classRequests.getResults().stream()
+                            .map(request -> new FullDetailClassReservationDTO(request, uriInfo))
+                            .collect(Collectors.toList())
+            ) { };
+        } else {
+            entity = new GenericEntity<List<ClassReservationDTO>>(
+                    classRequests.getResults().stream()
+                            .map(request -> new ClassReservationDTO(request, uriInfo))
+                            .collect(Collectors.toList())
+            ) { };
+        }
 
         return Response.ok(entity).links(links).build();
     }
@@ -195,8 +220,9 @@ public class UserController extends BaseController {
     @GET
     @Path("/requests/{id}")
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response request(@PathParam("id") final long id) {
-        return reservation(id);
+    public Response request(@PathParam("id") final long id,
+                            @DefaultValue("false") @QueryParam("fullDetail") final boolean fullDetail) {
+        return reservation(id, fullDetail);
     }
 
     @PUT

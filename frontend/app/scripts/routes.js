@@ -28,9 +28,9 @@ define([], function() {
                 templateUrl: '/views/courseFiles.html',
                 controller: 'CourseFilesCtrl'
             },
-            '/myClasses': {
+            '/requests': {
                 templateUrl: '/views/myClasses.html',
-                controller: 'MyClassesCtrl'
+                controller: 'RequestsCtrl'
             },
             '/profile': {
                 templateUrl: '/views/profile.html',

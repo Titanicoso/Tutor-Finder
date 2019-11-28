@@ -1,73 +1,37 @@
-<script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
-<script ng-src="/resources/js/select2.min.js"></script>
-<script ng-src="/resources/js/dropdownClick.js"></script>
-<script ng-src="/resources/js/searchForm.js"></script>
-
-
-
-<!-- <body class="body"> -->
-<c:url value="/searchResults" var="postPath"/>
-<!-- <div class="my-reservation"></div> -->
-
-<div class="search-results w-100">
-    <h3 class="search-data"><spring:message code="yourclassRequests" htmlEscape="true"/></h3>
-    <c:if test="${reservations.size() == 0}">
-        <h1><spring:message code="no.classRequests"/></h1>
-    </c:if>
-    <c:forEach var="reservation" items="${reservations}">
-        <div class="reservation-course-result">
-            <div class="search-result-img">
-                <c:choose>
-                    <c:when test="${reservation.status == 2}">
-                        <div class="button-2 relative" type="submit">
-                            <a class="class-button" ng-href="/approveClassRequest?classReservation=${reservation.classRequestId}"></a>
-                            <spring:message code="Approve"/>
+<div class="justify-center">
+        <div class="search-results w-100">
+            <h3 class="search-data" ng-bind="'REQUESTS' | translate"></h3>
+            <h1 ng-if="!requests || requests.data.length < 1" ng-bind="'NO_REQUESTS' | translate"></h1>
+            <div ng-if="requests && requests.data.length > 0">
+                <div class="reservation-course-result" ng-repeat="request in requests.data">
+                    <div class="search-result-img">
+                        <div class="button-2 relative" type="submit" ng-if="request.status === 'UNSPECIFIED'">
+                            <a class="class-button" href="javascript:;" ng-click="approve(request)"></a>
+                            {{'APPROVE' | translate}}
                         </div>
-                        <div class="button-2 relative" type="submit">
-                            <a class="class-button" ng-href="/denyClassRequest?classReservation=${reservation.classRequestId}"></a>
-                            <spring:message code="Deny"/>
+                        <div class="button-2 relative" type="submit" ng-if="request.status === 'UNSPECIFIED'">
+                            <a class="class-button" href="javascript:;" ng-click="deny(request)"></a>
+                            {{'DENY' | translate}}
                         </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="button-2 relative" type="submit">
-                            <a class="class-button" ng-href="/courseFiles?professor=${reservation.course.professor.id}&subject=${reservation.course.subject.id}"></a>
-                            <spring:message code="files"/>
+                        <div class="button-2 relative" type="submit" ng-if="request.status !== 'UNSPECIFIED'">
+                            <a class="class-button" ng-href="#!/courseFiles?professorId={{request.course.professor.id}}&subjectId={{request.course.subject.id}}"></a>
+                            {{'FILES' | translate}}
                         </div>
-                    </c:otherwise>
-                </c:choose>
+                    </div>
+                    <a class="search-result-title" ng-bind="request.course.subject.name"></a>
+                    <a class="search-result-professor" ng-bind="'REQUEST_STUDENT' | translate: { name: request.student.name }"></a>
+                    <a class="search-result-specs" ng-bind="'PRICE_SPEC' | translate: { price: request.course.price }"></a>
+                    <a class="search-result-description">{{'RESERVATION_DAY' | translate: { date: request.start_time } }}<br/>{{'RESERVATION_FROM' | translate: { date: request.start_time } }}{{'RESERVATION_TO' | translate: { date: request.end_time } }}</a>
+                    <span ng-switch="request.status">
+                        <a class="search-result-status" ng-switch-when="APPROVED" ng-bind="'APPROVED' | translate"></a>
+                        <a class="search-result-status" ng-switch-when="DENIED" ng-bind="'DENIED' | translate"></a>
+                        <a class="search-result-status" ng-switch-default ng-bind="'PENDING' | translate"></a>
+                    </span>
+                </div>
+                <div class="paged-result-buttons">
+                    <a href="javascript:;" ng-if="requests.links.prev" ng-click="getPage(requests.links.prev.number)" class="previous round">&#8249;</a>
+                    <a href="javascript:;" ng-if="requests.links.next" ng-click="getPage(requests.links.next.number)" class="next round">&#8250;</a>
+                </div>
             </div>
-                <%--TODO: add buttons--%>
-            <a class="search-result-title">
-                <c:out value="${reservation.course.subject.area.name} - ${reservation.course.subject.name}" escapeXml="true" /></a>
-            <a class="search-result-professor" >
-                <spring:message code="reservation.student" arguments="${reservation.student.name}" htmlEscape="true" /></a>
-            <a class="search-result-specs"><spring:message code="course.specs" arguments="${reservation.course.price}" htmlEscape="true" /></a>
-            <a class="search-result-description"><spring:message code="reservation.day" arguments="${reservation.startDay},${reservation.startMonth},${reservation.startYear}" htmlEscape="true" /><br/><spring:message code="reservation.from" arguments="${reservation.startHour},${reservation.startMinutes}" htmlEscape="true" /><spring:message code="reservation.to"  arguments="${reservation.endHour},${reservation.endMinutes}" htmlEscape="true" /></a>
-            <a class="search-result-status">
-                <c:choose>
-                    <c:when test="${reservation.status == 0}">
-                        <spring:message code="reservation.accepted" htmlEscape="true" />
-                    </c:when>
-                    <c:when test="${reservation.status == 1}">
-                        <spring:message code="reservation.canceled" htmlEscape="true" />
-                    </c:when>
-                    <c:otherwise>
-                        <spring:message code="reservation.pending" htmlEscape="true" />
-                    </c:otherwise>
-                </c:choose>
-            </a>
         </div>
-    </c:forEach>
-
-    <div class="paged-result-buttons">
-        <c:url value="/reservations?page=${page - 1}" var="previous"/>
-        <c:url value="/reservations?page=${page + 1}" var="next"/>
-
-        <c:if test="${page > 1}">
-            <a href="${previous}" class="previous round">&#8249;</a>
-        </c:if>
-        <c:if test="${hasNext}">
-            <a href="${next}" class="next round">&#8250;</a>
-        </c:if>
     </div>
-</div>

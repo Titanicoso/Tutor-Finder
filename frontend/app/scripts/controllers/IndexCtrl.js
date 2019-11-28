@@ -4,8 +4,8 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl'],
 	
 	tutorFinder.controller('IndexCtrl', IndexCtrl);
 	
-	IndexCtrl.inject = ['$scope', '$rootScope', '$translate', 'authService', '$uibModal'];
-	function IndexCtrl($scope, $rootScope, $translate, authService, $uibModal) {
+	IndexCtrl.inject = ['$scope', '$rootScope', '$translate', '$location', 'authService', '$uibModal'];
+	function IndexCtrl($scope, $rootScope, $translate, $location, authService, $uibModal) {
 		$rootScope.appName = $translate.instant('APP_NAME');
 		$rootScope.title = $rootScope.appName;
 
@@ -27,6 +27,7 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl'],
 
 		$scope.logout = function() {
 			authService.logout();
+			$location.url('/');
 		};
 
 		$scope.registerAsProfessor = function() {

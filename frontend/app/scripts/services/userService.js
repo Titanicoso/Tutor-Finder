@@ -11,6 +11,10 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
             return restService.get('user/reservations?page=' + page, true);
         };
 
+        this.getFullReservations = function(page) {
+            return restService.get('user/reservations?page=' + page + '&fullDetail=true', true);
+        };
+
         this.getReservation = function(id) {
             return restService.get('user/reservations/' + id, false);
         };

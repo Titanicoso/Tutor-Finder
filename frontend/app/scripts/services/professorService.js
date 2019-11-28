@@ -32,6 +32,10 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
             return restService.get('user/schedule', false);
         };
 
+        this.getFullRequests = function(page) {
+            return restService.get('user/requests?page=' + page + '&fullDetail=true', true);
+        };
+
         this.getRequests = function(page) {
             return restService.get('user/requests?page=' + page, true);
         };

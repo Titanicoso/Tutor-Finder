@@ -28,6 +28,22 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
             return resolved;
         };
 
+        this.absoluteGet = function(url, hasLinks) {
+
+            var authHeaders = authService.getAuthHeaders();
+
+            return $http.get(url, authHeaders)
+                .then(function(response) {
+                    if (hasLinks) {
+                        return {data: response.data, links: resolveLinks(response.headers)};
+                    } 
+                    return response.data;
+                })
+                .catch(function(err) {
+                    return $q.reject(err);
+                });
+        };
+
         this.get = function(url, hasLinks) {
 
             var authHeaders = authService.getAuthHeaders();
