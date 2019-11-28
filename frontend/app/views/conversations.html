@@ -1,38 +1,23 @@
-<script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
-<script ng-src="/resources/js/dropdownClick.js"></script>
+<link rel="stylesheet" type="text/css" href="styles/partials/conversations.css">
 
-
-<!-- <body class="conversations"> -->
-adasdasd
-<div class="inbox-message">
-    <hr>
-    <p class="inbox-title"><spring:message code="conversations.inbox"/></p>
-    <hr>
-</div>
-<c:if test="${conversations.results.size() == 0}" >
-    <h1><spring:message code="no.conversations"/></h1>
-    <p class="help-message"><spring:message code="conversations.help"/></p>
-</c:if>
-<c:forEach var="conversation" items="${conversations.results}">
-    <div class="chat">
-<!--         <a class="conversation-link" href = "<c:url value="/Conversation?id=${conversation.id}"></a>
- -->        <a class="conversation-subject-name"><c:out value="${conversation.subject.name}" escapeXml="true"/></a>
-        <h2 class="conversation-participants">
-            <c:out value="${conversation.professor.name} - ${conversation.user.name}" escapeXml="true"/>
-        </h2>
-        <h6 class="conversation-last-time">
-            <spring:message code="time" arguments="${conversation.day},${conversation.month},${conversation.year},${conversation.hours},${conversation.minutes}"/>
-        </h6>
+<div class="conversations">
+    <div class="inbox-message">
+        <hr>
+        <p class="inbox-title" ng-bind="'INBOX' | translate"></p>
+        <hr>
     </div>
-</c:forEach>
-<div class="paged-result-buttons">
-    <c:url value="/Conversations?page=${page - 1}" var="previous"/>
-    <c:url value="/Conversations?page=${page + 1}" var="next"/>
-
-    <c:if test="${page > 1}">
-        <a href="${previous}" class="previous round">&#8249;</a>
-    </c:if>
-    <c:if test="${conversations.hasNext}">
-        <a href="${next}" class="next round">&#8250;</a>
-    </c:if>
+    <div ng-if="!conversations || conversations.data.length < 1" >
+        <h1 ng-bind="'NO_CONVERSATIONS' | translate"></h1>
+        <p class="help-message" ng-bind="'CONVERSATIONS_HELP' | translate"></p>
+    </div>
+    <div class="chat" ng-repeat="conversation in conversations.data">
+        <a class="conversation-link" ng-href="#!/conversation/{{conversation.id}}"></a>
+        <a class="conversation-subject-name" ng-bind="conversation.subject.name"></a>
+        <h2 class="conversation-participants" ng-bind="conversation.professor.name + ' - ' + conversation.user.name"></h2>
+        <h6 class="conversation-last-time" ng-bind="'SENT_TIME' | translate: { date: conversation.latest_message } "></h6>
+    </div>
+    <div class="paged-result-buttons">
+        <a href="javascript:;" ng-if="conversations.links.prev" ng-click="getPage(conversations.links.prev.number)" class="previous round">&#8249;</a>
+        <a href="javascript:;" ng-if="conversations.links.next" ng-click="getPage(conversations.links.next.number)" class="next round">&#8250;</a>
+    </div>
 </div>
