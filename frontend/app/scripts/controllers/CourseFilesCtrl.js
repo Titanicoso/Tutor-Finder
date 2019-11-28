@@ -17,7 +17,7 @@ define(['tutorFinder', 'services/courseFileService'], function(tutorFinder) {
 
 		var ctrl = this;
 		$scope.upload = function(form) {
-			if (form.$valid || !$scope.invalidSize) {
+			if (form.$valid && !$scope.invalidSize) {
 				courseFileService.upload($scope.professorId, subjectId, 
 					$scope.courseFile.description, $scope.courseFile.file)
 				.then(function() {
