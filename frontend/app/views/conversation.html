@@ -1,40 +1,23 @@
-<link rel="stylesheet" ng-href="/resources/css/conversations.css">
-<script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
-<script ng-src="/resources/js/dropdownClick.js"></script>
+<link rel="stylesheet" type="text/css" href="styles/partials/conversations.css">
 
-
-<!-- <body class="conversation"> -->
-
-<div class="conversation-messages">
-    <c:forEach var="message" items="${conversation.messages}">
-        <c:choose>
-            <c:when test="${message.sender.id == currentUser.id}">
-                <c:set value="message own" var="messageClass" />
-            </c:when>
-            <c:otherwise>
-                <c:set value="message" var="messageClass" />
-            </c:otherwise>
-        </c:choose>
-        <div class="${messageClass}">
-            <h5 class="message-text"><c:out value="${message.sender.name}: ${message.text}" escapeXml="true"/></h5>
-                <h6 class="conversation-last-time">
-                    <spring:message code="time.sent" arguments="${message.day},${message.month},${message.year},${message.hours},${message.minutes}"/>
-                </h6>
+<div class="conversation">
+    <div class="conversation-messages">
+        <div class="message" ng-repeat="message in messages" ng-class="{own: message.sender.id === currentUser.id}">
+            <h5 class="message-text" ng-bind="message.sender.name + ': ' + message.text"></h5>
+                <h6 class="conversation-last-time" ng-bind="'SENT_TIME' | translate: { date: message.created } "></h6>
         </div>
-    </c:forEach>
-</div>
+    </div>
 
-<div class="form-container">
-    <c:url value="/Conversation" var="postPath"/>
-    <form:form cssClass="form" modelAttribute="messageForm" action="${postPath}" method="post">
-        <form:hidden path="conversationId" />
-        <div>
-            <form:label cssClass="label" path="body"><spring:message code="contact.body"/></form:label>
-            <form:textarea cssClass="chat-box" type="text" path="body" cols="5" rows="5"/>
-            <form:errors cssClass="error-text" path="body" element="p"/>
-        </div>
-        <div class="button-container">
-            <input class="button-2" type="submit" value='<spring:message code="send"/>'/>
-        </div>
-    </form:form>
+    <div class="form-container">
+        <form class="form" name="form" novalidate ng-submit="send(form)">
+            <div>
+                <label class="label" for="body" ng-bind="'BODY' | translate"></label>
+                <textarea class="chat-box" type="text" name="body" cols="5" rows="5" ng-required="true" ng-maxlength="1024" ng-model="message.text"></textarea>
+                <p class="error-text" ng-show="form.body.$dirty && form.body.$invalid">{{'MESSAGE_SIZE_ERROR' | translate: '{min: 1, max: 1024}'}}</p>
+            </div>
+            <div class="button-container">
+                <input class="button-2" type="submit" value="{{ 'SEND' | translate }}" ng-disabled="form.$invalid"/>
+            </div>
+        </form>
+    </div>
 </div>
