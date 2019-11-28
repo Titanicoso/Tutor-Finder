@@ -9,8 +9,9 @@ define([], function() {
 		SEARCH_CATEGORY: 'Seleccione una categoría',
 		REGISTER: 'Registrarse',
 		LOGIN: 'Iniciar sesión',
-		USERNAME: 'Usuario',
-		PASSWORD: 'Contraseña',
+		USERNAME: 'Usuario:',
+		PASSWORD: 'Contraseña:',
+		REPEAT_PASSWORD: 'Repetir contraseña:',
 		REMEMBER_ME: 'Recordarme',
 		LOGIN_ERROR: 'La combinación usuario contraseña es incorrecta.',
 		FORGOT_PASSWORD: 'Olvido su contraseña',
@@ -51,6 +52,8 @@ define([], function() {
 		RESTORE_PASSWORD: 'Restaurar contraseña',
 		EMAIL: 'Correo:',
 		FORGOT_PASSWORD_SENT: 'Se envió un correo electrónico a su cuenta, siga los pasos para restaurar su contraseña',
+		NAME: 'Nombre:',
+		LASTNAME: 'Apellido:',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
@@ -68,6 +71,11 @@ define([], function() {
 		PASSWORD_SIZE_ERROR: 'La contraseña debe tener entre {{min}} y {{max}} caracteres',
 		REPEAT_PASSWORD_ERROR: 'Las contraseñas deben coincidir',
 		INVALID_TOKEN: 'El token para restaurar la contraseña es inválido.',
-		PASSWORD_RESTORE_ERROR: 'Ocurrió un error al restaurar la contraseña'
+		PASSWORD_RESTORE_ERROR: 'Ocurrió un error al restaurar la contraseña',
+		NAME_SIZE_ERROR: 'El nombre debe tener entre {{min}} y {{max}} caracteres',
+		LASTNAME_SIZE_ERROR: 'El apellido debe tener entre {{min}} y {{max}} caracteres',
+		USERNAME_SIZE_ERROR: 'El usuario debe tener entre {{min}} y {{max}} caracteres',
+		NAME_PATTERN_ERROR: 'El nombre debe contener unicamente caracteres alfabeticos',
+		LASTNAME_PATTERN_ERROR: 'El apellido debe contener unicamente caracteres alfabeticos',
 	};
 });
