@@ -3,9 +3,8 @@ define(['tutorFinder', 'services/subjectService', 'services/courseService'], fun
 
 	tutorFinder.controller('CreateCourseCtrl', CreateCourseCtrl);
 	
-	CreateCourseCtrl.$inject = ['$scope', '$rootScope', '$uibModalInstance', 'course', 'subjectService', 'courseService'];
-	function CreateCourseCtrl($scope, $rootScope, $modal, course, subjectService, courseService) {
-		$rootScope.appendTitle('CREATE_COURSE');
+	CreateCourseCtrl.$inject = ['$scope', '$uibModalInstance', 'course', 'subjectService', 'courseService'];
+	function CreateCourseCtrl($scope, $modal, course, subjectService, courseService) {
 		$scope.isModifying = course !== undefined && course !== null;
 		
 		if ($scope.isModifying) {

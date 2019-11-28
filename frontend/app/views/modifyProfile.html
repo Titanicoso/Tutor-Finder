@@ -1,21 +1,19 @@
-<div class="button-container">
-    <h2 class="label"><spring:message code="modify.professor" /> </h2>
+<div>
+    <span class="modal-close" ng-click="close()">&times;</span>
+    <h1 class="center-text" ng-bind="isModifying ? 'MODIFY_PROFESSOR' : 'REGISTER_PROFESSOR' | translate"></h1>
+    <form class="form" name="form" ng-submit="submit(form)" novalidate>
+        <div>
+            <label class="label" for="description" ng-bind="isModifying ? 'MODIFY_DESCRIPTION' : 'DESCRIPTION' | translate"></label>
+            <textarea class="input-request" type="text" name="description" rows="5" cols="5" ng-required="true" ng-minlength="50" ng-maxlength="300" ng-model="professorInput.description"></textarea>
+            <p class="error-text" ng-show="form.description.$dirty && form.description.$invalid">{{'DESCRIPTION_SIZE_ERROR' | translate: '{ min: 50, max: 300 }'}}</p>
+        </div>
+        <div>
+            <label class="label" for="pic" ng-bind="isModifying ? 'MODIFY_PICTURE' : 'REGISTER_PICTURE' | translate"></label>
+            <input class="input-request" type="file" accept="image/jpeg, image/png" name="pic" file="professorInput.picture" size="professorInput.size" />
+            <p class="error-text" ng-show="(!professorInput.picture && !isModifying) || invalidSize">{{'PICTURE_ERROR' | translate: '{ size: \'80KB\' }'}}</p>
+        </div>
+        <div class="button-container">
+            <input class="button-2" type="submit" value="{{ isModifying ? 'MODIFY' : 'REGISTER' | translate }}" ng-disabled="form.$invalid || (!professorInput.picture && !isModifying) || invalidSize"/>
+        </div>
+    </form>
 </div>
-<c:url value="/editProfessorProfile" var="postPath" />
-<form:form cssClass="form" modelAttribute="editProfessorProfileForm" action="${postPath}" enctype="multipart/form-data" method="post">
-    <div>
-        <form:label cssClass="label" path="description"><spring:message code="profile.modify.description"/></form:label>
-        <form:textarea cssClass="input-request" type="text" path="description" rows="5" cols="5"/>
-        <form:errors cssClass="error-text" path="description" element="p"/>
-    </div>
-    <div id="pictureDiv">
-        <form:label cssClass="label" path="pic"><spring:message code="profile.modify.picture"/></form:label>
-        <form:input cssClass="input-request" type="file" path="pic" accept="image/jpeg, image/png" id="pic"/>
-        <form:errors cssClass="error-text" path="pic" element="p"/>
-        <p id="pictureError" class="error-text"><spring:message code="FileSize.registerAsProfessorForm.picture" /></p>
-    </div>
-
-    <div class="button-container">
-        <input class="button-2" type="submit" id="modifyProfessorSubmit" value='<spring:message code="modify"/>'/>
-    </div>
-</form:form>

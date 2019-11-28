@@ -80,8 +80,8 @@ define(['tutorFinder'], function(tutorFinder) {
 			$rootScope.$broadcast('user_update');
 		};
 
-		this.getCurrentUser = function() {
-			if (this.currentUser) {
+		this.getCurrentUser = function(force) {
+			if (this.currentUser && !force) {
 				return this.currentUser;
 			}
 

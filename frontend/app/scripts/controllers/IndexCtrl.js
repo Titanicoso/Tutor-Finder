@@ -1,11 +1,11 @@
 'use strict';
 
-define(['tutorFinder', 'services/authService'], function(tutorFinder) {
+define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl'], function(tutorFinder) {
 	
 	tutorFinder.controller('IndexCtrl', IndexCtrl);
 	
-	IndexCtrl.inject = ['$scope', '$rootScope', '$translate', 'authService'];
-	function IndexCtrl($scope, $rootScope, $translate, authService) {
+	IndexCtrl.inject = ['$scope', '$rootScope', '$translate', 'authService', '$uibModal'];
+	function IndexCtrl($scope, $rootScope, $translate, authService, $uibModal) {
 		$rootScope.appName = $translate.instant('APP_NAME');
 		$rootScope.title = $rootScope.appName;
 
@@ -27,6 +27,26 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
 
 		$scope.logout = function() {
 			authService.logout();
+		};
+
+		$scope.registerAsProfessor = function() {
+			$scope.showDropdown = false;
+			$uibModal.open({
+				controller: 'ModifyProfileCtrl',
+				templateUrl: 'views/modifyProfile.html',
+				backdrop: 'static',
+				resolve: {
+					professor: function() {
+						return undefined;
+					}
+				 }
+			}).result.then(function(answer) {
+				if (answer) {
+					$scope.currentUser = authService.getCurrentUser(true);
+				}
+			}, function(err) { 
+				console.log(err);
+			});
 		};
 		
 		$scope.reminder = function() {

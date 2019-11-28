@@ -44,10 +44,6 @@ define([], function() {
                 templateUrl: '/views/register.html',
                 controller: 'RegisterCtrl'
             },
-            '/registerAsProfessor': {
-                templateUrl: '/views/registerAsProfessorForm.html',
-                controller: 'RegisterAsProfessorCtrl'
-            },
             '/reservations': {
                 templateUrl: '/views/reservations.html',
                 controller: 'ReservationsCtrl'

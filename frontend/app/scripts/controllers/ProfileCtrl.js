@@ -1,5 +1,5 @@
 'use strict';
-define(['tutorFinder', 'services/authService', 'services/professorService', 'services/courseService', 'controllers/CreateCourseCtrl'], function(tutorFinder) {
+define(['tutorFinder', 'services/authService', 'services/professorService', 'services/courseService', 'controllers/CreateCourseCtrl', 'controllers/ModifyProfileCtrl'], function(tutorFinder) {
 
 	tutorFinder.controller('ProfileCtrl', ProfileCtrl);
 	
@@ -18,17 +18,21 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 			username = currentUser.username;
 		}
 
-		professorService.getProfessor(username)
-		.then(function(response) {
-			$scope.professor = response;
-			return professorService.getProfessorCourses(username, currentPage);
-		})
-		.then(function(response) {
-			$scope.courses = response;
-		})
-		.catch(function(err) {
-			console.log(err);
-		});
+		$scope.refresh = function() {
+			professorService.getProfessor(username)
+			.then(function(response) {
+				$scope.professor = response;
+				return professorService.getProfessorCourses(username, currentPage);
+			})
+			.then(function(response) {
+				$scope.courses = response;
+			})
+			.catch(function(err) {
+				console.log(err);
+			});
+		};
+
+		$scope.refresh();
 
 		$scope.getPage = function(number) {
 			professorService.getProfessorCourses(username, number)
@@ -59,7 +63,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 				console.log(err);
 			});
 		};
-
+		
 		$scope.editProfile = function() {
 			$uibModal.open({
 				controller: 'ModifyProfileCtrl',
@@ -67,11 +71,14 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 				backdrop: 'static',
 				resolve: {
 					professor: function() {
-						return currentUser;
+						return $scope.professor;
 					}
 				 }
 			}).result.then(function(answer) {
-				
+				if (answer) {
+					$scope.professor.image_url = undefined;
+					$scope.refresh();
+				}
 			}, function(err) { 
 				console.log(err);
 			});

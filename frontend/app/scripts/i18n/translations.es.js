@@ -45,6 +45,9 @@ define([], function() {
 		PRICE: 'Precio por hora:',
 		MODIFY: 'Modificar',
 		CREATE: 'Crear',
+		MODIFY_DESCRIPTION: 'Modifica tu descripción',
+		MODIFY_PICTURE: 'Sube una nueva foto de perfil',
+		REGISTER_PICTURE: 'Foto de perfil:',
 
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
@@ -55,6 +58,7 @@ define([], function() {
 		COMMENT_SIZE_ERROR: 'El comentario debe tener entre {{min}} y {{max}} caracteres',
 		RATING_ERROR: 'El rating debe estar entre entre {{min}} y {{max}}',
 		PRICE_ERROR: 'El precio debe ser mayor que {{min}}',
-		SUBJECT_ERROR: 'Debe seleccionar una materia'
+		SUBJECT_ERROR: 'Debe seleccionar una materia',
+		PICTURE_ERROR: 'Debe subir una foto de perfil con un tamaño máximo de {{size}}'
 	};
 });

@@ -56,11 +56,18 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
                 });
         };
 
-        this.post = function(url, data) {
+        this.post = function(url, data, isMultipart) {
 
             var authHeaders = authService.getAuthHeaders();
+            var payload = data;
 
-            return $http.post(apiBaseUrl + '/' + url, JSON.stringify(data), authHeaders)
+            if (isMultipart) {
+                authHeaders.headers['Content-type'] = undefined;
+            } else {
+                payload = JSON.stringify(data);
+            }
+
+            return $http.post(apiBaseUrl + '/' + url, payload, authHeaders)
                 .then(function(response) {
                     return response.data;
                 })
@@ -69,11 +76,18 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
                 });
         };
 
-        this.put = function(url, data) {
+        this.put = function(url, data, isMultipart) {
 
             var authHeaders = authService.getAuthHeaders();
+            var payload = data;
 
-            return $http.put(apiBaseUrl + '/' + url, JSON.stringify(data), authHeaders)
+            if (isMultipart) {
+                authHeaders.headers['Content-type'] = undefined;
+            } else {
+                payload = JSON.stringify(data);
+            }
+
+            return $http.put(apiBaseUrl + '/' + url, payload, authHeaders)
                 .then(function(response) {
                     return response.data;
                 })

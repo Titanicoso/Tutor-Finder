@@ -7,8 +7,7 @@ define(['tutorFinder', 'directives/search'], function(tutorFinder) {
 	function HomeCtrl($scope, $rootScope) {
 		$rootScope.appendTitle('HOME');
 
-		$scope.searchTerm = '';
-		$scope.selectOption = 'course';
+		$scope.query = {text: '', category: 'course'};
 		$scope.complete = false;
 
 		$scope.search = function() {

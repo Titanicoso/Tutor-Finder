@@ -27,7 +27,24 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
             return restService.post('user/', {name: name, lastname: lastname, email: email, username: username, password: password});
         };
 
-        // TODO: modify and upgrade
+        this.modify = function(description, picture) {
+            var data = new FormData();
+
+            if (picture) {
+                data.append('picture', picture);
+            }
+            data.append('description', new Blob([description], {type: 'application/json'}));
+
+            return restService.put('user/', data, true);
+        };
+
+        this.upgrade = function(description, picture) {
+            var data = new FormData();
+
+            data.append('picture', picture);
+            data.append('description', new Blob([description], {type: 'application/json'}));
+            return restService.post('user/upgrade', data, true);
+        };
     }]);
 
 });
