@@ -11,7 +11,11 @@ define(['tutorFinder'], function(tutorFinder) {
 				element.bind('change', function (changeEvent) {
 					$scope.$apply(function () {
 						$scope.file = changeEvent.target.files[0];
-						$scope.size = changeEvent.target.files[0].size;
+						if ($scope.file) {
+							$scope.size = changeEvent.target.files[0].size;
+						} else {
+							$scope.size = 0;
+						}
 					});
 				});
 			}

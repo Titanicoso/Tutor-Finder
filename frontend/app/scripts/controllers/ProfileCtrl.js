@@ -7,7 +7,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 	function ProfileCtrl($scope, $rootScope, $route, $uibModal, authService, professorService, courseService) {
 		$rootScope.appendTitle('PROFILE');
 		var username = $route.current.params.username;
-		var currentUser = authService.getCurrentUser();
+		var currentUser = $scope.currentUser;
 		$scope.showEditOptions = false;
 
 		var currentPage = 1;

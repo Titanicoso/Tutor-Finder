@@ -42,7 +42,7 @@ define([], function() {
 		NO_COURSES: 'El profesor no dicta ningun curso',
 		SUBJECT: 'Materia:',
 		SELECT_SUBJECT: 'Seleccione una materia',
-		DESCRIPTION: 'Descripción: ',
+		DESCRIPTION: 'Descripción: {{value}}',
 		PRICE: 'Precio por hora:',
 		MODIFY: 'Modificar',
 		CREATE: 'Crear',
@@ -72,6 +72,13 @@ define([], function() {
 		CONVERSATIONS_HELP: 'Para iniciar una nueva conversación, busque un curso y póngase en contacto con el profesor',
 		INBOX: 'Bandeja de entrada',
 		LAST_MESSAGE: 'Último mensaje: {{date | date: "dd/MM/yy hh:mm"}}',
+		CONTENTS: 'Contenidos de la clase',
+		NO_CONTENTS: 'La clase actualmente no tiene contenido',
+		DOWNLOAD: 'Descargar',
+		DELETE: 'Eliminar',
+		FILE_UPLOAD: 'Subida de archivo',
+		FILE_SELECT: 'Seleccionar archivo',
+		UPLOAD: 'Subir',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
@@ -94,6 +101,7 @@ define([], function() {
 		LASTNAME_SIZE_ERROR: 'El apellido debe tener entre {{min}} y {{max}} caracteres',
 		USERNAME_SIZE_ERROR: 'El usuario debe tener entre {{min}} y {{max}} caracteres',
 		NAME_PATTERN_ERROR: 'El nombre debe contener unicamente caracteres alfabeticos',
-		LASTNAME_PATTERN_ERROR: 'El apellido debe contener unicamente caracteres alfabeticos'
+		LASTNAME_PATTERN_ERROR: 'El apellido debe contener unicamente caracteres alfabeticos',
+		FILE_ERROR: 'Debe subir un archivo con un tamaño máximo de {{size}}'
 	};
 });

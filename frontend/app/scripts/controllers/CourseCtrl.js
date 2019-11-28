@@ -12,7 +12,6 @@ define(['tutorFinder', 'services/courseService', 'services/authService'], functi
 
 		$scope.contactInput = {body: ''};
 		$scope.contactSuccess = false;
-		$scope.currentUser = authService.getCurrentUser();
 
 		$scope.commentInput = {body: '', rating: undefined};
 		$scope.commentError = undefined;

@@ -1,65 +1,48 @@
-<link rel="stylesheet" ng-href="/resources/css/course.css">
-<link rel="stylesheet" ng-href="/resources/css/conversations.css">
-<link rel="stylesheet" ng-href="/resources/css/schedule.css">
-<script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
-<script ng-src="/resources/js/dropdownClick.js"></script>
-<script ng-src="/resources/js/courseFile.js"></script>
+<link rel="stylesheet" type="text/css" ng-href="styles/partials/course.css">
+<link rel="stylesheet" type="text/css" ng-href="styles/partials/conversations.css">
+<link rel="stylesheet" type="text/css" ng-href="styles/partials/schedule.css">
 
-
-<!-- <body class="body"> -->
-
-<!-- <div class="content my-reservation"></div> -->
-
-<div class="search-results w-98 rm-10-b m-t-20">
-    <h3 class="search-data"><spring:message code="contents" htmlEscape="true"/></h3>
-    <c:if test="${courseFiles.size() == 0}">
-        <h1><spring:message code="no.contents"/></h1>
-    </c:if>
-    <c:forEach var="file" items="${courseFiles}">
-        <div class="reservation-course-result">
+<div class="body my-reservation">
+    <div class="search-results w-98 rm-10-b m-t-20">
+        <h3 class="search-data" ng-bind="'CONTENTS' | translate"></h3>
+        <h1 ng-if="!courseFiles || courseFiles.length < 1" ng-bind="'NO_CONTENTS' | translate"></h1>
+        <div class="reservation-course-result" ng-repeat="file in courseFiles">
             <div class="search-result-img">
                 <div class="button-2 relative" type="submit">
-                    <a class="class-button" ng-href="/downloadFile?courseFile=${file.id}"></a>
-                    <spring:message code="download"/>
+                    <a class="class-button" href="javascript:;" ng-click="download(file)"></a>
+                    {{'DOWNLOAD' | translate}}
                 </div>
-                <c:if test="${param.professor == currentUser.id}">
-                    <div class="button-2 relative" type="submit">
-                        <a class="class-button" ng-href="/deleteFile?courseFile=${file.id}&professor=${param.professor}&subject=${param.subject}"></a>
-                        <spring:message code="delete"/>
-                    </div>
-                </c:if>
+                <div class="button-2 relative" type="submit" ng-if="professorId == currentUser.id">
+                    <a class="class-button" href="javascript:;" ng-click="delete(file)"></a>
+                    {{'DELETE' | translate}}
+                </div>
             </div>
-            <a class="search-result-title">
-                <c:out value="${file.name}" escapeXml="true" /></a>
-            <a class="search-result-professor" ></a>
+            <a class="search-result-title" ng-bind="file.name"></a>
+            <a class="search-result-professor"></a>
             <a class="search-result-specs"></a>
-            <a class="search-result-description"><spring:message code="description"/><c:out value="${file.description}" escapeXml="true" /></a>
+            <a class="search-result-description" ng-bind="'DESCRIPTION' | translate: { value: file.description }"></a>
             <a class="search-result-status"></a>
-
         </div>
-    </c:forEach>
-</div>
-<c:if test="${param.professor == currentUser.id}">
-    <div class="comment w-100">
+    </div>
+    <div class="comment w-100" ng-if="professorId == currentUser.id">
         <div class="button-container">
-            <h2 class="label"><spring:message code="course.fileUploadTitle"/></h2>
+            <h2 class="label" ng-bind="'FILE_UPLOAD' | translate"></h2>
         </div>
-        <c:url value="/uploadFile?professor=${param.professor}&subject=${param.subject}" var="postPath"/>
-        <form:form method="POST" modelAttribute="uploadClassFileForm" enctype="multipart/form-data" class="form-horizontal" action="${postPath}">
+
+        <form class="form-horizontal" name="form" ng-submit="upload(form)" novalidate>
             <div>
-                <form:label cssClass="label" path="file"><spring:message code="course.fileUpload"/></form:label>
-                <form:input type="file" path="file" id="file" class="input-request"/>
-                <form:errors cssClass="error-text" path="file" element="p"/>
-                <p id="fileError" class="error-text"><spring:message code="FileSize.uploadClassFileForm.file" /></p>
+                <label class="label" for="file" ng-bind="'FILE_SELECT' | translate"></label>
+                <input class="input-request" type="file" name="file" file="courseFile.file" size="courseFile.size" />
+                <p class="error-text" ng-show="!courseFile.file || invalidSize">{{'FILE_ERROR' | translate: '{ size: \'10MB\' }'}}</p>
             </div>
             <div>
-                <form:label cssClass="label" path="description"><spring:message code="course.description"/></form:label>
-                <form:textarea type="text" path="description" id="description" class="input-request chat-box" rows="5" cols="5"/>
-                <form:errors cssClass="error-text" path="description" element="p"/>
+                <label class="label" for="description" ng-bind="'DESCRIPTION' | translate"></label>
+                <textarea class="input-request" type="text" name="description" rows="5" cols="5" ng-required="true" ng-minlength="5" ng-maxlength="255" ng-model="courseFile.description"></textarea>
+                <p class="error-text" ng-show="form.description.$dirty && form.description.$invalid">{{'DESCRIPTION_SIZE_ERROR' | translate: '{ min: 5, max: 255 }'}}</p>
             </div>
             <div class="button-container">
-                <input class="button-2" type="submit" id="uploadSubmit" value='<spring:message code="upload"/>'/>
+                <input class="button-2" type="submit" value="{{ 'UPLOAD' | translate }}" ng-disabled="form.$invalid || !courseFile.file || invalidSize"/>
             </div>
-        </form:form>
+        </form>
     </div>
-</c:if>
+</div>

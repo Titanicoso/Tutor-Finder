@@ -1,59 +1,61 @@
 <link rel="stylesheet" ng-href="/styles/partials/schedule.css">
 
-<div ng-if="professor">
-    <div class="profile-profesor">
-        <img class="profile-picture" alt="Profile picture" ng-src="{{ professor.image_url }}"/>
-        <div class="profile-name row">
-            <h1 class="m-0-10 fit-content" ng-bind="professor.name + ' ' + professor.lastname"></h1>
-            <a ng-if="showEditOptions" class="fa fa-pencil center profile-course-button" title="{{'MODIFY_PROFESSOR' | translate}}" href="javascript:;" ng-click="editProfile()"></a>
-        </div>
-        <h3 class="profile-description m-0-10" ng-bind="professor.description"></h3>
-    </div>
-    <div class="class-content">
-        <div class="row r-center" ng-if="showEditOptions">
-            <div class="add-class button-2 relative">
-                <a class="class-button" href="javascript:;" ng-click="modifyCourse()"></a>
-                {{ 'ADD_COURSE' | translate }}
+<div class="staticProfile">
+    <div ng-if="professor">
+        <div class="profile-profesor">
+            <img class="profile-picture" alt="Profile picture" ng-src="{{ professor.image_url }}"/>
+            <div class="profile-name row">
+                <h1 class="m-0-10 fit-content" ng-bind="professor.name + ' ' + professor.lastname"></h1>
+                <a ng-if="showEditOptions" class="fa fa-pencil center profile-course-button" title="{{'MODIFY_PROFESSOR' | translate}}" href="javascript:;" ng-click="editProfile()"></a>
             </div>
+            <h3 class="profile-description m-0-10" ng-bind="professor.description"></h3>
         </div>
-        <div class="classes" ng-if="courses">
-            <div>
-                <h2 ng-bind="(showEditOptions ? 'PROFILE_COURSES' : 'PROFESSOR_COURSES') | translate"></h2>
-                <p ng-bind="(showEditOptions ? 'PROFILE_COURSES_DESCRIPTION' : 'PROFESSOR_COURSES_DESCRIPTION') | translate"></p>
-            </div>
-            <h4 ng-if="!showEditOptions && courses.data.length < 1" ng-bind="'NO_COURSES' | translate"></h4>
-
-            <div class="class" ng-repeat="course in courses.data">
-                <a class="class-button" ng-href="/#!/course/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}"></a>
-                <h3 class="class-title" ng-bind="course.subject.name"></h3>
-                <div class="class-description" ng-bind="course.description"></div>
-                <div class="edit-class" ng-if="showEditOptions">
-                    <a title="{{ 'MODIFY_COURSE' | translate }}" href="javascript:;" ng-click="modifyCourse(course)" class="fa fa-pencil center profile-course-button"></a>
-                    <a title="{{ 'FILES' | translate }}" href="javascript:;" class="fa fa-file center profile-course-button"></a>
-                    <a title="{{ 'DELETE_COURSE' | translate }}" ng-href="/#!/course/files/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}" ng-click="deleteCourse(course)" class="fa fa-trash center profile-course-button"></a>
+        <div class="class-content">
+            <div class="row r-center" ng-if="showEditOptions">
+                <div class="add-class button-2 relative">
+                    <a class="class-button" href="javascript:;" ng-click="modifyCourse()"></a>
+                    {{ 'ADD_COURSE' | translate }}
                 </div>
             </div>
+            <div class="classes" ng-if="courses">
+                <div>
+                    <h2 ng-bind="(showEditOptions ? 'PROFILE_COURSES' : 'PROFESSOR_COURSES') | translate"></h2>
+                    <p ng-bind="(showEditOptions ? 'PROFILE_COURSES_DESCRIPTION' : 'PROFESSOR_COURSES_DESCRIPTION') | translate"></p>
+                </div>
+                <h4 ng-if="!showEditOptions && courses.data.length < 1" ng-bind="'NO_COURSES' | translate"></h4>
 
-            <div class="paged-result-buttons">
-                <a href="javascript:;" ng-if="courses.links.prev" ng-click="getPage(courses.links.prev.number)" class="previous round">&#8249;</a>
-                <a href="javascript:;" ng-if="courses.links.next" ng-click="getPage(courses.links.next.number)" class="next round">&#8250;</a>
+                <div class="class" ng-repeat="course in courses.data">
+                    <a class="class-button" ng-href="/#!/course/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}"></a>
+                    <h3 class="class-title" ng-bind="course.subject.name"></h3>
+                    <div class="class-description" ng-bind="course.description"></div>
+                    <div class="edit-class" ng-if="showEditOptions">
+                        <a title="{{ 'MODIFY_COURSE' | translate }}" href="javascript:;" ng-click="modifyCourse(course)" class="fa fa-pencil center profile-course-button"></a>
+                        <a title="{{ 'FILES' | translate }}" ng-href="/#!/course/files/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}" class="fa fa-file center profile-course-button"></a>
+                        <a title="{{ 'DELETE_COURSE' | translate }}" href="javascript:;" ng-click="deleteCourse(course)" class="fa fa-trash center profile-course-button"></a>
+                    </div>
+                </div>
+
+                <div class="paged-result-buttons">
+                    <a href="javascript:;" ng-if="courses.links.prev" ng-click="getPage(courses.links.prev.number)" class="previous round">&#8249;</a>
+                    <a href="javascript:;" ng-if="courses.links.next" ng-click="getPage(courses.links.next.number)" class="next round">&#8250;</a>
+                </div>
             </div>
         </div>
+
+        <!-- <div class="time-content time-content-other">
+            <div class="schedule">
+                <h2><spring:message code="schedule.title"/></h2>
+                <p><spring:message code="schedule.description" /></p>
+                <c:choose>
+                    <c:when test="${schedule.monday.isEmpty() && schedule.tuesday.isEmpty() && schedule.wednesday.isEmpty() && schedule.thursday.isEmpty() && schedule.friday.isEmpty() && schedule.saturday.isEmpty() && schedule.sunday.isEmpty()}">
+                        <h4><spring:message code="schedule.empty"/></h4>
+                    </c:when>
+                    <c:otherwise>
+                            <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include>
+
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div> -->
     </div>
-
-    <!-- <div class="time-content time-content-other">
-        <div class="schedule">
-            <h2><spring:message code="schedule.title"/></h2>
-            <p><spring:message code="schedule.description" /></p>
-            <c:choose>
-                <c:when test="${schedule.monday.isEmpty() && schedule.tuesday.isEmpty() && schedule.wednesday.isEmpty() && schedule.thursday.isEmpty() && schedule.friday.isEmpty() && schedule.saturday.isEmpty() && schedule.sunday.isEmpty()}">
-                    <h4><spring:message code="schedule.empty"/></h4>
-                </c:when>
-                <c:otherwise>
-                        <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include>
-
-                </c:otherwise>
-            </c:choose>
-        </div>
-    </div> -->
 </div>
