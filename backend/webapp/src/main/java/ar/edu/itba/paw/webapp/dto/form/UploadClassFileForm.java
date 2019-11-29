@@ -9,9 +9,8 @@ import javax.validation.constraints.Size;
 
 public class UploadClassFileForm {
 
-    //TODO: File size max not working
     @NotNull(message = "{NotNull.uploadClassFileForm.file}")
-//    @FileSize(min = 1, max = 10 * 1024 * 1024)
+    @FileSize(min= 1, max = 10 * 1024 * 1024, message = "{FileSize.uploadClassFileForm.file}")
     @FormDataParam("file")
     private FormDataBodyPart file;
 

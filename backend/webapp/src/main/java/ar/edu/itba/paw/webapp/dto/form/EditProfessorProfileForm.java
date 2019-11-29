@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.dto.form;
 
+import ar.edu.itba.paw.webapp.validator.FileSize;
 import ar.edu.itba.paw.webapp.validator.FileType;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -12,7 +13,7 @@ public class EditProfessorProfileForm {
     @FormDataParam("description")
     private String description;
 
-//    @FileSize(max = 81920)
+    @FileSize(min= 1, max = 81920, message = "{FileSize.editProfessorProfileForm.picture}")
     @FileType(message = "{FileType.editProfessorProfileForm.picture}")
     @FormDataParam("picture")
     private FormDataBodyPart picture;
