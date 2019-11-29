@@ -69,6 +69,7 @@ define([], function() {
 		REQUEST_STUDENT: 'Alumno: {{name}}',
 		PRICE_SPEC: '$ {{price}} /hr',
 		CONVERSATION: 'Conversación',
+		NO_CONVERSATIONS: 'No tiene ninguna conversación activa',
 		CONVERSATIONS_HELP: 'Para iniciar una nueva conversación, busque un curso y póngase en contacto con el profesor',
 		INBOX: 'Bandeja de entrada',
 		LAST_MESSAGE: 'Último mensaje: {{date | date: "dd/MM/yy hh:mm"}}',

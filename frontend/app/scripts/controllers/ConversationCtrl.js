@@ -1,12 +1,16 @@
 'use strict';
-define(['tutorFinder', 'services/conversationService'], function(tutorFinder) {
+define(['tutorFinder', 'services/conversationService', 'services/authService'], function(tutorFinder) {
 
 	tutorFinder.controller('ConversationCtrl', ConversationCtrl);
 	
-	ConversationCtrl.$inject = ['$scope', '$rootScope', '$route', 'conversationService'];
-	function ConversationCtrl($scope, $rootScope, $route, conversationService) {
+	ConversationCtrl.$inject = ['$scope', '$rootScope', '$route', 'conversationService', 'authService'];
+	function ConversationCtrl($scope, $rootScope, $route, conversationService, authService) {
 		$rootScope.appendTitle('CONVERSATION');
 		var id = $route.current.params.id;
+
+		if (!$scope.currentUser) { 
+			$scope.currentUser = authService.getCurrentUser();
+		}
 
 		$scope.message = {text: ''};
 

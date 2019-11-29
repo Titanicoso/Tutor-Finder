@@ -1,13 +1,17 @@
 'use strict';
-define(['tutorFinder', 'services/courseFileService'], function(tutorFinder) {
+define(['tutorFinder', 'services/courseFileService', 'services/authService'], function(tutorFinder) {
 
 	tutorFinder.controller('CourseFilesCtrl', CourseFilesCtrl);
 	
-	CourseFilesCtrl.$inject = ['$scope', '$rootScope', '$route', 'courseFileService'];
-	function CourseFilesCtrl($scope, $rootScope, $route, courseFileService) {
+	CourseFilesCtrl.$inject = ['$scope', '$rootScope', '$route', 'courseFileService', 'authService'];
+	function CourseFilesCtrl($scope, $rootScope, $route, courseFileService, authService) {
 		$rootScope.appendTitle('COURSE_FILES');
 		$scope.professorId = $route.current.params.professorId;
 		var subjectId = $route.current.params.subjectId;
+
+		if (!$scope.currentUser) { 
+			$scope.currentUser = authService.getCurrentUser();
+		}
 
 		$scope.courseFile = {description: '', file: undefined, size: 0};
 

@@ -10,6 +10,10 @@ define(['tutorFinder', 'services/courseService', 'services/authService'], functi
 		$scope.professorId = $route.current.params.professorId;
 		var subjectId = $route.current.params.subjectId;
 
+		if (!$scope.currentUser) { 
+			$scope.currentUser = authService.getCurrentUser();
+		}
+
 		$scope.contactInput = {body: ''};
 		$scope.contactSuccess = false;
 
