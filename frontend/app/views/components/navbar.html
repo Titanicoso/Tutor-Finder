@@ -1,23 +1,25 @@
 <link rel="stylesheet" type="text/css" href="styles/partials/navbar.css">
 
-<a ng-href="/#!/" class="logo-box">
+<a href="javascript:;" ng-click="home()" class="logo-box">
     <img alt="Tu Teoria" class="logo" src="images/logo_invert.jpg" />
 </a>
 
 <div class="search-bar">
-    <form role="search" class="search-bar">
-        <input class="search-input" type="search" ng-model="search_input" placeholder="{{ 'SEARCH' | translate }}" />
-        <div class="search-dropdown">
-            <select class="select-search-type" name="type">
-                <option value="" selected disabled>{{ 'SEARCH_CATEGORY' | translate }}</option>
-                <option value="professor">{{ 'PROFESSOR' | translate }}</option>
-                <option value="course">{{ 'COURSE' | translate }}</option>
-                <option value="area">{{ 'AREA' | translate }}</option>
-            </select>
+    <form ng-submit="search()" class="search-bar" novalidate>
+        <div class="search-bar">
+            <input class="search-input" type="search" placeholder="{{ 'SEARCH' | translate }}" ng-model="filters.query">
+            <div class="search-dropdown">
+                <select class="select-search-type" ng-model="filters.category">
+                    <option value="" disabled="true" ng-bind="'SEARCH_CATEGORY' | translate"></option>
+                    <option value="professor" ng-bind="'PROFESSOR' | translate"></option>
+                    <option value="course" ng-bind="'COURSE' | translate"></option>
+                    <option value="area" ng-bind="'AREA' | translate"></option>
+                </select>
+            </div>
+            <button type="submit" class="search-button">
+                <img class="search-img" ng-src="images/search.png"/>
+            </button>
         </div>
-        <button type="submit" class="search-button" ng-click="reminder()">
-            <img class="search-img" ng-src="images/search.png" />
-        </button>
     </form>
 </div>
 

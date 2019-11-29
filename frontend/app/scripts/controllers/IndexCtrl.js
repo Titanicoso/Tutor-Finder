@@ -10,11 +10,19 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl'],
 		$rootScope.title = $rootScope.appName;
 
 		$scope.currentUser = authService.getCurrentUser();
+
+		$scope.filters = {query: '', category: 'course'};
+
 		$scope.showDropdown = false;
 		
 		$rootScope.appendTitle = function(subtitle) {
 			$rootScope.title = $rootScope.appName + ' | ' + 
 								$translate.instant(subtitle);
+		};
+
+		$scope.home = function() {
+			$scope.filters = {query: '', category: 'course'};
+			$location.url('/');
 		};
 
 		$scope.$on('user_update', function() {
@@ -49,9 +57,9 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl'],
 				console.log(err);
 			});
 		};
-		
-		$scope.reminder = function() {
-			// alert('TODO: search function');
+
+		$scope.search = function() {
+			$location.path('/searchResults').search($scope.filters);
 		};
 	};
 });

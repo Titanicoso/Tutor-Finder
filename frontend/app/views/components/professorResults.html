@@ -1,0 +1,6 @@
+<div class="search-area-result" ng-repeat="professor in results">
+    <a class="conversation-link" ng-href="#!/professor/{{professor.username}}">
+    <a class="search-result-img"><img class="search-result-picture" ng-src="{{professor.image_url}}"/></a>
+    <a class="search-result-title" ng-bind="professor.name + ' ' + professor.lastname"></a>
+    <a class="search-result-description" ng-bind="professor.description"></a>
+</div>

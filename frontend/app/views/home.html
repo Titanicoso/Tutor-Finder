@@ -1,7 +1,3 @@
-<!-- <script ng-src="/resources/js/jquery-3.3.1.min.js"></script>
-<script ng-src="/resources/js/dropdownClick.js"></script>
-<script ng-src="/resources/js/searchForm.js"></script> -->
-
 <div class="search-box" ng-if="!complete">
     <img alt="{{ 'APP_NAME' | translate }}" class="search-logo" ng-src="images/logo.png" />
     <form ng-submit="search()" novalidate>
@@ -21,4 +17,3 @@
         </div>
     </form>
 </div>
-<search ng-if="complete" category="query.category" term="query.text"></search>

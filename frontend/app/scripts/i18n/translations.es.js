@@ -80,6 +80,8 @@ define([], function() {
 		FILE_UPLOAD: 'Subida de archivo',
 		FILE_SELECT: 'Seleccionar archivo',
 		UPLOAD: 'Subir',
+		RATING_SPEC: 'Puntaje: {{rating}}/5',
+		SEARCH_MESSAGE: 'Buscaste: {{term}}',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
