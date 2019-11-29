@@ -84,7 +84,7 @@ public class AreaServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Area> results = areaService.filterAreasByName(NAME, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test

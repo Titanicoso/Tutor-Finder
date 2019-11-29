@@ -57,15 +57,7 @@ public class CourseServiceImpl implements CourseService {
         final List<Course> courses = courseDao.findByProfessorId(professor_id, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = courseDao.totalByProfessorId(professor_id);
 
-        final PagedResults<Course> pagedResults =
-                pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
     }
 
     @Override
@@ -79,15 +71,7 @@ public class CourseServiceImpl implements CourseService {
         final List<Course> courses = courseDao.filterByAreaId(areaId, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = courseDao.totalByAreaId(areaId);
 
-        final PagedResults<Course> pagedResults =
-                pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
 
     }
 
@@ -123,15 +107,7 @@ public class CourseServiceImpl implements CourseService {
         final List<Course> courses = courseDao.filter(days, startHour, endHour, minPrice, maxPrice, searchText, PAGE_SIZE, PAGE_SIZE * (page -1));
         final long total = courseDao.totalByFilter(days, startHour, endHour, minPrice, maxPrice, searchText);
 
-        final PagedResults<Course> pagedResults =
-                pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
     }
 
     @Override
@@ -224,15 +200,7 @@ public class CourseServiceImpl implements CourseService {
         final List<Comment> comments = courseDao.getComments(course, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = courseDao.totalComments(course);
 
-        final PagedResults<Comment> pagedResults =
-                pagedResultBuilder.getPagedResults(comments, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(comments, total, page, PAGE_SIZE);
     }
 
     @Override

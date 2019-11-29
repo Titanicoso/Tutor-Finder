@@ -138,15 +138,7 @@ public class ConversationServiceImpl implements ConversationService {
         final List<Conversation> conversations = conversationDao.findByUserId(userId, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = conversationDao.totalConversationsByUserId(userId);
 
-        final PagedResults<Conversation> pagedResults =
-                pagedResultBuilder.getPagedResults(conversations, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(conversations, total, page, PAGE_SIZE);
     }
 
     @Transactional

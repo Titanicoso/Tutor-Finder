@@ -72,15 +72,7 @@ public class ProfessorServiceImpl implements ProfessorService {
         final List<Professor> professors = professorDao.filterByFullName(fullName, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = professorDao.totalProfessorsByFullName(fullName);
 
-        final PagedResults<Professor> pagedResults =
-                pagedResultBuilder.getPagedResults(professors, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(professors, total, page, PAGE_SIZE);
     }
 
     @Override
@@ -284,14 +276,6 @@ public class ProfessorServiceImpl implements ProfessorService {
         final List<ClassReservation> reservations = professorDao.getPagedClassRequests(professorId, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = professorDao.totalClassRequests(professorId);
 
-        final PagedResults<ClassReservation> pagedResults =
-                pagedResultBuilder.getPagedResults(reservations, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(reservations, total, page, PAGE_SIZE);
     }
 }

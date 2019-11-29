@@ -10,9 +10,9 @@ public class PaginationResultBuilder {
 
     public <T> PagedResults<T> getPagedResults(final List<T> results, final long total, final int page, final int pageSize) {
 
-        final int lastPage = (int) Math.ceil(total / (double)pageSize);
-        if(lastPage < page) {
-            return null;
+        int lastPage = (int) Math.ceil(total / (double)pageSize);
+        if(lastPage == 0) {
+            lastPage = 1;
         }
         return new PagedResults<>(results, total, page, lastPage);
     }

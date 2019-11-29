@@ -19,7 +19,9 @@ public class PaginationLinkBuilder {
         Link link;
 
         if(results.getPage() > 1) {
-            link = Link.fromUriBuilder(uriBuilder.replaceQueryParam("page", results.getPage() - 1))
+            int prev = results.getPage() > results.getLastPage() ? results.getLastPage() : results.getPage() - 1;
+
+            link = Link.fromUriBuilder(uriBuilder.replaceQueryParam("page", prev))
                     .rel("prev")
                     .build();
             links.add(link);
