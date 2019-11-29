@@ -11,18 +11,18 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 		var category = $route.current.params.category;
 		var minPrice = parseFloat($route.current.params.minPrice);
 		var maxPrice = parseFloat($route.current.params.maxPrice);
-		var startHour = parseInt($route.current.params.startHour);
-		var endHour = parseInt($route.current.params.endHour);
-		var page = parseInt($route.current.params.page);
+		var startHour = parseInt($route.current.params.startHour, 10);
+		var endHour = parseInt($route.current.params.endHour, 10);
+		var page = parseInt($route.current.params.page, 10);
 
 		var tempDays = $route.current.params.days;
 		var days = [];
 		if (tempDays && tempDays.length > 1) {
 			days = tempDays.filter(function(day) { 
-				var tempDay = parseInt(day);
+				var tempDay = parseInt(day, 10);
 				return tempDay === tempDay;
 			}).map(function(day) {
-				return parseInt(day);
+				return parseInt(day, 10);
 			});
 		} else if (tempDays) {
 			days.push(tempDays);

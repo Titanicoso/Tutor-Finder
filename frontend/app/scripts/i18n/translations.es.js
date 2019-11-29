@@ -82,6 +82,8 @@ define([], function() {
 		UPLOAD: 'Subir',
 		RATING_SPEC: 'Puntaje: {{rating}}/5',
 		SEARCH_MESSAGE: 'Buscaste: {{term}}',
+		AREA_SEARCH: 'Cursos de {{area}}',
+		NO_RESULTS: 'No se encontraron resultados',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
