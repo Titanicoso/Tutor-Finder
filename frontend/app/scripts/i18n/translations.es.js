@@ -94,6 +94,9 @@ define([], function() {
 		LASTNAME_SIZE_ERROR: 'El apellido debe tener entre {{min}} y {{max}} caracteres',
 		USERNAME_SIZE_ERROR: 'El usuario debe tener entre {{min}} y {{max}} caracteres',
 		NAME_PATTERN_ERROR: 'El nombre debe contener unicamente caracteres alfabeticos',
-		LASTNAME_PATTERN_ERROR: 'El apellido debe contener unicamente caracteres alfabeticos'
+		LASTNAME_PATTERN_ERROR: 'El apellido debe contener unicamente caracteres alfabeticos',
+		ERROR_TITLE: 'Ha habido un error :(',
+		ERROR_CODE: 'Codigo: {{code}}',
+		ERROR_MSG: 'No se ha podido efectuar la accion solicitada'
 	};
 });

@@ -9,6 +9,7 @@
     align-content: center;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     margin-bottom: 0;
+    border-radius: 0;
 }
 
 .logo-box {
@@ -29,19 +30,33 @@
     justify-content: end;
 }
 
+.navbar-buttons .navbar-buttons {
+    display: grid;
+    position: absolute;
+    right: 0;
+}
+
+.navbar-button:hover {
+    background-color: rgb(241, 154, 116);
+    text-decoration: none;
+    color: white;
+}
+
 .navbar-button {
     background-color: inherit;
     border: none;
     display: grid;
     cursor: pointer;
-    align-content: center;
     text-align: center;
+    align-content: center;
     text-decoration: none;
     color: white;
-    font-size: 14px;
+    font-size: 17px;
+    font-weight: bold;
     width: fit-content;
     height: 100%;
     padding: 0 10px;
+    right: 0;
 }
 
 .navbar .search-img {

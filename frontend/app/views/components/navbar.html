@@ -22,9 +22,9 @@
 </div>
 
 <div class="navbar-buttons pull-right" id="navbar-buttons">
-    <div ng-if="currentUser" class="navbar-button dropdown relative" id="dropdown">
-        <a class="dropdown-button" ng-click="toggleDropdown()" ng-bind="currentUser.name"></a>
-        <div class="dropdown-content" ng-show="showDropdown">
+    <div ng-if="currentUser" class="navbar-buttons dropdown relative" id="dropdown">
+        <a class="dropdown-button navbar-button" ng-mouseover="toggleDropdown()" ng-bind="currentUser.name"></a>
+        <div class="dropdown-content" ng-mouseleave="toggleDropdown()" ng-show="showDropdown">
             <div ng-if="currentUser.professor">
                 <a ng-href="/#!/profile" ng-click="toggleDropdown()" class="navbar-button" ng-bind="'PROFILE' | translate"></a>
                 <a ng-href="/#!/requests" ng-click="toggleDropdown()" class="navbar-button" ng-bind="'CLASS_REQUESTS' | translate"></a>
@@ -37,7 +37,7 @@
             <a ng-click="logout()" ng-click="toggleDropdown()" class="navbar-button" ng-bind="'LOGOUT' | translate"></a>
         </div>
     </div>
-    <div ng-if="!currentUser">
+    <div ng-if="!currentUser" class="navbar-buttons">
         <a ng-href="/#!/register" class="navbar-button">{{ 'REGISTER' | translate }}</a>
         <a ng-href="/#!/login" class="navbar-button">{{ 'LOGIN' | translate }}</a>
     </div> 

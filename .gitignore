@@ -17,3 +17,7 @@ frontend/.vscode/*
 .vscode/*
 
 frontend/.sass-cache/
+frontend/app/styles/*.css
+frontend/app/styles/*.css.map
+frontend/app/styles/partials/*.css
+frontend/app/styles/partials/*.css.map

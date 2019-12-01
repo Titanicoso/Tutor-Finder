@@ -8,6 +8,10 @@ define([], function() {
                 templateUrl: '/views/home.html',
                 controller: 'HomeCtrl'
             },
+            '/error': {
+                templateUrl: '/views/error.html',
+                controller: 'HomeCtrl'
+            },
             '/conversations': {
                 templateUrl: '/views/conversations.html',
                 controller: 'ConversationsCtrl'

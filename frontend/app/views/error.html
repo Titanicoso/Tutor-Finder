@@ -1,18 +1,14 @@
 <link rel="stylesheet" ng-href="/resources/css/errors.css">
 
-
-<div class="navbar">
-    <a ng-href="/" class="logo-box">
-        <img alt="Tu Teoria" class="logo" ng-src="images/logo_invert.jpg" />
-    </a>
-</div>
-
 <div class="text-wrapper">
     <div class="title">
-        <spring:message code="oops"/>
+        <h1>{{ 'ERROR_TITLE' | translate }}</h1>
     </div>
 
+    <br/>
+
     <div class="subtitle">
-        <spring:message code="${errorMessageCode}"/>
+        <!-- <h5>{{ 'ERROR_CODE' | translate }}</h5> -->
+        <h4>{{ 'ERROR_MSG' | translate }}</h4>
     </div>
 </div>
