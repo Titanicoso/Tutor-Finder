@@ -7,13 +7,12 @@ define(['tutorFinder', 'services/userService'], function(tutorFinder) {
 	function ReservationsCtrl($scope, $rootScope, userService, toastService) {
 		$rootScope.appendTitle('RESERVATIONS');
 
-		var currentPage = 1;
+		$scope.currentPage = 1;
 
 		$scope.getPage = function(number) {
 			userService.getFullReservations(number)
 			.then(function(reservations) {
 				$scope.reservations = reservations;
-				currentPage = number;
 			})
 			.catch(function(err) {
 				switch (err.status) {
@@ -23,6 +22,6 @@ define(['tutorFinder', 'services/userService'], function(tutorFinder) {
 			});
 		};
 
-		$scope.getPage(currentPage);
+		$scope.getPage($scope.currentPage);
 	};
 });

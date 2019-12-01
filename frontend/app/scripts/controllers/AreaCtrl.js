@@ -8,7 +8,7 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 		$rootScope.appendTitle('AREA');
 		var id = $route.current.params.id;
 		
-		var currentPage = 1;
+		$scope.currentPage = 1;
 
 		areaService.getArea(id)
 		.then(function(area) {
@@ -25,7 +25,6 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 			areaService.getAreaCourses(id, number)
 			.then(function(results) {
 				$scope.courses = results;
-				currentPage = number;
 			})
 			.catch(function(err) {
 				switch (err.status) {
@@ -35,6 +34,6 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 			});
 		};
 
-		$scope.getPage(currentPage);
+		$scope.getPage($scope.currentPage);
 	};
 });

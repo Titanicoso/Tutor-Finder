@@ -15,7 +15,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 		var currentUser = $scope.currentUser;
 		$scope.showEditOptions = false;
 
-		var currentPage = 1;
+		$scope.currentPage = 1;
 
 		if (!username || (currentUser && currentUser.username === username)) {
 			$scope.showEditOptions = true;
@@ -27,7 +27,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 			professorService.getProfessor(username)
 			.then(function(response) {
 				$scope.professor = response;
-				return professorService.getProfessorCourses(username, currentPage);
+				return professorService.getProfessorCourses(username, $scope.currentPage);
 			})
 			.then(function(response) {
 				$scope.courses = response;
@@ -46,7 +46,6 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 			professorService.getProfessorCourses(username, number)
 			.then(function(courses) {
 				$scope.courses = courses;
-				currentPage = number;
 			})
 			.catch(function(err) {
 				switch (err.status) {
@@ -68,7 +67,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 				 }
 			}).result.then(function(answer) {
 				if (answer) {
-					$scope.getPage(currentPage);
+					$scope.getPage($scope.currentPage);
 				}
 			}, function(err) { 
 				switch (err.status) {
@@ -102,7 +101,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 		$scope.deleteCourse = function(course) {
 			courseService.delete(course.professor.id, course.subject.id)
 			.then(function() {
-				$scope.getPage(currentPage);
+				$scope.getPage($scope.currentPage);
 			})
 			.catch(function(err) { 
 				switch (err.status) {

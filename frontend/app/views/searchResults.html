@@ -73,8 +73,7 @@
         <course-results ng-switch-default results="results.data"></course-results>
     
         <div class="paged-result-buttons">
-            <a href="javascript:;" ng-if="results.links.prev" ng-click="getPage(results.links.prev.number)" class="previous round">&#8249;</a>
-            <a href="javascript:;" ng-if="results.links.next" ng-click="getPage(results.links.next.number)" class="next round">&#8250;</a>
+            <ul ng-if="results.links" uib-pagination total-items="results.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="currentPage" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage(currentPage)"></ul>
         </div>
     </div>
 </div>

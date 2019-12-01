@@ -21,7 +21,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 		$scope.commentError = undefined;
 		$scope.canComment = false;
 
-		var currentPage = 1;
+		$scope.currentPage = 1;
 
 		courseService.getCourse($scope.professorId, subjectId)
 		.then(function(course) {
@@ -43,7 +43,6 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 			courseService.getComments($scope.professorId, subjectId, number)
 			.then(function(comments) {
 				$scope.comments = comments;
-				currentPage = number;
 			})
 			.catch(function(err) {
 				switch (err.status) {
@@ -97,7 +96,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 					$scope.commentInput.rating = undefined;
 					$scope.commentError = undefined;
 					form.$setPristine();
-					$scope.getPage(currentPage);
+					$scope.getPage($scope.currentPage);
 				})
 				.catch(function(err) {
 					switch (err.status) {

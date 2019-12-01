@@ -40,10 +40,10 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 
 		$scope.lastSearch = {query: $scope.filters.query, category: $scope.filters.category};
 
-		var currentPage = page !== page ? 1 : page;
+		$scope.currentPage = page !== page ? 1 : page;
 
 		$scope.search = function() {
-			$scope.getPage(currentPage);
+			$scope.getPage($scope.currentPage);
 		};
 
 		$scope.getPage = function(number) {
@@ -57,7 +57,6 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 
 			request.then(function(results) {
 				$scope.results = results;
-				currentPage = number;
 			})
 			.catch(function(err) {
 				switch (err.status) {

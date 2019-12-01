@@ -7,13 +7,12 @@ define(['tutorFinder', 'services/conversationService'], function(tutorFinder) {
 	function ConversationsCtrl($scope, $rootScope, conversationService, toastService) {
 		$rootScope.appendTitle('CONVERSATIONS');
 
-		var currentPage = 1;
+		$scope.currentPage = 1;
 
 		$scope.getPage = function(number) {
 			conversationService.getConversations(number)
 			.then(function(conversations) {
 				$scope.conversations = conversations;
-				currentPage = number;
 			})
 			.catch(function(err) {
 				switch (err.status) {
@@ -23,6 +22,6 @@ define(['tutorFinder', 'services/conversationService'], function(tutorFinder) {
 			});
 		};
 
-		$scope.getPage(currentPage);
+		$scope.getPage($scope.currentPage);
 	};
 });

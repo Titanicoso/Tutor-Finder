@@ -7,13 +7,12 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 	function RequestsCtrl($scope, $rootScope, professorService, toastService) {
 		$rootScope.appendTitle('REQUESTS');
 
-		var currentPage = 1;
+		$scope.currentPage = 1;
 
 		$scope.getPage = function(number) {
 			professorService.getFullRequests(number)
 			.then(function(requests) {
 				$scope.requests = requests;
-				currentPage = number;
 			})
 			.catch(function(err) {
 				switch (err.status) {
@@ -49,6 +48,6 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 			});
 		};
 
-		$scope.getPage(currentPage);
+		$scope.getPage($scope.currentPage);
 	};
 });
