@@ -6,6 +6,7 @@ define([], function() {
 		PROFESSOR: 'Profesor',
 		COURSE: 'Curso',
 		AREA: 'Área',
+		HOME: 'Inicio',
 		SEARCH_CATEGORY: 'Seleccione una categoría',
 		REGISTER: 'Registrarse',
 		LOGIN: 'Iniciar sesión',
@@ -98,6 +99,8 @@ define([], function() {
 		PROFILE_SCHEDULE: 'Tus Horarios',
 		PROFILE_SCHEDULE_DESCRIPTION: 'Aquí estan tus horarios, asi lo veran los alumnos',	
 		SCHEDULE_EMPTY: 'El profesor no tiene horarios.',
+		COURSE_FILES: 'Archivos de la clase',
+		SEARCH_RESULTS: 'Búsqueda',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
