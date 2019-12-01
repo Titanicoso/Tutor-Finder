@@ -1,18 +1,9 @@
-<link rel="stylesheet" ng-href="/resources/css/errors.css">
-
-
-<div class="navbar">
-    <a ng-href="/" class="logo-box">
-        <img alt="Tu Teoria" class="logo" ng-src="images/logo_invert.jpg" />
-    </a>
-</div>
+<!-- build:css(.tmp) styles/stylesheet.css -->
+<link rel="stylesheet" href="styles/partials/errors.css">
+<!-- endbuild -->
 
 <div class="text-wrapper">
-    <div class="title">
-        <spring:message code="oops"/>
-    </div>
+    <div class="title" ng-bind="'ERROR_OOPS' | translate"></div>
 
-    <div class="subtitle">
-        <spring:message code="${errorMessageCode}"/>
-    </div>
+    <div class="subtitle" ng-bind="errorMessage | translate"></div>
 </div>

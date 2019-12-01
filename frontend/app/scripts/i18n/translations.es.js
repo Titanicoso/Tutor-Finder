@@ -143,6 +143,10 @@ define([], function() {
 		ERROR_DELETING_COURSE: 'Ocurrió un error al intentar eliminar el curso',
 		ERROR_DELETING_FILE: 'Ocurrió un error al intentar eliminar el archivo',
 		ERROR_UPLOADING_FILE: 'Ocurrió un error al intentar subir el archivo',
-		ERROR_DOWNLOADING_FILE: 'Ocurrió un error al intentar descargar el archivo'
+		ERROR_DOWNLOADING_FILE: 'Ocurrió un error al intentar descargar el archivo',
+		ERROR_OOPS: 'Oops! Ocurrió un error!',
+		ERROR_404: 'Error 404, la página a la que quiere acceder no existe',
+		ERROR_403: 'Error 403, usted no tiene permisos para acceder a esta página',
+		ERROR_500: 'Error 500, estamos teniendo dificultades técnicas disculpe las molestias'
 	};
 });

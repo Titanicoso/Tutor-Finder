@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.PagedResults;
-import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.dto.CourseDTO;
 import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
@@ -126,9 +123,15 @@ public class ProfessorController extends BaseController{
     @GET
     @Path("/{username}/schedule")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response professorSchedule(@PathParam("username") final String username){
-        //TODO fill in when schedule model is revised.
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    public Response professorSchedule(@PathParam("username") final String username) {
+        final Professor professor = ps.findByUsername(username);
+
+        if(professor == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        final Schedule schedule = ss.getScheduleForProfessor(professor.getId());
+        return Response.ok(schedule).build();
     }
 
     @GET
