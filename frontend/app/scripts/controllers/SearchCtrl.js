@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 
 	tutorFinder.controller('SearchCtrl', SearchCtrl);
 	
-	SearchCtrl.$inject = ['$scope', '$rootScope', '$route', '$location', 'areaService', 'courseService', 'professorService'];
-	function SearchCtrl($scope, $rootScope, $route, $location, areaService, courseService, professorService) {
+	SearchCtrl.$inject = ['$scope', '$rootScope', '$route', '$location', 'areaService', 'courseService', 'professorService', 'toastService'];
+	function SearchCtrl($scope, $rootScope, $route, $location, areaService, courseService, professorService, toastService) {
 		$rootScope.appendTitle('SEARCH_RESULTS');
 
 		var query = $route.current.params.query;
@@ -60,7 +60,10 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 				currentPage = number;
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 

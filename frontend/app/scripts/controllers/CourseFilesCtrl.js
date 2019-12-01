@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 
 	tutorFinder.controller('CourseFilesCtrl', CourseFilesCtrl);
 	
-	CourseFilesCtrl.$inject = ['$scope', '$rootScope', '$route', 'courseFileService', 'authService'];
-	function CourseFilesCtrl($scope, $rootScope, $route, courseFileService, authService) {
+	CourseFilesCtrl.$inject = ['$scope', '$rootScope', '$route', 'courseFileService', 'authService', 'toastService'];
+	function CourseFilesCtrl($scope, $rootScope, $route, courseFileService, authService, toastService) {
 		$rootScope.appendTitle('COURSE_FILES');
 		$scope.professorId = $route.current.params.professorId;
 		var subjectId = $route.current.params.subjectId;
@@ -30,7 +30,10 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 					ctrl.refresh();
 				})
 				.catch(function(err) {
-					console.log(err);
+					switch (err.status) {
+						case -1: toastService.showAction('NO_CONNECTION'); break;
+						default: toastService.showAction('ERROR_UPLOADING_FILE'); break;
+					}
 				});
 			}
 		};
@@ -41,7 +44,10 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 				$scope.courseFiles = files; 
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 
@@ -51,7 +57,10 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 				courseFileService.downloadFile(file, data);
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('ERROR_DOWNLOADING_FILE'); break;
+				}
 			});
 		};
 
@@ -64,7 +73,10 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 				});
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('ERROR_DELETING_FILE'); break;
+				}
 			});
 		};
 

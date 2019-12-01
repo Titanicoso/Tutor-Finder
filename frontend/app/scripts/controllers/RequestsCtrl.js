@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 
 	tutorFinder.controller('RequestsCtrl', RequestsCtrl);
 	
-	RequestsCtrl.$inject = ['$scope', '$rootScope', 'professorService'];
-	function RequestsCtrl($scope, $rootScope, professorService) {
+	RequestsCtrl.$inject = ['$scope', '$rootScope', 'professorService', 'toastService'];
+	function RequestsCtrl($scope, $rootScope, professorService, toastService) {
 		$rootScope.appendTitle('REQUESTS');
 
 		var currentPage = 1;
@@ -16,7 +16,10 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 				currentPage = number;
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 
@@ -26,7 +29,10 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 				request.status = 'APPROVED';
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('ERROR_APPROVING'); break;
+				}
 			});
 		};
 
@@ -36,7 +42,10 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 				request.status = 'DENIED';
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('ERROR_DENYING'); break;
+				}
 			});
 		};
 

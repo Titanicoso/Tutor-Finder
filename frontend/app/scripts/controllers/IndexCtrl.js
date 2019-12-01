@@ -1,11 +1,11 @@
 'use strict';
 
-define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl'], function(tutorFinder) {
+define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl', 'services/toastService'], function(tutorFinder) {
 	
 	tutorFinder.controller('IndexCtrl', IndexCtrl);
 	
-	IndexCtrl.inject = ['$scope', '$rootScope', '$translate', '$location', 'authService', '$uibModal'];
-	function IndexCtrl($scope, $rootScope, $translate, $location, authService, $uibModal) {
+	IndexCtrl.inject = ['$scope', '$rootScope', '$translate', '$location', 'authService', '$uibModal', 'toastService'];
+	function IndexCtrl($scope, $rootScope, $translate, $location, authService, $uibModal, toastService) {
 		$rootScope.appName = $translate.instant('APP_NAME');
 		$rootScope.title = $rootScope.appName;
 
@@ -54,7 +54,9 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl'],
 					$scope.currentUser = authService.getCurrentUser(true);
 				}
 			}, function(err) { 
-				console.log(err);
+				switch (err.status) {
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 

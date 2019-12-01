@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/conversationService', 'services/authService'], 
 
 	tutorFinder.controller('ConversationCtrl', ConversationCtrl);
 	
-	ConversationCtrl.$inject = ['$scope', '$rootScope', '$route', 'conversationService', 'authService'];
-	function ConversationCtrl($scope, $rootScope, $route, conversationService, authService) {
+	ConversationCtrl.$inject = ['$scope', '$rootScope', '$route', '$location', 'conversationService', 'authService', 'toastService'];
+	function ConversationCtrl($scope, $rootScope, $route, $location, conversationService, authService, toastService) {
 		$rootScope.appendTitle('CONVERSATION');
 		var id = $route.current.params.id;
 
@@ -20,7 +20,11 @@ define(['tutorFinder', 'services/conversationService', 'services/authService'], 
 				$scope.messages = messages;
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					case 403: toastService.showAction('FORBIDDEN_CONVERSATION'); $location.url('/'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 
@@ -34,7 +38,11 @@ define(['tutorFinder', 'services/conversationService', 'services/authService'], 
 					ctrl.refresh();
 				})
 				.catch(function(err) {
-					console.log(err);
+					switch (err.status) {
+						case -1: toastService.showAction('NO_CONNECTION'); break;
+						case 403: toastService.showAction('FORBIDDEN_CONVERSATION'); $location.url('/'); break;
+						default: toastService.showAction('ERROR_SENDING_MESSGE'); break;
+					}
 				});
 			}
 		};

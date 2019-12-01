@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 
 	tutorFinder.controller('AreaCtrl', AreaCtrl);
 	
-	AreaCtrl.$inject = ['$scope', '$rootScope', '$route', 'areaService'];
-	function AreaCtrl($scope, $rootScope, $route, areaService) {
+	AreaCtrl.$inject = ['$scope', '$rootScope', '$route', 'areaService', 'toastService'];
+	function AreaCtrl($scope, $rootScope, $route, areaService, toastService) {
 		$rootScope.appendTitle('AREA');
 		var id = $route.current.params.id;
 		
@@ -15,7 +15,10 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 			$scope.area = area;
 		})
 		.catch(function(err) {
-			console.log(err);
+			switch (err.status) {
+				case -1: toastService.showAction('NO_CONNECTION'); break;
+				default: toastService.showAction('OOPS'); break;
+			}
 		});
 
 		$scope.getPage = function(number) {
@@ -25,7 +28,10 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 				currentPage = number;
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 

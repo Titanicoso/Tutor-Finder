@@ -9,6 +9,8 @@ $fa-font-path: '../../bower_components/components-font-awesome/fonts';
 @import 'bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
 // endbower
 
+@import '../../bower_components/angular-material/angular-material.scss';
+
 @import 'partials/home';
 
 .browsehappy {
@@ -16,6 +18,10 @@ $fa-font-path: '../../bower_components/components-font-awesome/fonts';
   background: white;
   color: #000;
   padding: 0.2em 0;
+}
+
+.md-datepicker-calendar-pane {
+  z-index: 1250;
 }
 
 /* Space out content a bit */

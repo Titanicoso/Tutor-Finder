@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/userService', 'services/authService'], function
 
 	tutorFinder.controller('ForgotPasswordCtrl', ForgotPasswordCtrl);
 	
-	ForgotPasswordCtrl.$inject = ['$scope', '$rootScope', '$route', '$location', 'userService', 'authService'];
-	function ForgotPasswordCtrl($scope, $rootScope, $route, $location, userService, authService) {
+	ForgotPasswordCtrl.$inject = ['$scope', '$rootScope', '$route', '$location', 'userService', 'authService', 'toastService'];
+	function ForgotPasswordCtrl($scope, $rootScope, $route, $location, userService, authService, toastService) {
 		$rootScope.appendTitle('FORGOT_PASSWORD');
 		var token = $route.current.params.token;
 		$scope.newPassword = false;
@@ -43,8 +43,10 @@ define(['tutorFinder', 'services/userService', 'services/authService'], function
 					$location.url('/');
 				})
 				.catch(function(err) {
-					console.log(err);
-					$scope.restoreResponse.error = true;
+					switch (err.status) {
+						case -1: toastService.showAction('NO_CONNECTION'); break;
+						default: $scope.restoreResponse.error = true; break;
+					}
 				});
 				return;
 			}

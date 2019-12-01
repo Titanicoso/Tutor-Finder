@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/conversationService'], function(tutorFinder) {
 
 	tutorFinder.controller('ConversationsCtrl', ConversationsCtrl);
 	
-	ConversationsCtrl.$inject = ['$scope', '$rootScope', 'conversationService'];
-	function ConversationsCtrl($scope, $rootScope, conversationService) {
+	ConversationsCtrl.$inject = ['$scope', '$rootScope', 'conversationService', 'toastService'];
+	function ConversationsCtrl($scope, $rootScope, conversationService, toastService) {
 		$rootScope.appendTitle('CONVERSATIONS');
 
 		var currentPage = 1;
@@ -16,7 +16,10 @@ define(['tutorFinder', 'services/conversationService'], function(tutorFinder) {
 				currentPage = number;
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 

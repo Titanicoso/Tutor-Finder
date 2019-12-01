@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="button-container">
-                    <input class="button-2" type="submit" ng-disabled="commentForm.$invalid" value="{{'SEND' | translate}}"/>
+                    <input class="button-2" type="submit" title="{{!canComment ? 'FORBIDDEN_COMMENT' : '' | translate}}" ng-disabled="commentForm.$invalid || !canComment" value="{{'SEND' | translate}}"/>
                 </div>
             </form:form>
         </div>
@@ -73,14 +73,13 @@
             </div>
         </div>
 
-    <!--     <div class="schedule w-92">
-            <h2><spring:message code="schedule.title"/></h2>
-            <c:if test="${currentUser == null || (currentUser != null && currentUser.id != course.professor.id)}">
-                <input  class="button-2" type="button" value="<spring:message code="reservations.action"/>" onclick="location.href='<c:url value="/reserveClass?professor=${course.professor.id}&subject=${course.subject.id}" />'"/>
-            </c:if>
-            <p><spring:message code="schedule.description" /></p>
-            <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include>
-
-        </div> -->
+        <div class="schedule w-92">
+            <h2 ng-bind="'SCHEDULE' | translate"></h2>
+            <input ng-if="currentUser == null || currentUser.id != professorId" class="button-2" type="button" value="{{'RESERVE_CLASS' | translate}}" ng-click="reserveClass()"/>
+            <p ng-bind="'SCHEDULE_DESCRIPTION' | translate"></p>
+            <!-- TODO: CHANGE WHEN SCHEDULE ADDED
+                <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include> 
+            -->
+        </div>
     </div>
 </div>

@@ -42,20 +42,14 @@
             </div>
         </div>
 
-        <!-- <div class="time-content time-content-other">
+        <div class="time-content time-content-other">
             <div class="schedule">
-                <h2><spring:message code="schedule.title"/></h2>
-                <p><spring:message code="schedule.description" /></p>
-                <c:choose>
-                    <c:when test="${schedule.monday.isEmpty() && schedule.tuesday.isEmpty() && schedule.wednesday.isEmpty() && schedule.thursday.isEmpty() && schedule.friday.isEmpty() && schedule.saturday.isEmpty() && schedule.sunday.isEmpty()}">
-                        <h4><spring:message code="schedule.empty"/></h4>
-                    </c:when>
-                    <c:otherwise>
-                            <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include>
-
-                    </c:otherwise>
-                </c:choose>
+                <h2 ng-bind="(showEditOptions ? 'PROFILE_SCHEDULE' : 'SCHEDULE') | translate"></h2>
+                <p ng-bind="(showEditOptions ? 'PROFILE_SCHEDULE_DESCRIPTION' : 'SCHEDULE_DESCRIPTION') | translate"></p>
+                <!-- TODO: ADD SCHEDULE AND CHANGE CONDITION -->
+                <h4 ng-if="!showEditOptions && true" ng-bind="'SCHEDULE_EMPTY' | translate"></h4>
+                <!-- <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include> -->
             </div>
-        </div> -->
+        </div> 
     </div>
 </div>

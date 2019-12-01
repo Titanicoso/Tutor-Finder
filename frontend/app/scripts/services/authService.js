@@ -5,6 +5,7 @@ define(['tutorFinder'], function(tutorFinder) {
 
 		var currentUser;
 		var accessToken;
+		var redirectUrl;
 		var self = this;
 
         this.getAccessToken = function() {
@@ -19,6 +20,32 @@ define(['tutorFinder'], function(tutorFinder) {
                 accessToken = $window.sessionStorage.getItem('access_token');
             }
             return accessToken;
+		};
+
+		this.getRedirectUrl = function() {
+			return this.redirectUrl;
+		};
+
+		this.setRedirectUrl = function(redirectUrl, params) {
+			return this.redirectUrl = {url: redirectUrl, params: params};
+		};
+
+		this.checkRoles = function(roles) {
+			var roleCheck = {authorization: false, canPromote: false};
+
+			if (!roles) {
+				roleCheck.authorization = true;
+			} else if (!roles.loggedIn) {
+				roleCheck.authorization = this.currentUser === undefined;
+			} else if (roles.needsProfessor) {
+				roleCheck.authorization = this.currentUser !== undefined && this.currentUser.professor;
+				roleCheck.canPromote = this.currentUser === undefined;
+			} else {
+				roleCheck.authorization = this.currentUser !== undefined;
+				roleCheck.canPromote = true;
+			}
+
+			return roleCheck;
 		};
 		
 		this.getAuthHeaders = function() {

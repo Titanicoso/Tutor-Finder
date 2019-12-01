@@ -4,8 +4,8 @@ define(['tutorFinder', 'directives/fileRead', 'services/userService'], function(
 
 	tutorFinder.controller('ModifyProfileCtrl', ModifyProfileCtrl);
 	
-	ModifyProfileCtrl.$inject = ['$scope', '$uibModalInstance', 'professor', 'userService'];
-	function ModifyProfileCtrl($scope, $modal, professor, userService) {
+	ModifyProfileCtrl.$inject = ['$scope', '$uibModalInstance', 'professor', 'userService', 'toastService'];
+	function ModifyProfileCtrl($scope, $modal, professor, userService, toastService) {
 		$scope.isModifying = professor !== undefined && professor !== null;
 		$scope.invalidType = false;
 		
@@ -36,7 +36,10 @@ define(['tutorFinder', 'directives/fileRead', 'services/userService'], function(
 					$modal.close(true);
 				})
 				.catch(function(err) {
-					console.log(err);
+					switch (err.status) {
+						case -1: toastService.showAction('NO_CONNECTION'); break;
+						default: toastService.showAction('ERROR_MODIFYING'); break;
+					}
 				});
 			}
 		};

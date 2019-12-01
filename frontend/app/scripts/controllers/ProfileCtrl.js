@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 
 	tutorFinder.controller('ProfileCtrl', ProfileCtrl);
 	
-	ProfileCtrl.$inject = ['$scope', '$rootScope', '$route', '$uibModal', 'authService', 'professorService', 'courseService'];
-	function ProfileCtrl($scope, $rootScope, $route, $uibModal, authService, professorService, courseService) {
+	ProfileCtrl.$inject = ['$scope', '$rootScope', '$route', '$uibModal', 'authService', 'professorService', 'courseService', 'toastService'];
+	function ProfileCtrl($scope, $rootScope, $route, $uibModal, authService, professorService, courseService, toastService) {
 		$rootScope.appendTitle('PROFILE');
 		var username = $route.current.params.username;
 
@@ -33,7 +33,10 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 				$scope.courses = response;
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 
@@ -46,7 +49,10 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 				currentPage = number;
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 
@@ -65,7 +71,9 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 					$scope.getPage(currentPage);
 				}
 			}, function(err) { 
-				console.log(err);
+				switch (err.status) {
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 		
@@ -85,7 +93,9 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 					$scope.refresh();
 				}
 			}, function(err) { 
-				console.log(err);
+				switch (err.status) {
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 
@@ -95,7 +105,10 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 				$scope.getPage(currentPage);
 			})
 			.catch(function(err) { 
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('ERROR_DELETING_COURSE'); break;
+				}
 			});
 		};
 	};

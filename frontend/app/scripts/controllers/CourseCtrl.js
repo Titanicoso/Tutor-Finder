@@ -1,10 +1,10 @@
 'use strict';
-define(['tutorFinder', 'services/courseService', 'services/authService'], function(tutorFinder) {
+define(['tutorFinder', 'services/courseService', 'services/authService', 'controllers/ReserveClassCtrl'], function(tutorFinder) {
 
 	tutorFinder.controller('CourseCtrl', CourseCtrl);
 	
-	CourseCtrl.$inject = ['$scope', '$rootScope', '$route', 'courseService', 'authService'];
-	function CourseCtrl($scope, $rootScope, $route, courseService, authService) {
+	CourseCtrl.$inject = ['$scope', '$rootScope', '$route', '$uibModal', 'courseService', 'authService', 'toastService'];
+	function CourseCtrl($scope, $rootScope, $route, $uibModal, courseService, authService, toastService) {
 
 		$rootScope.appendTitle('COURSE');
 		$scope.professorId = $route.current.params.professorId;
@@ -19,19 +19,24 @@ define(['tutorFinder', 'services/courseService', 'services/authService'], functi
 
 		$scope.commentInput = {body: '', rating: undefined};
 		$scope.commentError = undefined;
+		$scope.canComment = false;
 
 		var currentPage = 1;
 
 		courseService.getCourse($scope.professorId, subjectId)
 		.then(function(course) {
 			$scope.course = course;
+			$scope.canComment = $scope.currentUser === null || course.canComment;
 			return courseService.getComments($scope.professorId, subjectId, 1);
 		})
 		.then(function(comments) {
 			$scope.comments = comments;
 		})
 		.catch(function(err) {
-			console.log(err);
+			switch (err.status) {
+				case -1: toastService.showAction('NO_CONNECTION'); break;
+				default: toastService.showAction('OOPS'); break;
+			}
 		});
 
 		$scope.getPage = function(number) {
@@ -41,7 +46,10 @@ define(['tutorFinder', 'services/courseService', 'services/authService'], functi
 				currentPage = number;
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 
@@ -54,9 +62,31 @@ define(['tutorFinder', 'services/courseService', 'services/authService'], functi
 					$scope.contactSuccess = true;
 				})
 				.catch(function(err) {
-					console.log(err.data);
+					switch (err.status) {
+						case -1: toastService.showAction('NO_CONNECTION'); break;
+						default: toastService.showAction('ERROR_SENDING_MESSGE'); break;
+					}
 				});
 			}
+		};
+
+		$scope.reserveClass = function() {
+			$uibModal.open({
+				controller: 'ReserveClassCtrl',
+				templateUrl: 'views/reserveClass.html',
+				backdrop: 'static',
+				resolve: {
+					course: function() {
+						return $scope.course;
+					}
+				 }
+			}).result.then(function() {
+				
+			}, function(err) { 
+				switch (err.status) {
+					default: toastService.showAction('OOPS'); break;
+				}
+			});
 		};
 
 		$scope.comment = function(form) {
@@ -70,10 +100,10 @@ define(['tutorFinder', 'services/courseService', 'services/authService'], functi
 					$scope.getPage(currentPage);
 				})
 				.catch(function(err) {
-					if (err.status === 403) {
-						$scope.commentError = 'FORBIDDEN_COMMENT';
-					} else {
-						console.log(err.data);
+					switch (err.status) {
+						case -1: toastService.showAction('NO_CONNECTION'); break;
+						case 403: $scope.commentError = 'FORBIDDEN_COMMENT'; break;
+						default: toastService.showAction('ERROR_COMMENTING'); break;
 					}
 				});
 			}

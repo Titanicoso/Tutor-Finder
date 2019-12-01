@@ -14,11 +14,13 @@ define([], function() {
             },
             '/conversations': {
                 templateUrl: '/views/conversations.html',
-                controller: 'ConversationsCtrl'
+                controller: 'ConversationsCtrl',
+                roles: {loggedIn: true, needsProfessor: false}
             },
             '/conversation/:id': {
                 templateUrl: '/views/conversation.html',
-                controller: 'ConversationCtrl'
+                controller: 'ConversationCtrl',
+                roles: {loggedIn: true, needsProfessor: false}
             },
             '/course': {
                 templateUrl: '/views/course.html',
@@ -26,23 +28,28 @@ define([], function() {
             },
             '/forgotPassword': {
                 templateUrl: '/views/forgotPassword.html',
-                controller: 'ForgotPasswordCtrl'
+                controller: 'ForgotPasswordCtrl',
+                roles: {loggedIn: false, needsProfessor: false}
             },
             '/login': {
                 templateUrl: '/views/login.html',
-                controller: 'LoginCtrl'
+                controller: 'LoginCtrl',
+                roles: {loggedIn: false, needsProfessor: false}
             },
             '/course/files': {
                 templateUrl: '/views/courseFiles.html',
-                controller: 'CourseFilesCtrl'
+                controller: 'CourseFilesCtrl',
+                roles: {loggedIn: true, needsProfessor: false}
             },
             '/requests': {
                 templateUrl: '/views/myClasses.html',
-                controller: 'RequestsCtrl'
+                controller: 'RequestsCtrl',
+                roles: {loggedIn: true, needsProfessor: true}
             },
             '/profile': {
                 templateUrl: '/views/profile.html',
-                controller: 'ProfileCtrl'
+                controller: 'ProfileCtrl',
+                roles: {loggedIn: true, needsProfessor: true}
             },
             '/professor/:username': {
                 templateUrl: '/views/profile.html',
@@ -50,15 +57,13 @@ define([], function() {
             },
             '/register': {
                 templateUrl: '/views/register.html',
-                controller: 'RegisterCtrl'
+                controller: 'RegisterCtrl',
+                roles: {loggedIn: false, needsProfessor: false}
             },
             '/reservations': {
                 templateUrl: '/views/reservations.html',
-                controller: 'ReservationsCtrl'
-            },
-            '/reserveClass': {
-                templateUrl: '/views/reserveClass.html',
-                controller: 'ReserveClassCtrl'
+                controller: 'ReservationsCtrl',
+                roles: {loggedIn: true, needsProfessor: false}
             },
             '/searchResults': {
                 templateUrl: '/views/searchResults.html',
