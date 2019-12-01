@@ -12,6 +12,13 @@
     border-radius: 0;
 }
 
+.sticky{
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    z-index: 10;
+}
+
 .logo-box {
     grid-area: logo-box;
     margin-top: 7px;
