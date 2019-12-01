@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
 
 	tutorFinder.controller('RegisterCtrl', RegisterCtrl);
 	
-	RegisterCtrl.$inject = ['$scope', '$rootScope', '$location', 'authService'];
-	function RegisterCtrl($scope, $rootScope, $location, authService) {
+	RegisterCtrl.$inject = ['$scope', '$rootScope', '$location', 'authService', 'toastService'];
+	function RegisterCtrl($scope, $rootScope, $location, authService, toastService) {
 		$rootScope.appendTitle('REGISTER');
 		$scope.regex = '[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+';
 		$scope.register = {name: '', lastname: '', email: '', username: '', password: '', repeatPassword: ''};
@@ -21,10 +21,18 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
 			})
 			.then(function() {
 				$scope.register = {name: '', lastname: '', email: '', username: '', password: '', repeatPassword: ''};
-				$location.url('/');
+				var redirect = authService.getRedirectUrl();
+				if (redirect.url) {
+					$location.path(redirect.url).search(redirect.params);
+				} else {
+					$location.url('/');
+				}
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
 	};

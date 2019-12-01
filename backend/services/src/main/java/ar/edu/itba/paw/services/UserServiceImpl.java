@@ -152,14 +152,6 @@ public class UserServiceImpl implements UserService {
         final List<ClassReservation> reservations = userDao.pagedReservations(userId, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = userDao.totalReservations(userId);
 
-        final PagedResults<ClassReservation> pagedResults =
-                pagedResultBuilder.getPagedResults(reservations, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(reservations, total, page, PAGE_SIZE);
     }
 }

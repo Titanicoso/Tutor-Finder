@@ -1,20 +1,28 @@
 'use strict';
 
-define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl'], function(tutorFinder) {
+define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl', 'services/toastService'], function(tutorFinder) {
 	
 	tutorFinder.controller('IndexCtrl', IndexCtrl);
 	
-	IndexCtrl.inject = ['$scope', '$rootScope', '$translate', '$location', 'authService', '$uibModal'];
-	function IndexCtrl($scope, $rootScope, $translate, $location, authService, $uibModal) {
+	IndexCtrl.inject = ['$scope', '$rootScope', '$translate', '$location', 'authService', '$uibModal', 'toastService'];
+	function IndexCtrl($scope, $rootScope, $translate, $location, authService, $uibModal, toastService) {
 		$rootScope.appName = $translate.instant('APP_NAME');
 		$rootScope.title = $rootScope.appName;
 
 		$scope.currentUser = authService.getCurrentUser();
+
+		$scope.filters = {query: '', category: 'course'};
+
 		$scope.showDropdown = false;
 		
 		$rootScope.appendTitle = function(subtitle) {
 			$rootScope.title = $rootScope.appName + ' | ' + 
 								$translate.instant(subtitle);
+		};
+
+		$scope.home = function() {
+			$scope.filters = {query: '', category: 'course'};
+			$location.url('/');
 		};
 
 		$scope.$on('user_update', function() {
@@ -46,12 +54,14 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl'],
 					$scope.currentUser = authService.getCurrentUser(true);
 				}
 			}, function(err) { 
-				console.log(err);
+				switch (err.status) {
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 		};
-		
-		$scope.reminder = function() {
-			// alert('TODO: search function');
+
+		$scope.search = function() {
+			$location.path('/searchResults').search($scope.filters);
 		};
 	};
 });

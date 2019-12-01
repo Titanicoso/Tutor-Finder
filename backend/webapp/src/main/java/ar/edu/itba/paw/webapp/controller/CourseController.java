@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-//TODO: Chequear badRequest en resultados paginados
 @Path("courses")
 @Component
 public class CourseController extends BaseController{
@@ -62,8 +61,15 @@ public class CourseController extends BaseController{
                            @PathParam("subject") final long subjectId){
 
         final Course course = courseService.findCourseByIds(professorId, subjectId);
+        final User loggedUser = loggedUser();
+
         if(course == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if (loggedUser != null) {
+            final boolean canComment = classReservationService.hasAcceptedReservation(loggedUser, course);
+            return Response.ok(new CourseDTO(course, uriInfo, canComment)).build();
         }
 
         LOGGER.debug("Creating view for Course with professor id {} and subject id {}", professorId, subjectId);

@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/subjectService', 'services/courseService'], fun
 
 	tutorFinder.controller('CreateCourseCtrl', CreateCourseCtrl);
 	
-	CreateCourseCtrl.$inject = ['$scope', '$uibModalInstance', 'course', 'subjectService', 'courseService'];
-	function CreateCourseCtrl($scope, $modal, course, subjectService, courseService) {
+	CreateCourseCtrl.$inject = ['$scope', '$uibModalInstance', 'course', 'subjectService', 'courseService', 'toastService'];
+	function CreateCourseCtrl($scope, $modal, course, subjectService, courseService, toastService) {
 		$scope.isModifying = course !== undefined && course !== null;
 		
 		if ($scope.isModifying) {
@@ -15,7 +15,9 @@ define(['tutorFinder', 'services/subjectService', 'services/courseService'], fun
 				$scope.availableSubjects = subjects;
 			})
 			.catch(function(err) {
-				console.log(err);
+				switch (err.status) {
+					default: toastService.showAction('OOPS'); break;
+				}
 			});
 
 			$scope.courseInput = {subject: undefined, description: undefined, price: undefined};
@@ -33,7 +35,10 @@ define(['tutorFinder', 'services/subjectService', 'services/courseService'], fun
 					$modal.close(true);
 				})
 				.catch(function(err) {
-					console.log(err);
+					switch (err.status) {
+						case -1: toastService.showAction('NO_CONNECTION'); break;
+						default: toastService.showAction('ERROR_CREATING_COURSE'); break;
+					}
 				});
 			}
 		};

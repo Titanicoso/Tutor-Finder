@@ -1,0 +1,9 @@
+<div class="search-course-result" ng-repeat="course in results">
+    <a class="conversation-link" ng-href="/#!/course/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}"></a>
+    <a class="search-result-img"><img class="search-result-picture" ng-src="{{course.image_url}}"/></a>
+    <a class="search-result-title" ng-bind="course.subject.name"></a>
+    <a class="search-result-professor" ng-bind="course.professor.name"></a>
+    <a class="search-result-specs" ng-bind="'PRICE_SPEC' | translate: { price: course.price }"></a>
+    <a class="search-result-description" ng-bind="course.description"></a>
+    <a class="search-result-rating" ng-bind="'RATING_SPEC' | translate: { rating: course.rating ? course.rating : '-' }"></a>
+</div>

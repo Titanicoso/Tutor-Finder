@@ -20,7 +20,12 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
 				
 				authService.login($scope.loginForm.username, $scope.loginForm.password, $scope.loginForm.rememberMe)
 				.then(function() {
-					$location.url('/');
+					var redirect = authService.getRedirectUrl();
+					if (redirect.url) {
+						$location.path(redirect.url).search(redirect.params);
+					} else {
+						$location.url('/');
+					}
 				})
 				.catch(function(err) {
 					$scope.error = true;

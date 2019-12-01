@@ -19,6 +19,7 @@ public class FileSizeValidator implements ConstraintValidator<FileSize, FormData
    public boolean isValid(FormDataBodyPart file, ConstraintValidatorContext context) {
       if(file == null)
          return false;
-      return file.getContentDisposition().getSize() <= max && file.getContentDisposition().getSize() >= min;
+      final int length = file.getValueAs(byte[].class).length;
+      return length <= max && length >= min;
    }
 }

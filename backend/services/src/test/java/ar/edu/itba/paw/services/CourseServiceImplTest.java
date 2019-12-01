@@ -105,7 +105,7 @@ public class CourseServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test
@@ -239,7 +239,7 @@ public class CourseServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Course> results = courseService.findCourseByProfessorId(PROFESSOR_ID, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test
@@ -292,7 +292,7 @@ public class CourseServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Course> results = courseService.filterByAreaId(AREA_ID, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test

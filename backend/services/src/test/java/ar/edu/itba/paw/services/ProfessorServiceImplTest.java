@@ -106,7 +106,7 @@ public class ProfessorServiceImplTest {
         final Integer INVALID_PAGE = 666;
 
         final PagedResults<Professor> results = professorService.filterByFullName(NAME, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test

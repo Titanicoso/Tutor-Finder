@@ -45,7 +45,7 @@ public class CourseHibernateDao implements CourseDao {
     public List<Course> findByProfessorId(final long professor_id, final int limit, final int offset) {
         LOGGER.trace("Querying for courses belonging to a professor with id {}", professor_id);
         final TypedQuery<Course> query = em.createQuery("from Course as c where c.professor.id = :id " +
-                "order by c.professor.id, c.subject.id", Course.class);
+                "order by c.price, c.professor.id, c.subject.id", Course.class);
         query.setParameter("id", professor_id);
         query.setFirstResult(offset);
         query.setMaxResults(limit);
@@ -67,7 +67,7 @@ public class CourseHibernateDao implements CourseDao {
     public List<Course> filterByAreaId(final long areaId, final int limit, final int offset) {
         LOGGER.trace("Querying for courses from area with id {}", areaId);
         final TypedQuery<Course> query = em.createQuery("from Course as c where c.subject.area.id = :id " +
-                "order by c.professor.id, c.subject.id", Course.class);
+                "order by c.price, c.professor.id, c.subject.id", Course.class);
         query.setParameter("id", areaId);
         query.setFirstResult(offset);
         query.setMaxResults(limit);
@@ -132,6 +132,8 @@ public class CourseHibernateDao implements CourseDao {
         }
 
         criteria.where(builder.and(predicates.toArray(new Predicate[] {})));
+
+        criteria.orderBy(builder.asc(root.get("price")));
 
         TypedQuery<Course> query = em.createQuery(criteria.select(root))
                 .setFirstResult(offset)

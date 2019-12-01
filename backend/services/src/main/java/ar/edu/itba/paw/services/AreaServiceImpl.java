@@ -51,14 +51,7 @@ public class AreaServiceImpl implements AreaService {
         final List<Area> areas = areaDao.filterAreasByName(name, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = areaDao.totalAreasByName(name);
 
-        final PagedResults<Area> pagedResults = pagedResultBuilder.getPagedResults(areas, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(areas, total, page, PAGE_SIZE);
     }
 
 }

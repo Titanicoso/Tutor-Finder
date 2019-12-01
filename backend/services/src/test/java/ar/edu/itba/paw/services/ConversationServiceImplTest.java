@@ -104,7 +104,7 @@ public class ConversationServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Conversation> results = conversationService.findByUserId(ID, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test

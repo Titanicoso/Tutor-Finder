@@ -26,6 +26,7 @@ require.config({
         transition: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/transition',
         'angular-material': '../../bower_components/angular-material/angular-material',
         'angular-animate': '../../bower_components/angular-animate/angular-animate',
+        'angular-messages': '../../bower_components/angular-messages/angular-messages',
         'angular-aria': '../../bower_components/angular-aria/angular-aria',
         'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls'
     },
@@ -41,6 +42,11 @@ require.config({
             ]
         },
         'angular-animate': {
+            deps: [
+                'angular'
+            ]
+        },
+        'angular-messages': {
             deps: [
                 'angular'
             ]

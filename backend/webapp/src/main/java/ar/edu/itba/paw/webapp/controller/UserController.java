@@ -7,11 +7,7 @@ import ar.edu.itba.paw.webapp.auth.JwtTokenManager;
 import ar.edu.itba.paw.webapp.auth.SecurityConstants;
 import ar.edu.itba.paw.webapp.auth.StatelessSuccessHandler;
 import ar.edu.itba.paw.webapp.dto.*;
-import ar.edu.itba.paw.webapp.dto.form.EditProfessorProfileForm;
-import ar.edu.itba.paw.webapp.dto.form.RegisterAsProfessorForm;
-import ar.edu.itba.paw.webapp.dto.form.RegisterForm;
-import ar.edu.itba.paw.webapp.dto.form.ResetPasswordRequestForm;
-import ar.edu.itba.paw.webapp.dto.form.ResetPasswordForm;
+import ar.edu.itba.paw.webapp.dto.form.*;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,6 +37,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private PasswordResetService passwordResetService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Autowired
     private CourseService courseService;
@@ -111,13 +110,78 @@ public class UserController extends BaseController {
         return Response.ok(entity).links(links).build();
     }
 
-
+    //TODO: Might need to be revised
     @GET
     @Path("/schedule")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response schedule(){
-        //TODO fill in when schedule model is revised.
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        final User loggedUser = loggedUser();
+
+        final Schedule schedule = scheduleService.getScheduleForProfessor(loggedUser.getId());
+        return Response.ok(schedule).build();
+    }
+
+    @POST
+    @Path("/schedule")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response createTimeslot(@Valid final ScheduleForm form) {
+
+        final User currentUser = loggedUser();
+
+        if(!form.validForm()) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            addError(errors, "profile.add_schedule.timeError", "endHour");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
+        }
+
+        final List<Timeslot> timeslots;
+        try {
+            timeslots = scheduleService.reserveTimeSlot(currentUser.getId(), form.getDay(),
+                    form.getStartHour(), form.getEndHour());
+        } catch (NonexistentProfessorException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (TimeslotAllocatedException e) {
+            final ValidationErrorDTO error = getErrors("TimeslotAllocatedError");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
+        }
+
+        if(timeslots == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        final URI uri = uriInfo.getBaseUriBuilder().path("/user/schedule").build();
+        return Response.created(uri).build();
+    }
+
+    @DELETE
+    @Path("/schedule")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response RemoveTimeslot(@Valid final ScheduleForm form) {
+
+        final User loggedUser = loggedUser();
+
+        if(!form.validForm()) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            addError(errors, "profile.add_schedule.timeError", "endHour");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
+        }
+
+        final boolean removed;
+
+        try {
+            removed = scheduleService.removeTimeSlot(loggedUser.getId(),
+                    form.getDay(), form.getStartHour(), form.getEndHour());
+        } catch (NonexistentProfessorException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(!removed) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        return Response.noContent().build();
     }
 
     @GET
@@ -286,8 +350,6 @@ public class UserController extends BaseController {
         return Response.ok().build();
     }
 
-    //TODO: Maybe url encoded
-    //TODO: Frontend has to check password repetition
     @POST
     @Path("/forgot_password/{token}")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
@@ -369,7 +431,6 @@ public class UserController extends BaseController {
                 .build();
     }
 
-    //TODO: Check if modify can be the same form
     @POST
     @Consumes(value = { MediaType.MULTIPART_FORM_DATA, })
     @Produces(value = { MediaType.APPLICATION_JSON, })

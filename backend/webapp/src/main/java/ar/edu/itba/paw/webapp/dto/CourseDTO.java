@@ -27,6 +27,8 @@ public class CourseDTO {
 
     private URI url;
 
+    private boolean canComment;
+
     public CourseDTO() {
     }
 
@@ -43,6 +45,12 @@ public class CourseDTO {
         this.courseFilesUrl = baseUri.resolve(this.url + "/files");
         this.professor = new ProfessorDTO(course.getProfessor(), uriInfo);
         this.imageUrl = baseUri.resolve("areas/" + course.getSubject().getArea().getId() + "/image");
+        this.canComment = false;
+    }
+
+    public CourseDTO(final Course course, final UriInfo uriInfo, final boolean canComment) {
+        this(course, uriInfo);
+        this.canComment = canComment;
     }
 
     public String getDescription() {
@@ -115,5 +123,13 @@ public class CourseDTO {
 
     public void setImageUrl(URI imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean getCanComment() {
+        return canComment;
+    }
+
+    public void setCanComment(boolean canComment) {
+        this.canComment = canComment;
     }
 }

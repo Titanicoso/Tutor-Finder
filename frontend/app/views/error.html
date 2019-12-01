@@ -1,14 +1,9 @@
-<link rel="stylesheet" ng-href="/resources/css/errors.css">
+<!-- build:css(.tmp) styles/stylesheet.css -->
+<link rel="stylesheet" href="styles/partials/errors.css">
+<!-- endbuild -->
 
 <div class="text-wrapper">
-    <div class="title">
-        <h1>{{ 'ERROR_TITLE' | translate }}</h1>
-    </div>
+    <div class="title" ng-bind="'ERROR_OOPS' | translate"></div>
 
-    <br/>
-
-    <div class="subtitle">
-        <!-- <h5>{{ 'ERROR_CODE' | translate }}</h5> -->
-        <h4>{{ 'ERROR_MSG' | translate }}</h4>
-    </div>
+    <div class="subtitle" ng-bind="errorMessage | translate"></div>
 </div>
