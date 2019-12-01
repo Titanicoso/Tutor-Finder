@@ -33,19 +33,34 @@ define(['tutorFinder'], function(tutorFinder) {
 		this.checkRoles = function(roles) {
 			var roleCheck = {authorization: false, canPromote: false};
 
-			if (!roles) {
-				roleCheck.authorization = true;
-			} else if (!roles.loggedIn) {
-				roleCheck.authorization = this.currentUser === undefined;
-			} else if (roles.needsProfessor) {
-				roleCheck.authorization = this.currentUser !== undefined && this.currentUser.professor;
-				roleCheck.canPromote = this.currentUser === undefined;
-			} else {
-				roleCheck.authorization = this.currentUser !== undefined;
-				roleCheck.canPromote = true;
-			}
+			return this.getUser()
+			.then(function(user) {
+				self.currentUser = user;
+			})
+			.catch(function() {
+				self.currentUser = undefined;
+			})
+			.then(function() {
+				if (!roles) {
+					roleCheck.authorization = true;
+				} else if (!roles.loggedIn) {
+					roleCheck.authorization = self.currentUser === undefined;
+				} else if (roles.needsProfessor) {
+					roleCheck.authorization = self.currentUser !== undefined && self.currentUser.professor;
+					roleCheck.canPromote = self.currentUser === undefined;
+				} else {
+					roleCheck.authorization = self.currentUser !== undefined;
+					roleCheck.canPromote = true;
+				}
 
-			return roleCheck;
+				if (!roleCheck.authorization && roleCheck.canPromote) {
+					return $q.reject(true);
+				} else if (!roleCheck.authorization && !roleCheck.canPromote) {
+					return $q.reject(false);
+				}
+	
+				return $q.resolve(true);
+			});
 		};
 		
 		this.getAuthHeaders = function() {
@@ -148,6 +163,19 @@ define(['tutorFinder'], function(tutorFinder) {
 			.catch(function() {
 				return null;
 			});
+		};
+
+		this.getUser = function() {
+			if (this.currentUser) {
+				return $q.resolve(this.currentUser);
+			}
+
+			var service = this;
+			if (!service.getAccessToken()) {
+				return $q.resolve(undefined);
+			}
+
+			return $http.get(apiUrl + '/user', service.getAuthHeaders());
 		};
 
     }]);

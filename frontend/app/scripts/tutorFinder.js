@@ -61,20 +61,27 @@ define([
 				$translateProvider.preferredLanguage('preferredLanguage');
 			}])
 			.run(['$rootScope', '$location', 'authService', 'toastService', function($rootScope, $location, authService, toastService) {
-				$rootScope.$on('$routeChangeStart', function(event, next, current) {
-					if (next && next.$$route) {
-						var authorized = authService.checkRoles(next.$$route.roles);
-						var path = next.$$route.originalPath;
-						var params = next.params;
+				$rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+					if (current && current.$$route) {
+						var path = current.$$route.originalPath;
 
-						if (!authorized.authorization && authorized.canPromote) {
+						if (path !== '/login' && path !== '/register') {
+							authService.setRedirectUrl(undefined, undefined);
+						}
+					}
+				});
+
+				$rootScope.$on('$routeChangeError', function(event, current, previous, error) {
+					if (current && current.$$route) {
+						var path = current.$$route.originalPath;
+						var params = current.params;
+
+						if (error) {
 							authService.setRedirectUrl(path, params);
 							$location.url('/login');
-						} else if (!authorized.authorization && !authorized.canPromote) {
+						} else {
 							toastService.showAction('FORBIDDEN_ERROR');
 							$location.url('/');
-						} else if (path !== '/login' && path !== '/register') {
-							authService.setRedirectUrl(undefined, undefined);
 						}
 					}
 				});
