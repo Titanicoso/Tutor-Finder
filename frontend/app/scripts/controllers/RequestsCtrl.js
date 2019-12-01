@@ -3,16 +3,35 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 
 	tutorFinder.controller('RequestsCtrl', RequestsCtrl);
 	
-	RequestsCtrl.$inject = ['$scope', '$rootScope', 'professorService', 'toastService'];
-	function RequestsCtrl($scope, $rootScope, professorService, toastService) {
+	RequestsCtrl.$inject = ['$scope', '$rootScope', 'professorService', 'toastService', '$location', '$route'];
+	function RequestsCtrl($scope, $rootScope, professorService, toastService, $location, $route) {
 		$rootScope.appendTitle('REQUESTS');
 
-		$scope.currentPage = 1;
+		var page = parseInt($route.current.params.page, 10);
+		var self = this;
+
+		$scope.current = {};
+		$scope.current.page = page !== page ? 1 : page;
+		$scope.current.previous = $scope.current.page;
+
+		$scope.$on('$routeUpdate', function() {
+			var page = parseInt($route.current.params.page, 10);
+			page = page !== page ? 1 : page;
+			if ($scope.current.previous !== page) {
+				self.getRequests(page);
+			}
+		});
 
 		$scope.getPage = function(number) {
-			professorService.getFullRequests(number)
+			$location.search({page: number});
+		};
+
+		this.getRequests = function(page) {
+			professorService.getFullRequests(page)
 			.then(function(requests) {
 				$scope.requests = requests;
+				$scope.current.page = page;
+				$scope.current.previous = page;
 			})
 			.catch(function(err) {
 				switch (err.status) {
@@ -48,6 +67,6 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 			});
 		};
 
-		$scope.getPage($scope.currentPage);
+		this.getRequests($scope.current.page);
 	};
 });

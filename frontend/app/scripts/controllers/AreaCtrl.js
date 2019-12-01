@@ -3,12 +3,24 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 
 	tutorFinder.controller('AreaCtrl', AreaCtrl);
 	
-	AreaCtrl.$inject = ['$scope', '$rootScope', '$route', 'areaService', 'toastService'];
-	function AreaCtrl($scope, $rootScope, $route, areaService, toastService) {
+	AreaCtrl.$inject = ['$scope', '$rootScope', '$route', 'areaService', 'toastService', '$location'];
+	function AreaCtrl($scope, $rootScope, $route, areaService, toastService, $location) {
 		$rootScope.appendTitle('AREA');
 		var id = $route.current.params.id;
-		
-		$scope.currentPage = 1;
+		var page = parseInt($route.current.params.page, 10);
+		var self = this;
+
+		$scope.current = {};
+		$scope.current.page = page !== page ? 1 : page;
+		$scope.current.previous = $scope.current.page;
+
+		$scope.$on('$routeUpdate', function() {
+			var page = parseInt($route.current.params.page, 10);
+			page = page !== page ? 1 : page;
+			if ($scope.current.previous !== page) {
+				self.getCourses(page);
+			}
+		});
 
 		areaService.getArea(id)
 		.then(function(area) {
@@ -22,9 +34,15 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 		});
 
 		$scope.getPage = function(number) {
-			areaService.getAreaCourses(id, number)
+			$location.search({page: number});
+		};
+
+		this.getCourses = function(page) {
+			areaService.getAreaCourses(id, page)
 			.then(function(results) {
 				$scope.courses = results;
+				$scope.current.page = page;
+				$scope.current.previous = page;
 			})
 			.catch(function(err) {
 				switch (err.status) {
@@ -34,6 +52,6 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 			});
 		};
 
-		$scope.getPage($scope.currentPage);
+		this.getCourses($scope.current.page);
 	};
 });

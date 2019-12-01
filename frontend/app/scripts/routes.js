@@ -10,7 +10,8 @@ define([], function() {
             },
             '/area/:id': {
                 templateUrl: '/views/area.html',
-                controller: 'AreaCtrl'
+                controller: 'AreaCtrl',
+                reloadOnSearch: false
             },
             '/error': {
                 templateUrl: '/views/error.html',
@@ -20,6 +21,7 @@ define([], function() {
                 templateUrl: '/views/conversations.html',
                 controller: 'ConversationsCtrl',
                 roles: {loggedIn: true, needsProfessor: false},
+                reloadOnSearch: false,
                 resolve: {
                     roleCheck: ['$route', 'authService', function($route, authService) {
                         var roles = $route.current.$$route.roles;
@@ -79,6 +81,7 @@ define([], function() {
                 templateUrl: '/views/myClasses.html',
                 controller: 'RequestsCtrl',
                 roles: {loggedIn: true, needsProfessor: true},
+                reloadOnSearch: false,
                 resolve: {
                     roleCheck: ['$route', 'authService', function($route, authService) {
                         var roles = $route.current.$$route.roles;
@@ -116,6 +119,7 @@ define([], function() {
                 templateUrl: '/views/reservations.html',
                 controller: 'ReservationsCtrl',
                 roles: {loggedIn: true, needsProfessor: false},
+                reloadOnSearch: false,
                 resolve: {
                     roleCheck: ['$route', 'authService', function($route, authService) {
                         var roles = $route.current.$$route.roles;
@@ -125,7 +129,8 @@ define([], function() {
             },
             '/searchResults': {
                 templateUrl: '/views/searchResults.html',
-                controller: 'SearchCtrl'
+                controller: 'SearchCtrl',
+                reloadOnSearch: false
             }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */

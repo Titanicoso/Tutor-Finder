@@ -73,7 +73,7 @@
         <course-results ng-switch-default results="results.data"></course-results>
     
         <div class="paged-result-buttons">
-            <ul ng-if="results.links" uib-pagination total-items="results.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="currentPage" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage(currentPage)"></ul>
+            <ul ng-if="results.links" uib-pagination total-items="results.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="filters.page" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage()"></ul>
         </div>
     </div>
 </div>

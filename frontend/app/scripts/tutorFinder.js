@@ -49,7 +49,8 @@ define([
 							templateUrl: route.templateUrl, 
 							resolve: resolved, 
 							controller: route.controller, gaPageTitle: route.gaPageTitle,
-							roles: route.roles
+							roles: route.roles,
+							reloadOnSearch: route.reloadOnSearch !== undefined ? route.reloadOnSearch : true
 						});
 					});
 				}

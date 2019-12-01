@@ -35,7 +35,7 @@ define(['tutorFinder'], function(tutorFinder) {
 
 			return this.getUser()
 			.then(function(user) {
-				self.currentUser = user;
+				self.currentUser = user.data;
 			})
 			.catch(function() {
 				self.currentUser = undefined;
@@ -167,12 +167,12 @@ define(['tutorFinder'], function(tutorFinder) {
 
 		this.getUser = function() {
 			if (this.currentUser) {
-				return $q.resolve(this.currentUser);
+				return $q.resolve({data: this.currentUser});
 			}
 
 			var service = this;
 			if (!service.getAccessToken()) {
-				return $q.resolve(undefined);
+				return $q.resolve({data: undefined});
 			}
 
 			return $http.get(apiUrl + '/user', service.getAuthHeaders());

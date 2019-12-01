@@ -15,7 +15,8 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 		var currentUser = $scope.currentUser;
 		$scope.showEditOptions = false;
 
-		$scope.currentPage = 1;
+		$scope.current = {};
+		$scope.current.page = 1;
 
 		if (!username || (currentUser && currentUser.username === username)) {
 			$scope.showEditOptions = true;
@@ -27,7 +28,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 			professorService.getProfessor(username)
 			.then(function(response) {
 				$scope.professor = response;
-				return professorService.getProfessorCourses(username, $scope.currentPage);
+				return professorService.getProfessorCourses(username, $scope.current.page);
 			})
 			.then(function(response) {
 				$scope.courses = response;
@@ -67,7 +68,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 				 }
 			}).result.then(function(answer) {
 				if (answer) {
-					$scope.getPage($scope.currentPage);
+					$scope.getPage($scope.current.page);
 				}
 			}, function(err) { 
 				switch (err.status) {
@@ -101,7 +102,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 		$scope.deleteCourse = function(course) {
 			courseService.delete(course.professor.id, course.subject.id)
 			.then(function() {
-				$scope.getPage($scope.currentPage);
+				$scope.getPage($scope.current.page);
 			})
 			.catch(function(err) { 
 				switch (err.status) {

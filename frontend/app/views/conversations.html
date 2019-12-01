@@ -17,6 +17,6 @@
         <h6 class="conversation-last-time" ng-bind="'SENT_TIME' | translate: { date: conversation.latest_message } "></h6>
     </div>
     <div class="paged-result-buttons">
-        <ul ng-if="conversations.links" uib-pagination total-items="conversations.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="currentPage" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage(currentPage)"></ul>
+        <ul ng-if="conversations.links" uib-pagination total-items="conversations.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="current.page" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage(current.page)"></ul>
     </div>
 </div>
