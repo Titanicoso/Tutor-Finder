@@ -147,7 +147,7 @@ define([], function() {
 		ERROR_OOPS: 'Oops! Ocurrió un error!',
 		ERROR_404: 'Error 404, la página a la que quiere acceder no existe',
 		ERROR_403: 'Error 403, usted no tiene permisos para acceder a esta página',
-		ERROR_500: 'Error 500, estamos teniendo dificultades técnicas disculpe las molestias'
+		ERROR_500: 'Error 500, estamos teniendo dificultades técnicas disculpe las molestias',
 		ERROR_TITLE: 'Ha habido un error :(',
 		ERROR_MSG: 'No se ha podido efectuar la accion solicitada'
 	};
