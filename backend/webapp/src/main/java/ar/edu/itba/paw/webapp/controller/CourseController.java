@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-//TODO: Chequear badRequest en resultados paginados
 @Path("courses")
 @Component
 public class CourseController extends BaseController{

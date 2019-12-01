@@ -88,9 +88,7 @@ public class ProfessorController extends BaseController{
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response professor(@PathParam("username") final String username){
         final Professor professor = ps.findByUsername(username);
-        //TODO: define behaviour for when professor is the person who is makeing the request.
-        final User loggedUser = loggedUser();
-        final boolean isProfessor = isProfessor();
+
         if(professor == null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }

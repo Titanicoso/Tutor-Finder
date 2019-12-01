@@ -90,7 +90,6 @@ public class CourseFileController extends BaseController {
 
         byte[] encoded = Base64.getEncoder().encode(courseFile.getContent());
 
-        //TODO: Verificar si el header es necesario
         return Response
                 .ok(new String(encoded), MediaType.valueOf(courseFile.getType()))
                 .header("Content-Disposition","attachment; filename=\"" + courseFile.getName() +"\"")

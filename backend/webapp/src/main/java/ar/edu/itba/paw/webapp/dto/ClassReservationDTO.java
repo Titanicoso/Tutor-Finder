@@ -29,7 +29,6 @@ public class ClassReservationDTO {
     @XmlJavaTypeAdapter(type = LocalDateTime.class, value = LocalDateTimeXmlAdapter.class)
     private LocalDateTime endTime;
 
-    //TODO: Check representation
     private ClassReservationStatus status;
     private String comment;
 
