@@ -133,6 +133,7 @@ define([], function() {
 		NO_CONNECTION: 'No tiene conexión por el momento',
 		OOPS: 'Ha ocurrido un error, por favor intente nuevamente',
 		FORBIDDEN_CONVERSATION: 'No tiene permisos para acceder a esta conversación',
+		FORBIDDEN_COURSE_FILES: 'No tiene permisos para acceder al material de esta clase',
 		ERROR_SENDING_MESSGE: 'Ocurrió un error al enviar el mensaje',
 		ERROR_COMMENTING: 'Ocurrió un error al comentar',
 		ERROR_APPROVING: 'Ocurrió un error al intentar aprobar la solicitud',

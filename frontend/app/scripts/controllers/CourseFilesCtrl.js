@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 
 	tutorFinder.controller('CourseFilesCtrl', CourseFilesCtrl);
 	
-	CourseFilesCtrl.$inject = ['$scope', '$rootScope', '$route', 'courseFileService', 'authService', 'toastService'];
-	function CourseFilesCtrl($scope, $rootScope, $route, courseFileService, authService, toastService) {
+	CourseFilesCtrl.$inject = ['$scope', '$rootScope', '$location', '$route', 'courseFileService', 'authService', 'toastService'];
+	function CourseFilesCtrl($scope, $rootScope, $location, $route, courseFileService, authService, toastService) {
 		$rootScope.appendTitle('COURSE_FILES');
 		$scope.professorId = $route.current.params.professorId;
 		var subjectId = $route.current.params.subjectId;
@@ -46,6 +46,7 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 			.catch(function(err) {
 				switch (err.status) {
 					case -1: toastService.showAction('NO_CONNECTION'); break;
+					case 403: toastService.showAction('FORBIDDEN_COURSE_FILES'); $location.url('/'); break;
 					default: toastService.showAction('OOPS'); break;
 				}
 			});
