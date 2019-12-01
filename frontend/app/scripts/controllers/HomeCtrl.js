@@ -7,10 +7,10 @@ define(['tutorFinder', 'directives/search'], function(tutorFinder) {
 	function HomeCtrl($scope, $rootScope, $location) {
 		$rootScope.appendTitle('HOME');
 
-		$scope.query = {text: '', category: 'course'};
+		$scope.query = {query: '', category: 'course'};
 
 		$scope.search = function() {
-			$location.path('/searchResults').search({q: $scope.query.text, c: $scope.query.category});
+			$location.path('/searchResults').search($scope.query);
 		};
 	};
 });
