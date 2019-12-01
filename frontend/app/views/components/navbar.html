@@ -40,7 +40,7 @@
         </div>
     </div>
     <div ng-if="!currentUser">
-        <a ng-href="/#!/register" class="navbar-button">{{ 'REGISTER' | translate }}</a>
-        <a ng-href="/#!/login" class="navbar-button">{{ 'LOGIN' | translate }}</a>
+        <a ng-href="/#!/register" ng-click="toggleDropdown()" class="navbar-button">{{ 'REGISTER' | translate }}</a>
+        <a ng-href="/#!/login" ng-click="toggleDropdown()" class="navbar-button">{{ 'LOGIN' | translate }}</a>
     </div> 
 </div>
