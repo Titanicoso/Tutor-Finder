@@ -11,7 +11,9 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl', 
 
 		$scope.currentUser = authService.getCurrentUser();
 
-		$scope.filters = {query: '', category: 'course'};
+		if (!$rootScope.filters) {
+			$rootScope.filters = {query: '', category: 'course'};
+		}
 
 		$scope.showDropdown = false;
 		
@@ -20,8 +22,12 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl', 
 								$translate.instant(subtitle);
 		};
 
+		$rootScope.resetFilters = function() {
+			$rootScope.filters = {query: '', category: 'course'};
+		};
+
 		$scope.home = function() {
-			$scope.filters = {query: '', category: 'course'};
+			$rootScope.resetFilters();
 			$location.url('/');
 		};
 
@@ -61,7 +67,7 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl', 
 		};
 
 		$scope.search = function() {
-			$location.path('/searchResults').search($scope.filters);
+			$location.path('/searchResults').search($rootScope.filters);
 		};
 	};
 });

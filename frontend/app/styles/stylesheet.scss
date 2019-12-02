@@ -172,7 +172,7 @@ button {
 
 .filter-panel {
     grid-area: filter-panel;
-    display: none;
+    display: block;
     flex-direction: column;
     justify-self: center;
     background-color: #dedede;

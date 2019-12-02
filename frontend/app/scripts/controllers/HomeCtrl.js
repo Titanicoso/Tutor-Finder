@@ -1,5 +1,5 @@
 'use strict';
-define(['tutorFinder', 'directives/search'], function(tutorFinder) {
+define(['tutorFinder'], function(tutorFinder) {
 
 	tutorFinder.controller('HomeCtrl', HomeCtrl);
 	

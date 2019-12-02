@@ -27,6 +27,7 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 					return parseInt(day, 10);
 				});
 			} else if (tempDays) {
+				parameters.days = [];
 				parameters.days.push(tempDays);
 			}
 		
@@ -35,19 +36,46 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 				category: parameters.category,
 				minPrice: parameters.minPrice === parameters.minPrice ? parameters.minPrice : undefined,
 				maxPrice: parameters.maxPrice === parameters.maxPrice ? parameters.maxPrice : undefined,
-				startHour: parameters.startHour === parameters.startHour ? parameters.startHour : undefined,
-				endHour: parameters.endHour === parameters.endHour ? parameters.endHour : undefined,
+				startHour: parameters.startHour === parameters.startHour ? JSON.stringify(parameters.startHour) : undefined,
+				endHour: parameters.endHour === parameters.endHour ? JSON.stringify(parameters.endHour) : undefined,
 				days: parameters.days,
 				page: parameters.page !== parameters.page ? 1 : parameters.page
 			};
 		};
 
-		$scope.filters = this.getFilters();
+		$rootScope.filters = this.getFilters();
 
-		$scope.lastSearch = {query: $scope.filters.query, category: $scope.filters.category};
+		$scope.availableStartTimes = [];
+		$scope.availableEndTimes = [];
+
+		this.initStartTimes = function() {
+			for (var i = 7; i <= 22; i++) {
+				$scope.availableStartTimes.push(i);
+			}
+		};
+
+		this.initStartTimes();
+		
+		$scope.startSelected = function() {
+			if (parseInt($rootScope.filters.endHour, 10) <= parseInt($rootScope.filters.startHour, 10)) {
+				$rootScope.filters.endHour = undefined;
+			}
+			
+			if ($rootScope.filters.startHour) {
+				var endTimes = [];
+				for (var i = (parseInt($rootScope.filters.startHour, 10) + 1); i <= 23; i++) {
+					endTimes.push(i);
+				}
+				$scope.availableEndTimes = endTimes;
+			}
+		};
+
+		$scope.startSelected();
+
+		$scope.lastSearch = {query: $rootScope.filters.query, category: $rootScope.filters.category};
 		var self = this;
 
-		angular.copy($scope.filters, $scope.previous);
+		angular.copy($rootScope.filters, $scope.previous);
 
 		$scope.$on('$routeUpdate', function() {
 			var filters = self.getFilters();
@@ -58,7 +86,7 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 		});
 
 		$scope.getPage = function() {
-			$location.search($scope.filters);
+			$location.search($rootScope.filters);
 		};
 
 		this.search = function(filters) {
@@ -73,7 +101,7 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 
 			request.then(function(results) {
 				$scope.results = results;
-				$scope.filters = filters;
+				$rootScope.filters = filters;
 				angular.copy(filters, $scope.previous);
 			})
 			.catch(function(err) {
@@ -84,6 +112,6 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 			});
 		};
 
-		this.search($scope.filters);
+		this.search($rootScope.filters);
 	};
 });

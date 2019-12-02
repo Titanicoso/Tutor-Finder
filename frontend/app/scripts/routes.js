@@ -13,10 +13,6 @@ define([], function() {
                 controller: 'AreaCtrl',
                 reloadOnSearch: false
             },
-            '/error': {
-                templateUrl: '/views/error.html',
-                controller: 'HomeCtrl'
-            },
             '/conversations': {
                 templateUrl: '/views/conversations.html',
                 controller: 'ConversationsCtrl',

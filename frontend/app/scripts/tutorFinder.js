@@ -69,6 +69,10 @@ define([
 						if (path !== '/login' && path !== '/register') {
 							authService.setRedirectUrl(undefined, undefined);
 						}
+
+						if (path !== '/searchResults') {
+							$rootScope.resetFilters();
+						}
 					}
 				});
 
