@@ -13,7 +13,7 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 		if (id === undefined || id !== id) {
 			toastService.showAction('INVALID_PARAMETERS');
 			$location.url('/');
-			return ;
+			return;
 		}
 		
 		$scope.current = {};

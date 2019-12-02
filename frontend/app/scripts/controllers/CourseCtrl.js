@@ -14,7 +14,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 			 $scope.professorId !== $scope.professorId || subjectId !== subjectId) {
 			toastService.showAction('INVALID_PARAMETERS');
 			$location.url('/');
-			return ;
+			return;
 		}
 
 		if (!$scope.currentUser) { 

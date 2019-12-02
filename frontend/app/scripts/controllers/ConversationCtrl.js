@@ -11,7 +11,7 @@ define(['tutorFinder', 'services/conversationService', 'services/authService'], 
 		if (id === undefined || id !== id) {
 			toastService.showAction('INVALID_PARAMETERS');
 			$location.url('/');
-			return ;
+			return;
 		}
 
 		if (!$scope.currentUser) { 
