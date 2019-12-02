@@ -6,7 +6,13 @@ define(['tutorFinder', 'services/conversationService', 'services/authService'], 
 	ConversationCtrl.$inject = ['$scope', '$rootScope', '$route', '$location', 'conversationService', 'authService', 'toastService'];
 	function ConversationCtrl($scope, $rootScope, $route, $location, conversationService, authService, toastService) {
 		$rootScope.appendTitle('CONVERSATION');
-		var id = $route.current.params.id;
+		var id = parseInt($route.current.params.id, 10);
+
+		if (id === undefined || id !== id) {
+			toastService.showAction('INVALID_PARAMETERS');
+			$location.url('/');
+			return ;
+		}
 
 		if (!$scope.currentUser) { 
 			$scope.currentUser = authService.getCurrentUser();

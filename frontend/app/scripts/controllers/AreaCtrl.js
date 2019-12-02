@@ -6,10 +6,16 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 	AreaCtrl.$inject = ['$scope', '$rootScope', '$route', 'areaService', 'toastService', '$location'];
 	function AreaCtrl($scope, $rootScope, $route, areaService, toastService, $location) {
 		$rootScope.appendTitle('AREA');
-		var id = $route.current.params.id;
+		var id = parseInt($route.current.params.id, 10);
 		var page = parseInt($route.current.params.page, 10);
 		var self = this;
 
+		if (id === undefined || id !== id) {
+			toastService.showAction('INVALID_PARAMETERS');
+			$location.url('/');
+			return ;
+		}
+		
 		$scope.current = {};
 		$scope.current.page = page !== page ? 1 : page;
 		$scope.current.previous = $scope.current.page;

@@ -116,6 +116,7 @@ define([], function() {
 		SATURDAY: 'Sábado',
 		SUNDAY: 'Domingo',
 		DAY: 'Dias',
+		INVALID_PARAMETERS: 'Intentó acceder a la página con parametros incorrectos',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',

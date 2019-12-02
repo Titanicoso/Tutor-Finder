@@ -6,8 +6,15 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 	CourseFilesCtrl.$inject = ['$scope', '$rootScope', '$location', '$route', 'courseFileService', 'authService', 'toastService'];
 	function CourseFilesCtrl($scope, $rootScope, $location, $route, courseFileService, authService, toastService) {
 		$rootScope.appendTitle('COURSE_FILES');
-		$scope.professorId = $route.current.params.professorId;
-		var subjectId = $route.current.params.subjectId;
+		$scope.professorId = parseInt($route.current.params.professorId, 10);
+		var subjectId = parseInt($route.current.params.subjectId, 10);
+
+		if ($scope.professorId === undefined || subjectId === undefined ||
+			 $scope.professorId !== $scope.professorId || subjectId !== subjectId) {
+			toastService.showAction('INVALID_PARAMETERS');
+			$location.url('/');
+			return ;
+		}
 
 		if (!$scope.currentUser) { 
 			$scope.currentUser = authService.getCurrentUser();

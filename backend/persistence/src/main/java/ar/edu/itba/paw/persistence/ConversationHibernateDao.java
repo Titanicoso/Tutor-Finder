@@ -40,7 +40,7 @@ public class ConversationHibernateDao implements ConversationDao {
     public List<Conversation> findByUserId(final Long user_id, final int limit, final int offset) {
         LOGGER.trace("Querying for conversations belonging to a user with id {}", user_id);
         final TypedQuery<Conversation> query = em.createQuery("from Conversation as c where" +
-                " c.professor.id = :id or c.user.id = :id order by c.id", Conversation.class);
+                " c.professor.id = :id or c.user.id = :id order by c.latestMessage desc", Conversation.class);
         query.setParameter("id", user_id);
         query.setFirstResult(offset);
         query.setMaxResults(limit);
