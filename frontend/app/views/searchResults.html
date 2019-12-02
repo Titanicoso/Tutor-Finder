@@ -1,7 +1,7 @@
 <link rel="stylesheet" ng-href="/styles/partials/course.css">
 
 <div class="body">
-    <form class="staticSearchResults" novalidate ng-submit="getPage()">    
+    <form class="staticSearchResults" novalidate ng-submit="getPage()" ng-if="filters.category === 'course'">
         <div class="filter-panel">
             <h2 class="text-center-responsive" ng-bind="'FILTER' | translate"></h2>
             <div class="responsiveColumn">
