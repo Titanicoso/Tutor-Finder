@@ -35,7 +35,7 @@
 }
 
 .select-search-type {
-    height: 30px;
+    height: inherit;
     background-color: white;
     align-self: center;
     border: 1px solid grey;
@@ -45,7 +45,7 @@
 
 .select-searchbar-type {
     background-color: white;
-    height: 44px;
+    height: 48px;
     align-self: center;
     border: 1px solid grey;
     border-left: none;
@@ -54,10 +54,9 @@
 }
 
 .search-dropdown {
-    padding: 1px;
     margin-left: 0;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .search-dropdown .dropdown-button:hover {
@@ -227,7 +226,7 @@
 
 .search-button {
     background-color: white;
-    height: 44px;
+    height: 48px;
     align-self: center;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;

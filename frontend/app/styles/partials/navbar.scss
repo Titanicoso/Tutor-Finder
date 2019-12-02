@@ -80,20 +80,20 @@
     justify-content: end;
     margin-bottom: 0px;
     width: fit-content;
-    height: fit-content;
+    height: 34px;
     align-self: center;
     justify-self: center;
 }
 
 .navbar .search-dropdown {
     width: fit-content;
-    height: 30px;
     align-self: center;
+    height: inherit;
 }
 
 .navbar .search-button {
     width: fit-content;
-    height: 30px;
+    height: inherit;
     align-self: center;
 }
 
