@@ -142,8 +142,6 @@ public class ConversationHibernateDaoTest {
 
         assertNotNull(conversations);
         assertEquals(CONVERSATION_NUMBER, conversations.size());
-
-        assertEquals(CONVERSATION_ID, conversations.get(0).getId());
     }
 
     @Test
