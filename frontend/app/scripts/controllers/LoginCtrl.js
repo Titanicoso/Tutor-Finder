@@ -15,7 +15,7 @@ define(['tutorFinder', 'services/authService', 'services/toastService'], functio
 
 		$scope.error = false;
 		var self = this;
-				
+	
 		$scope.login = function() {
 			if ($scope.form.$valid) {
 				
@@ -40,12 +40,12 @@ define(['tutorFinder', 'services/authService', 'services/toastService'], functio
 					} else {
 						self.redirect(redirect);
 					}
-					if (redirect.url) {
-						$location.path(redirect.url).search(redirect.params);
-					} else {
-						$location.url('/');
-					}
 				})
+				.catch(function(err) {
+					$scope.error = true;
+				});
+			}
+		};
 
 		this.redirect = function(redirect) {
 			if (redirect && redirect.url) {
@@ -54,11 +54,6 @@ define(['tutorFinder', 'services/authService', 'services/toastService'], functio
 				$location.url('/');
 			}
 		};
-				.catch(function(err) {
-
-					$scope.error = true;
-				});
-			}
-		};
 	};
+
 });
