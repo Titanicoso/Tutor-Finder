@@ -26,7 +26,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 
 		$scope.commentInput = {body: '', rating: undefined};
 		$scope.commentError = undefined;
-		$scope.canComment = false;
+		$scope.canComment = $scope.currentUser === null;
 
 		$scope.current = {};
 		$scope.current.page = 1;
@@ -34,7 +34,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 		courseService.getCourse($scope.professorId, subjectId)
 		.then(function(course) {
 			$scope.course = course;
-			$scope.canComment = $scope.currentUser === null || course.canComment;
+			$scope.canComment = $scope.canComment || course.canComment;
 			return courseService.getComments($scope.professorId, subjectId, 1);
 		})
 		.then(function(comments) {
@@ -71,6 +71,20 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 				.catch(function(err) {
 					switch (err.status) {
 						case -1: toastService.showAction('NO_CONNECTION'); break;
+						case 401: {
+							if ($scope.currentUser) {
+								toastService.showAction('SESSION_EXPIRED'); 
+							} 
+							authService.setRedirectUrl($location.path(), $route.current.params);
+							authService.logout();
+							authService.setRequestRedo({
+								fun: courseService.contact,
+								params: [$scope.professorId, subjectId, $scope.contactInput.body],
+								message: 'ERROR_SENDING_MESSGE'}
+							);
+							$location.url('/login');
+							break;
+						}
 						default: toastService.showAction('ERROR_SENDING_MESSGE'); break;
 					}
 				});
@@ -109,6 +123,21 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 				.catch(function(err) {
 					switch (err.status) {
 						case -1: toastService.showAction('NO_CONNECTION'); break;
+						case 401: {
+							if ($scope.currentUser) {
+								toastService.showAction('SESSION_EXPIRED'); 
+							} 
+							authService.setRedirectUrl($location.path(), $route.current.params);
+							authService.logout();
+							authService.setRequestRedo({
+								fun: courseService.comment,
+								params: [$scope.professorId, subjectId, $scope.commentInput.body, $scope.commentInput.rating],
+								message: 'ERROR_DENYING',
+								errorMessage: 'FORBIDDEN_COMMENT'
+							});
+							$location.url('/login');
+							break;
+						}
 						case 403: $scope.commentError = 'FORBIDDEN_COMMENT'; break;
 						default: toastService.showAction('ERROR_COMMENTING'); break;
 					}

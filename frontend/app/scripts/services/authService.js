@@ -6,6 +6,7 @@ define(['tutorFinder'], function(tutorFinder) {
 		var currentUser;
 		var accessToken;
 		var redirectUrl;
+		var requestRedo;
 		var self = this;
 
         this.getAccessToken = function() {
@@ -26,8 +27,16 @@ define(['tutorFinder'], function(tutorFinder) {
 			return this.redirectUrl;
 		};
 
-		this.setRedirectUrl = function(redirectUrl, params) {
-			return this.redirectUrl = {url: redirectUrl, params: params};
+		this.setRedirectUrl = function(redirectUrl, params, path) {
+			return this.redirectUrl = {url: redirectUrl, params: params, path: path};
+		};
+
+		this.getRequestRedo = function() {
+			return this.requestRedo;
+		};
+
+		this.setRequestRedo = function(requestRedo) {
+			return this.requestRedo = requestRedo;
 		};
 
 		this.checkRoles = function(roles) {

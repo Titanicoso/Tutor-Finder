@@ -1,11 +1,11 @@
 
 'use strict';
-define(['tutorFinder', 'directives/fileRead', 'services/userService'], function(tutorFinder) {
+define(['tutorFinder', 'directives/fileRead', 'services/userService', 'services/authService'], function(tutorFinder) {
 
 	tutorFinder.controller('ModifyProfileCtrl', ModifyProfileCtrl);
 	
-	ModifyProfileCtrl.$inject = ['$scope', '$uibModalInstance', 'professor', 'userService', 'toastService'];
-	function ModifyProfileCtrl($scope, $modal, professor, userService, toastService) {
+	ModifyProfileCtrl.$inject = ['$scope', '$uibModalInstance', 'professor', 'userService', 'toastService', 'authService', '$location', '$route'];
+	function ModifyProfileCtrl($scope, $modal, professor, userService, toastService, authService, $location, $route) {
 		$scope.isModifying = professor !== undefined && professor !== null;
 		$scope.invalidType = false;
 		
@@ -38,6 +38,23 @@ define(['tutorFinder', 'directives/fileRead', 'services/userService'], function(
 				.catch(function(err) {
 					switch (err.status) {
 						case -1: toastService.showAction('NO_CONNECTION'); break;
+						case 401: {
+							var request = $scope.isModifying ? userService.modify : userService.upgrade;
+
+							if ($scope.currentUser) {
+								toastService.showAction('SESSION_EXPIRED'); 
+							} 
+							authService.setRedirectUrl($location.path(), $route.current.params);
+							authService.logout();
+							authService.setRequestRedo({
+								fun: request,
+								params: [$scope.professorInput.description, $scope.professorInput.picture],
+								message: 'ERROR_MODIFYING'
+							});
+							$location.url('/login');
+							$modal.close(false);
+							break;
+						}
 						default: toastService.showAction('ERROR_MODIFYING'); break;
 					}
 				});

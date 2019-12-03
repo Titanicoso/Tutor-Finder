@@ -40,6 +40,7 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl', 
 		};
 
 		$scope.logout = function() {
+			$scope.showDropdown = false;
 			authService.logout();
 			$location.url('/');
 		};

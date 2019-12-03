@@ -1,10 +1,10 @@
 'use strict';
-define(['tutorFinder', 'services/conversationService'], function(tutorFinder) {
+define(['tutorFinder', 'services/conversationService', 'services/errorService'], function(tutorFinder) {
 
 	tutorFinder.controller('ConversationsCtrl', ConversationsCtrl);
 	
-	ConversationsCtrl.$inject = ['$scope', '$rootScope', 'conversationService', 'toastService', '$location', '$route'];
-	function ConversationsCtrl($scope, $rootScope, conversationService, toastService, $location, $route) {
+	ConversationsCtrl.$inject = ['$scope', '$rootScope', 'conversationService', 'toastService', '$location', '$route', 'authService'];
+	function ConversationsCtrl($scope, $rootScope, conversationService, toastService, $location, $route, authService) {
 		$rootScope.appendTitle('CONVERSATIONS');
 
 		var page = parseInt($route.current.params.page, 10);
@@ -36,6 +36,15 @@ define(['tutorFinder', 'services/conversationService'], function(tutorFinder) {
 			.catch(function(err) {
 				switch (err.status) {
 					case -1: toastService.showAction('NO_CONNECTION'); break;
+					case 401: {
+						if ($scope.currentUser) {
+							toastService.showAction('SESSION_EXPIRED'); 
+						} 
+						authService.setRedirectUrl($location.path(), $route.current.params);
+						authService.logout();
+						$location.url('/login');
+						break;
+					}
 					default: toastService.showAction('OOPS'); break;
 				}
 			});

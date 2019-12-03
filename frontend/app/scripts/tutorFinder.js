@@ -68,6 +68,7 @@ define([
 
 						if (path !== '/login' && path !== '/register') {
 							authService.setRedirectUrl(undefined, undefined);
+							authService.setRequestRedo(undefined);
 						}
 
 						if (path !== '/searchResults') {

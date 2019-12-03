@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 
 	tutorFinder.controller('ProfileCtrl', ProfileCtrl);
 	
-	ProfileCtrl.$inject = ['$scope', '$rootScope', '$route', '$uibModal', 'authService', 'professorService', 'courseService', 'toastService'];
-	function ProfileCtrl($scope, $rootScope, $route, $uibModal, authService, professorService, courseService, toastService) {
+	ProfileCtrl.$inject = ['$scope', '$rootScope', '$route', '$uibModal', 'authService', 'professorService', 'courseService', 'toastService', '$location'];
+	function ProfileCtrl($scope, $rootScope, $route, $uibModal, authService, professorService, courseService, toastService, $location) {
 		$rootScope.appendTitle('PROFILE');
 		var username = $route.current.params.username;
 
@@ -107,6 +107,20 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 			.catch(function(err) { 
 				switch (err.status) {
 					case -1: toastService.showAction('NO_CONNECTION'); break;
+					case 401: {
+						if ($scope.currentUser) {
+							toastService.showAction('SESSION_EXPIRED'); 
+						}
+						authService.setRedirectUrl($location.path(), $route.current.params);
+						authService.logout();
+						authService.setRequestRedo({
+							fun: courseService.delete,
+							params: [course.professor.id, course.subject.id],
+							message: 'ERROR_DELETING_COURSE'}
+						);
+						$location.url('/login');
+						break;
+					}
 					default: toastService.showAction('ERROR_DELETING_COURSE'); break;
 				}
 			});

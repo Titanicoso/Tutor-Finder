@@ -1,10 +1,10 @@
 'use strict';
-define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
+define(['tutorFinder', 'services/professorService', 'services/authService'], function(tutorFinder) {
 
 	tutorFinder.controller('RequestsCtrl', RequestsCtrl);
 	
-	RequestsCtrl.$inject = ['$scope', '$rootScope', 'professorService', 'toastService', '$location', '$route'];
-	function RequestsCtrl($scope, $rootScope, professorService, toastService, $location, $route) {
+	RequestsCtrl.$inject = ['$scope', '$rootScope', 'professorService', 'toastService', '$location', '$route', 'authService'];
+	function RequestsCtrl($scope, $rootScope, professorService, toastService, $location, $route, authService) {
 		$rootScope.appendTitle('REQUESTS');
 
 		var page = parseInt($route.current.params.page, 10);
@@ -36,6 +36,15 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 			.catch(function(err) {
 				switch (err.status) {
 					case -1: toastService.showAction('NO_CONNECTION'); break;
+					case 401: {
+						if ($scope.currentUser) {
+							toastService.showAction('SESSION_EXPIRED'); 
+						}
+						authService.setRedirectUrl($location.path(), $route.current.params);
+						authService.logout();
+						$location.url('/login');
+						break;
+					}
 					default: toastService.showAction('OOPS'); break;
 				}
 			});
@@ -49,6 +58,20 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 			.catch(function(err) {
 				switch (err.status) {
 					case -1: toastService.showAction('NO_CONNECTION'); break;
+					case 401: {
+						if ($scope.currentUser) {
+							toastService.showAction('SESSION_EXPIRED'); 
+						}
+						authService.setRedirectUrl($location.path(), $route.current.params);
+						authService.logout();
+						authService.setRequestRedo({
+							fun: professorService.approveRequest,
+							params: [request.id],
+							message: 'ERROR_APPROVING'
+						});
+						$location.url('/login');
+						break;
+					}
 					default: toastService.showAction('ERROR_APPROVING'); break;
 				}
 			});
@@ -62,6 +85,20 @@ define(['tutorFinder', 'services/professorService'], function(tutorFinder) {
 			.catch(function(err) {
 				switch (err.status) {
 					case -1: toastService.showAction('NO_CONNECTION'); break;
+					case 401: {
+						if ($scope.currentUser) {
+							toastService.showAction('SESSION_EXPIRED'); 
+						}
+						authService.setRedirectUrl($location.path(), $route.current.params);
+						authService.logout();
+						authService.setRequestRedo({
+							fun: professorService.denyRequest,
+							params: [request.id],
+							message: 'ERROR_DENYING'
+						});
+						$location.url('/login');
+						break;
+					}
 					default: toastService.showAction('ERROR_DENYING'); break;
 				}
 			});

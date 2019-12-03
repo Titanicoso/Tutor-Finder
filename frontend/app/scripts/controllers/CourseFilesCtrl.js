@@ -39,6 +39,20 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 				.catch(function(err) {
 					switch (err.status) {
 						case -1: toastService.showAction('NO_CONNECTION'); break;
+						case 401: {
+							if ($scope.currentUser) {
+								toastService.showAction('SESSION_EXPIRED'); 
+							} 
+							authService.setRedirectUrl($location.path(), $route.current.params);
+							authService.logout();
+							authService.setRequestRedo({
+								fun: courseFileService.upload,
+								params: [$scope.professorId, subjectId, $scope.courseFile.description, $scope.courseFile.file],
+								message: 'ERROR_UPLOADING_FILE'}
+							);
+							$location.url('/login');
+							break;
+						}
 						default: toastService.showAction('ERROR_UPLOADING_FILE'); break;
 					}
 				});
@@ -53,6 +67,15 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 			.catch(function(err) {
 				switch (err.status) {
 					case -1: toastService.showAction('NO_CONNECTION'); break;
+					case 401: {
+						if ($scope.currentUser) {
+							toastService.showAction('SESSION_EXPIRED'); 
+						} 
+						authService.setRedirectUrl($location.path(), $route.current.params);
+						authService.logout();
+						$location.url('/login');
+						break;
+					}
 					case 403: toastService.showAction('FORBIDDEN_COURSE_FILES'); $location.url('/'); break;
 					default: toastService.showAction('OOPS'); break;
 				}
@@ -67,6 +90,20 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 			.catch(function(err) {
 				switch (err.status) {
 					case -1: toastService.showAction('NO_CONNECTION'); break;
+					case 401: {
+						if ($scope.currentUser) {
+							toastService.showAction('SESSION_EXPIRED'); 
+						} 
+						authService.setRedirectUrl($location.path(), $route.current.params);
+						authService.logout();
+						authService.setRequestRedo({
+							fun: courseFileService.getCourseFile,
+							params: [$scope.professorId, subjectId, file.id],
+							message: 'ERROR_DOWNLOADING_FILE'}
+						);
+						$location.url('/login');
+						break;
+					}
 					default: toastService.showAction('ERROR_DOWNLOADING_FILE'); break;
 				}
 			});
@@ -83,6 +120,20 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 			.catch(function(err) {
 				switch (err.status) {
 					case -1: toastService.showAction('NO_CONNECTION'); break;
+					case 401: {
+						if ($scope.currentUser) {
+							toastService.showAction('SESSION_EXPIRED'); 
+						} 
+						authService.setRedirectUrl($location.path(), $route.current.params);
+						authService.logout();
+						authService.setRequestRedo({
+							fun: courseFileService.delete,
+							params: [$scope.professorId, subjectId, file.id],
+							message: 'ERROR_DELETING_FILE'}
+						);
+						$location.url('/login');
+						break;
+					}
 					default: toastService.showAction('ERROR_DELETING_FILE'); break;
 				}
 			});
