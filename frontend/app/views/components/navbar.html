@@ -17,7 +17,7 @@
                 </select>
             </div>
             <button type="submit" class="search-button">
-                <img class="search-img" ng-src="images/search.png"/>
+                <img class="search-img" src="images/search.png"/>
             </button>
         </div>
     </form>
@@ -28,19 +28,19 @@
         <a class="dropdown-button navbar-button" ng-mouseover="toggleDropdown()" ng-bind="currentUser.name"></a>
         <div class="dropdown-content" ng-mouseleave="toggleDropdown()" ng-show="showDropdown">
             <div ng-if="currentUser.professor">
-                <a ng-href="/#!/profile" class="navbar-button" ng-bind="'PROFILE' | translate"></a>
-                <a ng-href="/#!/requests" class="navbar-button" ng-bind="'CLASS_REQUESTS' | translate"></a>
+                <a ng-href="#!/profile" class="navbar-button" ng-bind="'PROFILE' | translate"></a>
+                <a ng-href="#!/requests" class="navbar-button" ng-bind="'CLASS_REQUESTS' | translate"></a>
             </div>
             <div ng-if="!currentUser.professor">
                 <a href="javascript:;" ng-click="registerAsProfessor()" class="navbar-button" ng-bind="'REGISTER_PROFESSOR' | translate"></a>
             </div>
-            <a ng-href="/#!/reservations" class="navbar-button" ng-bind="'RESERVATIONS' | translate"></a>
-            <a ng-href="/#!/conversations" class="navbar-button" ng-bind="'CONVERSATIONS' | translate"></a>
+            <a ng-href="#!/reservations" class="navbar-button" ng-bind="'RESERVATIONS' | translate"></a>
+            <a ng-href="#!/conversations" class="navbar-button" ng-bind="'CONVERSATIONS' | translate"></a>
             <a ng-click="logout()" class="navbar-button" ng-bind="'LOGOUT' | translate"></a>
         </div>
     </div>
     <div ng-if="!currentUser" class="navbar-buttons">
-        <a ng-href="/#!/register" class="navbar-button">{{ 'REGISTER' | translate }}</a>
-        <a ng-href="/#!/login" class="navbar-button">{{ 'LOGIN' | translate }}</a>
+        <a ng-href="#!/register" class="navbar-button">{{ 'REGISTER' | translate }}</a>
+        <a ng-href="#!/login" class="navbar-button">{{ 'LOGIN' | translate }}</a>
     </div>
 </div>

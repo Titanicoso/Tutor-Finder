@@ -1,5 +1,5 @@
 <div class="search-course-result" ng-repeat="course in results">
-    <a class="conversation-link" ng-href="/#!/course/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}"></a>
+    <a class="conversation-link" ng-href="#!/course/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}"></a>
     <a class="search-result-img"><img class="search-result-picture" ng-src="{{course.image_url}}"/></a>
     <a class="search-result-title" ng-bind="course.subject.name"></a>
     <a class="search-result-professor" ng-bind="course.professor.name"></a>

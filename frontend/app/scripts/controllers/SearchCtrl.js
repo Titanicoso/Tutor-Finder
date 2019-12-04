@@ -26,9 +26,15 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 				}).map(function(day) {
 					return parseInt(day, 10);
 				});
+				parameters.days = parameters.days.filter(function(day, index) {
+					return parameters.days.indexOf(day) === index;
+				});
 			} else if (tempDays) {
 				parameters.days = [];
-				parameters.days.push(tempDays);
+				var tempDay = parseInt(tempDays, 10);
+				if (tempDay === tempDay) {
+					parameters.days.push(tempDay);
+				}
 			}
 		
 			return {

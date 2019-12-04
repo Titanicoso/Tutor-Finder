@@ -1,4 +1,4 @@
-<link rel="stylesheet" ng-href="/styles/partials/schedule.css">
+<link rel="stylesheet" ng-href="styles/partials/schedule.css">
 
 <div class="staticProfile">
     <div ng-if="professor">
@@ -25,12 +25,12 @@
                 <h4 ng-if="!showEditOptions && courses.data.length < 1" ng-bind="'NO_COURSES' | translate"></h4>
 
                 <div class="class" ng-repeat="course in courses.data">
-                    <a class="class-button" ng-href="/#!/course/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}"></a>
+                    <a class="class-button" ng-href="#!/course/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}"></a>
                     <h3 class="class-title" ng-bind="course.subject.name"></h3>
                     <div class="class-description" ng-bind="course.description"></div>
                     <div class="edit-class" ng-if="showEditOptions">
                         <a title="{{ 'MODIFY_COURSE' | translate }}" href="javascript:;" ng-click="modifyCourse(course)" class="fa fa-pencil center profile-course-button"></a>
-                        <a title="{{ 'FILES' | translate }}" ng-href="/#!/course/files/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}" class="fa fa-file center profile-course-button"></a>
+                        <a title="{{ 'FILES' | translate }}" ng-href="#!/course/files/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}" class="fa fa-file center profile-course-button"></a>
                         <a title="{{ 'DELETE_COURSE' | translate }}" href="javascript:;" ng-click="deleteCourse(course)" class="fa fa-trash center profile-course-button"></a>
                     </div>
                 </div>

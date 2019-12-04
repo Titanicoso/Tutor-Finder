@@ -5,16 +5,16 @@ define([], function() {
         defaultRoutePath: '/',
         routes: {
             '/': {
-                templateUrl: '/views/home.html',
+                templateUrl: 'views/home.html',
                 controller: 'HomeCtrl'
             },
             '/area/:id': {
-                templateUrl: '/views/area.html',
+                templateUrl: 'views/area.html',
                 controller: 'AreaCtrl',
                 reloadOnSearch: false
             },
             '/conversations': {
-                templateUrl: '/views/conversations.html',
+                templateUrl: 'views/conversations.html',
                 controller: 'ConversationsCtrl',
                 roles: {loggedIn: true, needsProfessor: false},
                 reloadOnSearch: false,
@@ -26,7 +26,7 @@ define([], function() {
                 }
             },
             '/conversation/:id': {
-                templateUrl: '/views/conversation.html',
+                templateUrl: 'views/conversation.html',
                 controller: 'ConversationCtrl',
                 roles: {loggedIn: true, needsProfessor: false},
                 resolve: {
@@ -37,11 +37,11 @@ define([], function() {
                 }
             },
             '/course': {
-                templateUrl: '/views/course.html',
+                templateUrl: 'views/course.html',
                 controller: 'CourseCtrl'
             },
             '/forgotPassword': {
-                templateUrl: '/views/forgotPassword.html',
+                templateUrl: 'views/forgotPassword.html',
                 controller: 'ForgotPasswordCtrl',
                 roles: {loggedIn: false, needsProfessor: false},
                 resolve: {
@@ -52,7 +52,7 @@ define([], function() {
                 }
             },
             '/login': {
-                templateUrl: '/views/login.html',
+                templateUrl: 'views/login.html',
                 controller: 'LoginCtrl',
                 roles: {loggedIn: false, needsProfessor: false},
                 resolve: {
@@ -63,7 +63,7 @@ define([], function() {
                 }
             },
             '/course/files': {
-                templateUrl: '/views/courseFiles.html',
+                templateUrl: 'views/courseFiles.html',
                 controller: 'CourseFilesCtrl',
                 roles: {loggedIn: true, needsProfessor: false},
                 resolve: {
@@ -74,7 +74,7 @@ define([], function() {
                 }
             },
             '/requests': {
-                templateUrl: '/views/myClasses.html',
+                templateUrl: 'views/myClasses.html',
                 controller: 'RequestsCtrl',
                 roles: {loggedIn: true, needsProfessor: true},
                 reloadOnSearch: false,
@@ -86,7 +86,7 @@ define([], function() {
                 }
             },
             '/profile': {
-                templateUrl: '/views/profile.html',
+                templateUrl: 'views/profile.html',
                 controller: 'ProfileCtrl',
                 roles: {loggedIn: true, needsProfessor: true},
                 resolve: {
@@ -97,11 +97,11 @@ define([], function() {
                 }
             },
             '/professor/:username': {
-                templateUrl: '/views/profile.html',
+                templateUrl: 'views/profile.html',
                 controller: 'ProfileCtrl'
             },
             '/register': {
-                templateUrl: '/views/register.html',
+                templateUrl: 'views/register.html',
                 controller: 'RegisterCtrl',
                 roles: {loggedIn: false, needsProfessor: false},
                 resolve: {
@@ -112,7 +112,7 @@ define([], function() {
                 }
             },
             '/reservations': {
-                templateUrl: '/views/reservations.html',
+                templateUrl: 'views/reservations.html',
                 controller: 'ReservationsCtrl',
                 roles: {loggedIn: true, needsProfessor: false},
                 reloadOnSearch: false,
@@ -124,7 +124,7 @@ define([], function() {
                 }
             },
             '/searchResults': {
-                templateUrl: '/views/searchResults.html',
+                templateUrl: 'views/searchResults.html',
                 controller: 'SearchCtrl',
                 reloadOnSearch: false
             }

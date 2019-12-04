@@ -1,5 +1,5 @@
 'use strict';
-define(['tutorFinder', 'services/conversationService', 'services/errorService'], function(tutorFinder) {
+define(['tutorFinder', 'services/conversationService'], function(tutorFinder) {
 
 	tutorFinder.controller('ConversationsCtrl', ConversationsCtrl);
 	

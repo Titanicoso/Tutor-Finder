@@ -1,5 +1,5 @@
-$icon-font-path: "../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-$fa-font-path: '../../bower_components/components-font-awesome/fonts';
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$fa-font-path: '../bower_components/components-font-awesome/fonts';
 
 @import './modules/variables.scss';
 
@@ -10,8 +10,6 @@ $fa-font-path: '../../bower_components/components-font-awesome/fonts';
 // endbower
 
 @import '../../bower_components/angular-material/angular-material.scss';
-
-@import 'partials/home';
 
 .browsehappy {
   margin: 0.2em 0;

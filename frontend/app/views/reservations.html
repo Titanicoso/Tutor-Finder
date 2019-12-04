@@ -6,7 +6,7 @@
             <div class="reservation-course-result" ng-repeat="reservation in reservations.data">
                 <div class="search-result-img">
                     <div class="button-2 relative" type="submit" ng-if="reservation.status === 'APPROVED'">
-                        <a class="class-button" ng-href="/#!/course/files/?professorId={{reservation.course.professor.id}}&subjectId={{reservation.course.subject.id}}"></a>
+                        <a class="class-button" ng-href="#!/course/files/?professorId={{reservation.course.professor.id}}&subjectId={{reservation.course.subject.id}}"></a>
                         {{'FILES' | translate}}
                     </div>
                     <a ng-if="reservation.status !== 'APPROVED'" class="search-result-img"><img class="search-result-picture" ng-src="{{reservation.course.image_url}}"/></a>
