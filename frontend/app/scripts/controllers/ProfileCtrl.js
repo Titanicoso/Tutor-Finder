@@ -1,5 +1,5 @@
 'use strict';
-define(['tutorFinder', 'services/authService', 'services/professorService', 'services/courseService', 'controllers/CreateCourseCtrl', 'controllers/ModifyProfileCtrl'], function(tutorFinder) {
+define(['tutorFinder', 'services/authService', 'services/professorService', 'services/courseService', 'controllers/CreateCourseCtrl', 'controllers/ModifyProfileCtrl', 'controllers/TimeslotCtrl'], function(tutorFinder) {
 
 	tutorFinder.controller('ProfileCtrl', ProfileCtrl);
 	
@@ -17,14 +17,29 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 
 		$scope.current = {};
 		$scope.current.page = 1;
+		var self = this;
 
 		if (!username || (currentUser && currentUser.username === username)) {
 			$scope.showEditOptions = true;
 			$scope.professor = currentUser;
 			username = currentUser.username;
 		}
+		
+		this.getSchedule = function () {
+			professorService.getProfessorSchedule(username)
+			.then(function(response) {
+				$scope.schedule = response;
+			})
+			.catch(function(err) {
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
+			});
+		};
 
 		$scope.refresh = function() {
+			self.getSchedule();
 			professorService.getProfessor(username)
 			.then(function(response) {
 				$scope.professor = response;
@@ -51,6 +66,22 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 			.catch(function(err) {
 				switch (err.status) {
 					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
+			});
+		};
+
+		$scope.addTimeslot = function() {
+			$uibModal.open({
+				controller: 'TimeslotCtrl',
+				templateUrl: 'views/addTimeslot.html',
+				backdrop: 'static'
+			}).result.then(function(answer) {
+				if (answer) {
+					self.getSchedule();
+				}
+			}, function(err) { 
+				switch (err.status) {
 					default: toastService.showAction('OOPS'); break;
 				}
 			});

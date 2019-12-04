@@ -51,6 +51,10 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
         this.denyRequest = function(id) {
             return restService.delete('user/requests/' + id);
         };
+
+        this.addTimeslot = function(day, startHour, endHour) {
+            return restService.post('user/schedule', {startHour: startHour, endHour: endHour, day: day});
+        };
     }]);
 
 });

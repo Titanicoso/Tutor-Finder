@@ -41,7 +41,10 @@
             </div>
         </div>
 
-        <div class="time-content time-content-other">
+        <div class="time-content" ng-class="{'time-content-other': !showEditOptions}">
+            <div class="row r-center" ng-if="showEditOptions">
+                <div ng-click="addTimeslot()" class="add-time-modal-button button-2" ng-bind="'ADD_TIMESLOT' | translate"></div>
+            </div>
             <div class="schedule">
                 <h2 ng-bind="(showEditOptions ? 'PROFILE_SCHEDULE' : 'SCHEDULE') | translate"></h2>
                 <p ng-bind="(showEditOptions ? 'PROFILE_SCHEDULE_DESCRIPTION' : 'SCHEDULE_DESCRIPTION') | translate"></p>
