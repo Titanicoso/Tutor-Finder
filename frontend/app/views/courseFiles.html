@@ -1,48 +1,48 @@
-<link rel="stylesheet" type="text/css" ng-href="styles/partials/course.css">
-<link rel="stylesheet" type="text/css" ng-href="styles/partials/conversations.css">
-<link rel="stylesheet" type="text/css" ng-href="styles/partials/schedule.css">
+<link rel="stylesheet" type="text/css" ng-href="styles/stylesheet.css">
 
-<div class="body my-reservation">
-    <div class="search-results w-98 rm-10-b m-t-20">
-        <h3 class="search-data" ng-bind="'CONTENTS' | translate"></h3>
-        <h1 ng-if="!courseFiles || courseFiles.length < 1" ng-bind="'NO_CONTENTS' | translate"></h1>
-        <div class="reservation-course-result" ng-repeat="file in courseFiles">
-            <div class="search-result-img">
-                <div class="button-2 relative" type="submit">
-                    <a class="class-button" href="javascript:;" ng-click="download(file)"></a>
-                    {{'DOWNLOAD' | translate}}
+<div class="body">
+    <div class="content my-reservation">
+        <div class="search-results w-100 rm-10-b m-t-20">
+            <h3 class="search-data" ng-bind="'CONTENTS' | translate"></h3>
+            <h1 ng-if="!courseFiles || courseFiles.length < 1" ng-bind="'NO_CONTENTS' | translate"></h1>
+            <div class="reservation-course-result" ng-repeat="file in courseFiles">
+                <div class="search-result-img">
+                    <div class="button-2 relative" type="submit">
+                        <a class="class-button" href="javascript:;" ng-click="download(file)"></a>
+                        {{'DOWNLOAD' | translate}}
+                    </div>
+                    <div class="button-2 relative" type="submit" ng-if="professorId == currentUser.id">
+                        <a class="class-button" href="javascript:;" ng-click="delete(file)"></a>
+                        {{'DELETE' | translate}}
+                    </div>
                 </div>
-                <div class="button-2 relative" type="submit" ng-if="professorId == currentUser.id">
-                    <a class="class-button" href="javascript:;" ng-click="delete(file)"></a>
-                    {{'DELETE' | translate}}
-                </div>
+                <a class="search-result-title" ng-bind="file.name"></a>
+                <a class="search-result-professor"></a>
+                <a class="search-result-specs"></a>
+                <a class="search-result-description" ng-bind="'DESCRIPTION' | translate: { value: file.description }"></a>
+                <a class="search-result-status"></a>
             </div>
-            <a class="search-result-title" ng-bind="file.name"></a>
-            <a class="search-result-professor"></a>
-            <a class="search-result-specs"></a>
-            <a class="search-result-description" ng-bind="'DESCRIPTION' | translate: { value: file.description }"></a>
-            <a class="search-result-status"></a>
         </div>
-    </div>
-    <div class="comment w-100" ng-if="professorId == currentUser.id">
-        <div class="button-container">
-            <h2 class="form-label" ng-bind="'FILE_UPLOAD' | translate"></h2>
-        </div>
-
-        <form class="form-horizontal" name="form" ng-submit="upload(form)" novalidate>
-            <div>
-                <label class="form-label" for="file" ng-bind="'FILE_SELECT' | translate"></label>
-                <input class="input-request" type="file" name="file" file="courseFile.file" size="courseFile.size" />
-                <p class="error-text" ng-show="!courseFile.file || invalidSize">{{'FILE_ERROR' | translate: '{ size: \'10MB\' }'}}</p>
-            </div>
-            <div>
-                <label class="form-label" for="description" ng-bind="'DESCRIPTION' | translate"></label>
-                <textarea class="input-request" type="text" name="description" rows="5" cols="5" ng-required="true" ng-minlength="5" ng-maxlength="255" ng-model="courseFile.description"></textarea>
-                <p class="error-text" ng-show="form.description.$dirty && form.description.$invalid">{{'DESCRIPTION_SIZE_ERROR' | translate: '{ min: 5, max: 255 }'}}</p>
-            </div>
+        <div class="comment w-100" ng-if="professorId == currentUser.id">
             <div class="button-container">
-                <input class="button-2" type="submit" value="{{ 'UPLOAD' | translate }}" ng-disabled="form.$invalid || !courseFile.file || invalidSize"/>
+                <h2 class="form-label" ng-bind="'FILE_UPLOAD' | translate"></h2>
             </div>
-        </form>
+
+            <form class="form-horizontal" name="form" ng-submit="upload(form)" novalidate>
+                <div>
+                    <label class="form-label" for="file" ng-bind="'FILE_SELECT' | translate"></label>
+                    <input class="input-request" type="file" name="file" file="courseFile.file" size="courseFile.size" />
+                    <p class="error-text" ng-show="!courseFile.file || invalidSize">{{'FILE_ERROR' | translate: '{ size: \'10MB\' }'}}</p>
+                </div>
+                <div>
+                    <label class="form-label" for="description" ng-bind="'DESCRIPTION' | translate"></label>
+                    <textarea class="input-request" type="text" name="description" rows="5" cols="5" ng-required="true" ng-minlength="5" ng-maxlength="255" ng-model="courseFile.description"></textarea>
+                    <p class="error-text" ng-show="form.description.$dirty && form.description.$invalid">{{'DESCRIPTION_SIZE_ERROR' | translate: '{ min: 5, max: 255 }'}}</p>
+                </div>
+                <div class="button-container">
+                    <input class="button-2" type="submit" value="{{ 'UPLOAD' | translate }}" ng-disabled="form.$invalid || !courseFile.file || invalidSize"/>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

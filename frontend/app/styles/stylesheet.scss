@@ -25,6 +25,12 @@ textarea {
     height: 100%;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    color: black;
+    line-height: 1.45;
+}
+
 a {
     color: black;
 }
@@ -343,6 +349,10 @@ button {
     border-radius: 5px;
 }
 
+.modify-modal {
+    padding: 1% 5%;
+}
+
 .modal-close {
     color: #aaaaaa;
     float: right;
@@ -371,7 +381,10 @@ button {
     height: fit-content;
 }
 
-
+.flex-content {
+    display: flex;
+    flex-direction: column;
+}
 
 .class {
     position: relative;
@@ -381,7 +394,6 @@ button {
     padding: 10px;
     display: grid;
     grid-column-gap: 10px;
-    justify-content: center;
     grid-template-areas: "class-title" "class-description";
 }
 
@@ -902,8 +914,8 @@ th, td {
     width: 98%;
 }
 
-.w-92 {
-    width: 92%;
+.w-95 {
+    width: 95%;
 }
 
 
