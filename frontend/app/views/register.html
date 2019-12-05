@@ -1,47 +1,49 @@
 <div class="register">
-    <div class="button-container">
-        <h2 class="label" ng-bind="'REGISTER' | translate"></h2>
-    </div>
-    <form class="form" novalidate name="form" ng-submit="submit(form)">
-        <div class="inputs">
-            <div>
-                <label class="label" for="name" ng-bind="'NAME' | translate"></label>
-                <input class="input-request" type="text" name="name" ng-required="true" ng-pattern="regex" ng-maxlength="128" ng-model="register.name"/>
-                <p class="error-text" ng-show="form.name.$dirty && (form.name.$error.maxlength || form.name.$error.required)">{{'NAME_SIZE_ERROR' | translate: '{min: 1, max: 128}'}}</p>
-                <p class="error-text" ng-show="form.name.$dirty && form.name.$error.pattern">{{'NAME_PATTERN_ERROR' | translate}}</p>
-            </div>
-            <div>
-                <label class="label" for="lastname" ng-bind="'LASTNAME' | translate"></label>
-                <input class="input-request" type="text" name="lastname" ng-required="true" ng-pattern="regex" ng-maxlength="128" ng-model="register.lastname"/>
-                <p class="error-text" ng-show="form.lastname.$dirty && (form.lastname.$error.maxlength || form.lastname.$error.required)">{{'LASTNAME_SIZE_ERROR' | translate: '{min: 1, max: 128}'}}</p>
-                <p class="error-text" ng-show="form.lastname.$dirty && form.lastname.$error.pattern">{{'LASTNAME_PATTERN_ERROR' | translate}}</p>
-            </div>
-            <div>
-                <label class="label" for="email" ng-bind="'EMAIL' | translate"></label>
-                <input class="input-request" type="email" name="email" ng-required="true" ng-maxlength="512" ng-model="register.email"/>
-                <p class="error-text" ng-show="form.email.$dirty && (form.email.$error.maxlength || form.email.$error.required)">{{'EMAIL_SIZE_ERROR' | translate: '{min: 1, max: 512}'}}</p>
-                <p class="error-text" ng-show="form.email.$dirty && form.email.$error.email">{{'EMAIL_FORMAT_ERROR' | translate}}</p>
-            </div>
-            <div>
-                <label class="label" for="username" ng-bind="'USERNAME' | translate"></label>
-                <input class="input-request" type="text" name="username" ng-required="true" ng-maxlength="128" ng-model="register.username"/>
-                <p class="error-text" ng-show="form.username.$dirty && form.username.$invalid">{{'USERNAME_SIZE_ERROR' | translate: '{min: 1, max: 128}'}}</p>
-            </div>
-            <div>
-                <label class="label" for="password" ng-bind="'PASSWORD' | translate"></label>
-                <input class="input-request" type="password" name="password" ng-minlength="8" ng-maxlength="512" ng-model="register.password"/>
-                <p class="error-text" ng-show="form.password.$dirty && form.password.$invalid">{{'PASSWORD_SIZE_ERROR' | translate: '{min: 8, max: 64}'}}</p>
-            </div>
-            <div>
-                <label class="label" for="repeatPassword" ng-bind="'REPEAT_PASSWORD' | translate"></label>
-                <input class="input-request" type="password" name="repeatPassword" ng-minlength="8" ng-maxlength="512" ng-model="register.repeatPassword"/>
-                <p class="error-text" ng-show="form.repeatPassword.$dirty && form.repeatPassword.$invalid">{{'PASSWORD_SIZE_ERROR' | translate: '{min: 8, max: 64}'}}</p>
-                <p class="error-text" ng-show="register.password !== register.repeatPassword">{{'REPEAT_PASSWORD_ERROR' | translate}}</p>
-            </div>
-
-            <div class="button-container">
-                <input class="button-2" type="submit" value="{{ 'REGISTER' | translate }}" ng-disabled="form.$invalid"/>
-            </div>
+    <div class="content">
+        <div class="button-container">
+            <h2 class="form-label" ng-bind="'REGISTER' | translate"></h2>
         </div>
-    </form>
+        <form class="form" novalidate name="form" ng-submit="submit(form)">
+            <div class="inputs">
+                <div>
+                    <label class="form-label" for="name" ng-bind="'NAME' | translate"></label>
+                    <input class="input-request" type="text" name="name" ng-required="true" ng-pattern="regex" ng-maxlength="128" ng-model="register.name"/>
+                    <p class="error-text" ng-show="form.name.$dirty && (form.name.$error.maxlength || form.name.$error.required)">{{'NAME_SIZE_ERROR' | translate: '{min: 1, max: 128}'}}</p>
+                    <p class="error-text" ng-show="form.name.$dirty && form.name.$error.pattern">{{'NAME_PATTERN_ERROR' | translate}}</p>
+                </div>
+                <div>
+                    <label class="form-label" for="lastname" ng-bind="'LASTNAME' | translate"></label>
+                    <input class="input-request" type="text" name="lastname" ng-required="true" ng-pattern="regex" ng-maxlength="128" ng-model="register.lastname"/>
+                    <p class="error-text" ng-show="form.lastname.$dirty && (form.lastname.$error.maxlength || form.lastname.$error.required)">{{'LASTNAME_SIZE_ERROR' | translate: '{min: 1, max: 128}'}}</p>
+                    <p class="error-text" ng-show="form.lastname.$dirty && form.lastname.$error.pattern">{{'LASTNAME_PATTERN_ERROR' | translate}}</p>
+                </div>
+                <div>
+                    <label class="form-label" for="email" ng-bind="'EMAIL' | translate"></label>
+                    <input class="input-request" type="email" name="email" ng-required="true" ng-maxlength="512" ng-model="register.email"/>
+                    <p class="error-text" ng-show="form.email.$dirty && (form.email.$error.maxlength || form.email.$error.required)">{{'EMAIL_SIZE_ERROR' | translate: '{min: 1, max: 512}'}}</p>
+                    <p class="error-text" ng-show="form.email.$dirty && form.email.$error.email">{{'EMAIL_FORMAT_ERROR' | translate}}</p>
+                </div>
+                <div>
+                    <label class="form-label" for="username" ng-bind="'USERNAME' | translate"></label>
+                    <input class="input-request" type="text" name="username" ng-required="true" ng-maxlength="128" ng-model="register.username"/>
+                    <p class="error-text" ng-show="form.username.$dirty && form.username.$invalid">{{'USERNAME_SIZE_ERROR' | translate: '{min: 1, max: 128}'}}</p>
+                </div>
+                <div>
+                    <label class="form-label" for="password" ng-bind="'PASSWORD' | translate"></label>
+                    <input class="input-request" type="password" name="password" ng-minlength="8" ng-maxlength="512" ng-model="register.password"/>
+                    <p class="error-text" ng-show="form.password.$dirty && form.password.$invalid">{{'PASSWORD_SIZE_ERROR' | translate: '{min: 8, max: 64}'}}</p>
+                </div>
+                <div>
+                    <label class="form-label" for="repeatPassword" ng-bind="'REPEAT_PASSWORD' | translate"></label>
+                    <input class="input-request" type="password" name="repeatPassword" ng-minlength="8" ng-maxlength="512" ng-model="register.repeatPassword"/>
+                    <p class="error-text" ng-show="form.repeatPassword.$dirty && form.repeatPassword.$invalid">{{'PASSWORD_SIZE_ERROR' | translate: '{min: 8, max: 64}'}}</p>
+                    <p class="error-text" ng-show="register.password !== register.repeatPassword">{{'REPEAT_PASSWORD_ERROR' | translate}}</p>
+                </div>
+
+                <div class="button-container">
+                    <input class="button-2" type="submit" value="{{ 'REGISTER' | translate }}" ng-disabled="form.$invalid"/>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

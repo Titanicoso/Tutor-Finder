@@ -1,25 +1,28 @@
-<div class="justify-center">
-    <div class="search-results w-100">
-        <h3 class="search-data" ng-bind="'RESERVATIONS' | translate"></h3>
-        <h1 ng-if="!reservations || reservations.data.length < 1" ng-bind="'NO_RESERVATIONS' | translate"></h1>
-        <div ng-if="reservations && reservations.data.length > 0">
-            <div class="reservation-course-result" ng-repeat="reservation in reservations.data">
-                <div class="search-result-img">
-                    <div class="button-2 relative" type="submit" ng-if="reservation.status === 'APPROVED'">
-                        <a class="class-button" ng-href="#!/course/files/?professorId={{reservation.course.professor.id}}&subjectId={{reservation.course.subject.id}}"></a>
-                        {{'FILES' | translate}}
+<div class="reservations">
+    <div class="content">
+        <div class="search-results w-100">
+            <h3 class="search-data" ng-bind="'RESERVATIONS' | translate"></h3>
+            <h1 ng-if="!reservations || reservations.data.length < 1" ng-bind="'NO_RESERVATIONS' | translate"></h1>
+            <div ng-if="reservations && reservations.data.length > 0">
+                <div class="reservation-course-result" ng-repeat="reservation in reservations.data">
+                    <a class="conversation-link" ng-href="#!/course/?professorId={{reservation.course.professor.id}}&subjectId={{reservation.course.subject.id}}"></a>
+                    <div class="search-result-img">
+                        <div class="button-2 relative" type="submit" ng-if="reservation.status === 'APPROVED'">
+                            <a class="class-button" ng-href="#!/course/files/?professorId={{reservation.course.professor.id}}&subjectId={{reservation.course.subject.id}}"></a>
+                            {{'FILES' | translate}}
+                        </div>
+                        <a ng-if="reservation.status !== 'APPROVED'" class="search-result-img"><img class="search-result-picture" ng-src="{{reservation.course.image_url}}"/></a>
                     </div>
-                    <a ng-if="reservation.status !== 'APPROVED'" class="search-result-img"><img class="search-result-picture" ng-src="{{reservation.course.image_url}}"/></a>
+                    <a class="search-result-title" ng-bind="reservation.course.subject.name"></a>
+                    <a class="search-result-professor" >{{ 'RESERVATION_PROFESSOR' | translate: { name: reservation.course.professor.name } }}</a>
+                    <a class="search-result-specs">{{'PRICE_SPEC' | translate: { price: reservation.course.price } }}</a>
+                    <a class="search-result-description">{{'RESERVATION_DAY' | translate: { date: reservation.start_time } }}<br/>{{'RESERVATION_FROM' | translate: { date: reservation.start_time } }}{{'RESERVATION_TO' | translate: { date: reservation.end_time } }}</a>
+                    <span class="search-result-status" ng-switch="reservation.status">
+                        <a class="search-result-status" ng-switch-when="APPROVED" ng-bind="'APPROVED' | translate"></a>
+                        <a class="search-result-status" ng-switch-when="DENIED" ng-bind="'DENIED' | translate"></a>
+                        <a class="search-result-status" ng-switch-default ng-bind="'PENDING' | translate"></a>
+                    </span>
                 </div>
-                <a class="search-result-title" ng-bind="reservation.course.subject.name"></a>
-                <a class="search-result-professor" >{{ 'RESERVATION_PROFESSOR' | translate: { name: reservation.course.professor.name } }}</a>
-                <a class="search-result-specs">{{'PRICE_SPEC' | translate: { price: reservation.course.price } }}</a>
-                <a class="search-result-description">{{'RESERVATION_DAY' | translate: { date: reservation.start_time } }}<br/>{{'RESERVATION_FROM' | translate: { date: reservation.start_time } }}{{'RESERVATION_TO' | translate: { date: reservation.end_time } }}</a>
-                <span ng-switch="reservation.status">
-                    <a class="search-result-status" ng-switch-when="APPROVED" ng-bind="'APPROVED' | translate"></a>
-                    <a class="search-result-status" ng-switch-when="DENIED" ng-bind="'DENIED' | translate"></a>
-                    <a class="search-result-status" ng-switch-default ng-bind="'PENDING' | translate"></a>
-                </span>
             </div>
             <div class="paged-result-buttons">
                 <ul ng-if="reservations.links" uib-pagination total-items="reservations.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="current.page" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage(current.page)"></ul>

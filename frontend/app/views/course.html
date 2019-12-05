@@ -18,11 +18,11 @@
         </div>
         <div class="contact" ng-if="currentUser == null || currentUser.id != professorId">
             <div class="button-container">
-                <h2 class="label" ng-bind="'CONTACT' | translate"></h2>
+                <h2 class="form-label" ng-bind="'CONTACT' | translate"></h2>
             </div>
             <form class="form" ng-submit="contact(contactForm)" name="contactForm" novalidate>
                 <div>
-                    <label class="label" for="body" ng-bind="'BODY' | translate"></label>
+                    <label class="form-label" for="body" ng-bind="'BODY' | translate"></label>
                     <textarea class="input-request chat-box" type="text" name="body" rows="5" cols="5" ng-required="true" ng-maxlength="1024" ng-model="contactInput.body"></textarea>
                     <p class="error-text" ng-show="contactForm.$dirty && contactForm.$invalid">{{'MESSAGE_SIZE_ERROR' | translate: '{ min: 1, max: 1024 }'}}</p>
                 </div>
@@ -37,16 +37,16 @@
 
         <div class="comment" ng-if="currentUser == null || currentUser.id != professorId">
             <div class="button-container">
-                <h2 class="label" ng-bind="'COMMENT' | translate"></h2>
+                <h2 class="form-label" ng-bind="'COMMENT' | translate"></h2>
             </div>
             <form class="form" ng-submit="comment(commentForm)" name="commentForm" novalidate>
                 <div>
-                    <label class="label" for="body" ng-bind="'COMMENT_BODY' | translate"></label>
+                    <label class="form-label" for="body" ng-bind="'COMMENT_BODY' | translate"></label>
                     <textarea class="input-request chat-box" type="text" name="body" rows="5" cols="5" ng-required="true" ng-maxlength="1024" ng-model="commentInput.body"></textarea>
                     <p class="error-text" ng-show="commentForm.body.$dirty && commentForm.body.$invalid">{{'COMMENT_SIZE_ERROR' | translate: '{ min: 1, max: 1024 }'}}</p>
                 </div>
                 <div>
-                    <label class="label" for="rating" ng-bind="'RATING' | translate"></label>
+                    <label class="form-label" for="rating" ng-bind="'RATING' | translate"></label>
                     <input class="input-request" type="number" name="rating" step="1" ng-min="1" ng-max="5" min="1" max="5" ng-required="true" ng-model="commentInput.rating"/>
                     <p class="error-text" ng-show="commentForm.rating.$dirty && commentForm.rating.$invalid">{{'RATING_ERROR' | translate: '{ min: 1, max: 5 }'}}</p>
                     <p class="error-text" ng-show="commentError">{{commentError | translate}}</p>

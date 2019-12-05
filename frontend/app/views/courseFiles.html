@@ -26,17 +26,17 @@
     </div>
     <div class="comment w-100" ng-if="professorId == currentUser.id">
         <div class="button-container">
-            <h2 class="label" ng-bind="'FILE_UPLOAD' | translate"></h2>
+            <h2 class="form-label" ng-bind="'FILE_UPLOAD' | translate"></h2>
         </div>
 
         <form class="form-horizontal" name="form" ng-submit="upload(form)" novalidate>
             <div>
-                <label class="label" for="file" ng-bind="'FILE_SELECT' | translate"></label>
+                <label class="form-label" for="file" ng-bind="'FILE_SELECT' | translate"></label>
                 <input class="input-request" type="file" name="file" file="courseFile.file" size="courseFile.size" />
                 <p class="error-text" ng-show="!courseFile.file || invalidSize">{{'FILE_ERROR' | translate: '{ size: \'10MB\' }'}}</p>
             </div>
             <div>
-                <label class="label" for="description" ng-bind="'DESCRIPTION' | translate"></label>
+                <label class="form-label" for="description" ng-bind="'DESCRIPTION' | translate"></label>
                 <textarea class="input-request" type="text" name="description" rows="5" cols="5" ng-required="true" ng-minlength="5" ng-maxlength="255" ng-model="courseFile.description"></textarea>
                 <p class="error-text" ng-show="form.description.$dirty && form.description.$invalid">{{'DESCRIPTION_SIZE_ERROR' | translate: '{ min: 5, max: 255 }'}}</p>
             </div>

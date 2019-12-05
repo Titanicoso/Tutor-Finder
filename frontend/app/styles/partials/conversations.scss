@@ -49,12 +49,12 @@ and (min-resolution:.001dpcm) {
 
 .conversations, .conversation {
     grid-template-columns: 5fr 90fr 5fr;
-    grid-template-rows: 65px 50px auto 50px;
-    grid-template-areas: "navbar navbar  navbar"
-    "...... ....... ......"
-    "...... content ......"
-    "...... ....... ......"
-;
+    grid-template-rows: 50px auto;
+    grid-template-areas: "...... ....... ......"
+    "...... content ......";
+    display: grid;
+    margin: 0;
+    height: 100%;
 }
 
 .conversations {
@@ -91,7 +91,7 @@ and (min-resolution:.001dpcm) {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    max-height: 200px;
+    height: 65%;
 }
 
 
@@ -149,6 +149,7 @@ and (min-resolution:.001dpcm) {
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
     background-color: #dedede;
+    height: 30%;
 }
 
 .conversations {

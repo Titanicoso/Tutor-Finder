@@ -95,6 +95,7 @@
     border-radius: 5px;
     height: fit-content;
     justify-content: center;
+    min-width: 85%;
 }
 
 .search-bar {
@@ -195,7 +196,7 @@
     font-weight: 600;
 }
 
-.search-result-description {
+.search-result-description, .search-result-description:hover, .search-result-description:focus {
     grid-area: search-result-description;
     font-size: 18px;
     color: #686f7a;
@@ -204,7 +205,7 @@
     text-align: justify;
 }
 
-.search-result-specs {
+.search-result-specs, .search-result-specs:hover, .search-result-specs:focus {
     grid-area: search-result-specs;
     font-weight: 700;
     color: #29303b;
@@ -212,7 +213,7 @@
     justify-self: flex-end;
 }
 
-.search-result-professor {
+.search-result-professor, .search-result-professor:hover, .search-result-professor:focus {
     grid-area: search-result-professor;
     font-size: 18px;
     color: #686f7a;

@@ -1,23 +1,25 @@
 <link rel="stylesheet" type="text/css" href="styles/partials/conversations.css">
 
 <div class="conversation">
-    <div class="conversation-messages">
-        <div class="message" ng-repeat="message in messages" ng-class="{own: message.sender.id === currentUser.id}">
-            <h5 class="message-text" ng-bind="message.sender.name + ': ' + message.text"></h5>
-                <h6 class="conversation-last-time" ng-bind="'SENT_TIME' | translate: { date: message.created } "></h6>
+    <div class="content">
+        <div class="conversation-messages">
+            <div class="message" ng-repeat="message in messages" ng-class="{own: message.sender.id === currentUser.id}">
+                <h5 class="message-text" ng-bind="message.sender.name + ': ' + message.text"></h5>
+                    <h6 class="conversation-last-time" ng-bind="'SENT_TIME' | translate: { date: message.created } "></h6>
+            </div>
         </div>
-    </div>
-
-    <div class="form-container">
-        <form class="form" name="form" novalidate ng-submit="send(form)">
-            <div>
-                <label class="label" for="body" ng-bind="'BODY' | translate"></label>
-                <textarea class="chat-box" type="text" name="body" cols="5" rows="5" ng-required="true" ng-maxlength="1024" ng-model="message.text"></textarea>
-                <p class="error-text" ng-show="form.body.$dirty && form.body.$invalid">{{'MESSAGE_SIZE_ERROR' | translate: '{min: 1, max: 1024}'}}</p>
-            </div>
-            <div class="button-container">
-                <input class="button-2" type="submit" value="{{ 'SEND' | translate }}" ng-disabled="form.$invalid"/>
-            </div>
-        </form>
+    
+        <div class="form-container">
+            <form class="form" name="form" novalidate ng-submit="send(form)">
+                <div>
+                    <label class="form-label" for="body" ng-bind="'BODY' | translate"></label>
+                    <textarea class="chat-box" type="text" name="body" cols="5" rows="5" ng-required="true" ng-maxlength="1024" ng-model="message.text"></textarea>
+                    <p class="error-text" ng-show="form.body.$dirty && form.body.$invalid">{{'MESSAGE_SIZE_ERROR' | translate: '{min: 1, max: 1024}'}}</p>
+                </div>
+                <div class="button-container">
+                    <input class="button-2" type="submit" value="{{ 'SEND' | translate }}" ng-disabled="form.$invalid"/>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

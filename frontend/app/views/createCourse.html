@@ -3,7 +3,7 @@
     <h1 class="center-text" ng-bind="isModifying ? 'MODIFY_COURSE' : 'ADD_COURSE' | translate"></h1>
     <form class="form" name="form" ng-submit="submit(form)" novalidate>
         <div ng-if="!isModifying && availableSubjects.length >= 1">
-            <label class="label" for="subject" ng-bind="'SUBJECT' | translate"></label>
+            <label class="form-label" for="subject" ng-bind="'SUBJECT' | translate"></label>
             <select class="input-request course-select" name="subject" ng-model="courseInput.subject" ng-required="true">
                 <option value="" disabled="true" ng-bind="'SELECT_SUBJECT' | translate"></option>
                 <option ng-repeat="subject in availableSubjects" value="{{ subject.id }}" ng-bind="subject.name"></option>
@@ -11,12 +11,12 @@
             <p class="error-text" ng-show="form.subject.$dirty && form.subject.$invalid">{{'SUBJECT_ERROR' | translate }}</p>
         </div>
         <div>
-            <label class="label" for="description" ng-bind="'DESCRIPTION' | translate"></label>
+            <label class="form-label" for="description" ng-bind="'DESCRIPTION' | translate"></label>
             <textarea class="input-request" type="text" name="description" rows="5" cols="5" ng-required="true" ng-minlength="50" ng-maxlength="300" ng-model="courseInput.description"></textarea>
             <p class="error-text" ng-show="form.description.$dirty && form.description.$invalid">{{'DESCRIPTION_SIZE_ERROR' | translate: '{ min: 50, max: 300 }'}}</p>
         </div>
         <div>
-            <label class="label" for="price" ng-bind="'PRICE' | translate"></label>
+            <label class="form-label" for="price" ng-bind="'PRICE' | translate"></label>
             <input class="input-request" type="number" step="1" name="price" ng-min="1" min="1" ng-required="true" ng-model="courseInput.price"/>
             <p class="error-text" ng-show="form.price.$dirty && form.price.$invalid">{{'PRICE_ERROR' | translate: '{ min: 1 }'}}</p>
         </div>

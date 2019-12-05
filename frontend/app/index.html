@@ -45,12 +45,12 @@
 
 </head>
 
-<body ng-controller="IndexCtrl">
+<body ng-controller="IndexCtrl" class="index-container">
 
   <ng-include class="navbar sticky" src="'views/components/navbar.html'"></ng-include>
 
-  <div class="container content">
-    <div class="" ng-view=""></div>
+  <div>
+    <div class="main-view" ng-view=""></div>
   </div>
   
   <script src="scripts/paths.js"></script>

@@ -3,7 +3,7 @@
     <h1 class="center-text" ng-bind="'ADD_TIMESLOT' | translate"></h1>
     <h1 class="center-text"></h1>
     <form class="form" name="form" ng-submit="submit(form)" novalidate>
-        <label class="label" path="day" ng-bind="'DAY' | translate"></label>
+        <label class="form-label" path="day" ng-bind="'DAY' | translate"></label>
         <select class="select-subject" path="day" ng-required="true" name="day" ng-model="timeslot.day">
             <option selected="selected" disabled="true" value="" ng-bind="'DAY' | translate"></option>
             <option ng-value="1" ng-bind="'MONDAY' | translate"></option>

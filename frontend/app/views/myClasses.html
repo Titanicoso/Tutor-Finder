@@ -1,32 +1,36 @@
-<div class="justify-center">
-        <div class="search-results w-100">
-            <h3 class="search-data" ng-bind="'REQUESTS' | translate"></h3>
-            <h1 ng-if="!requests || requests.data.length < 1" ng-bind="'NO_REQUESTS' | translate"></h1>
-            <div ng-if="requests && requests.data.length > 0">
-                <div class="reservation-course-result" ng-repeat="request in requests.data">
-                    <div class="search-result-img">
-                        <div class="button-2 relative" type="submit" ng-if="request.status === 'UNSPECIFIED'">
-                            <a class="class-button" href="javascript:;" ng-click="approve(request)"></a>
-                            {{'APPROVE' | translate}}
+<div class="reservations">
+    <div class="content">
+        <div class="justify-center">
+            <div class="search-results w-100">
+                <h3 class="search-data" ng-bind="'REQUESTS' | translate"></h3>
+                <h1 ng-if="!requests || requests.data.length < 1" ng-bind="'NO_REQUESTS' | translate"></h1>
+                <div ng-if="requests && requests.data.length > 0">
+                    <div class="reservation-course-result" ng-repeat="request in requests.data">
+                        <a class="conversation-link" ng-href="#!/course/?professorId={{request.course.professor.id}}&subjectId={{request.course.subject.id}}"></a>
+                        <div class="search-result-img">
+                            <div class="button-2 relative" type="submit" ng-if="request.status === 'UNSPECIFIED'">
+                                <a class="class-button" href="javascript:;" ng-click="approve(request)"></a>
+                                {{'APPROVE' | translate}}
+                            </div>
+                            <div class="button-2 relative" type="submit" ng-if="request.status === 'UNSPECIFIED'">
+                                <a class="class-button" href="javascript:;" ng-click="deny(request)"></a>
+                                {{'DENY' | translate}}
+                            </div>
+                            <div class="button-2 relative" type="submit" ng-if="request.status !== 'UNSPECIFIED'">
+                                <a class="class-button" ng-href="#!/course/files/?professorId={{request.course.professor.id}}&subjectId={{request.course.subject.id}}"></a>
+                                {{'FILES' | translate}}
+                            </div>
                         </div>
-                        <div class="button-2 relative" type="submit" ng-if="request.status === 'UNSPECIFIED'">
-                            <a class="class-button" href="javascript:;" ng-click="deny(request)"></a>
-                            {{'DENY' | translate}}
-                        </div>
-                        <div class="button-2 relative" type="submit" ng-if="request.status !== 'UNSPECIFIED'">
-                            <a class="class-button" ng-href="#!/course/files/?professorId={{request.course.professor.id}}&subjectId={{request.course.subject.id}}"></a>
-                            {{'FILES' | translate}}
-                        </div>
+                        <a class="search-result-title" ng-bind="request.course.subject.name"></a>
+                        <a class="search-result-professor" ng-bind="'REQUEST_STUDENT' | translate: { name: request.student.name }"></a>
+                        <a class="search-result-specs" ng-bind="'PRICE_SPEC' | translate: { price: request.course.price }"></a>
+                        <a class="search-result-description">{{'RESERVATION_DAY' | translate: { date: request.start_time } }}<br/>{{'RESERVATION_FROM' | translate: { date: request.start_time } }}{{'RESERVATION_TO' | translate: { date: request.end_time } }}</a>
+                        <span class="search-result-status" ng-switch="request.status">
+                            <a class="search-result-status" ng-switch-when="APPROVED" ng-bind="'APPROVED' | translate"></a>
+                            <a class="search-result-status" ng-switch-when="DENIED" ng-bind="'DENIED' | translate"></a>
+                            <a class="search-result-status" ng-switch-default ng-bind="'PENDING' | translate"></a>
+                        </span>
                     </div>
-                    <a class="search-result-title" ng-bind="request.course.subject.name"></a>
-                    <a class="search-result-professor" ng-bind="'REQUEST_STUDENT' | translate: { name: request.student.name }"></a>
-                    <a class="search-result-specs" ng-bind="'PRICE_SPEC' | translate: { price: request.course.price }"></a>
-                    <a class="search-result-description">{{'RESERVATION_DAY' | translate: { date: request.start_time } }}<br/>{{'RESERVATION_FROM' | translate: { date: request.start_time } }}{{'RESERVATION_TO' | translate: { date: request.end_time } }}</a>
-                    <span ng-switch="request.status">
-                        <a class="search-result-status" ng-switch-when="APPROVED" ng-bind="'APPROVED' | translate"></a>
-                        <a class="search-result-status" ng-switch-when="DENIED" ng-bind="'DENIED' | translate"></a>
-                        <a class="search-result-status" ng-switch-default ng-bind="'PENDING' | translate"></a>
-                    </span>
                 </div>
                 <div class="paged-result-buttons">
                     <ul ng-if="requests.links" uib-pagination total-items="requests.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="current.page" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage(current.page)"></ul>
@@ -34,3 +38,4 @@
             </div>
         </div>
     </div>
+</div>
