@@ -24,7 +24,7 @@ import java.util.List;
 @Transactional
 public class ConversationServiceImpl implements ConversationService {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Logger LOGGER = LoggerFactory.getLogger(ConversationServiceImpl.class);
 
     @Autowired

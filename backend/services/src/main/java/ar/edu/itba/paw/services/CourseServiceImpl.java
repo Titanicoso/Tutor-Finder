@@ -18,7 +18,7 @@ import java.util.Optional;
 @Transactional
 public class CourseServiceImpl implements CourseService {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseServiceImpl.class);
 
     @Autowired

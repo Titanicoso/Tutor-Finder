@@ -21,7 +21,6 @@ define(['tutorFinder', 'services/subjectService', 'services/courseService', 'ser
 						if ($scope.currentUser) {
 							toastService.showAction('SESSION_EXPIRED'); 
 						} 
-						// VER
 						authService.setRedirectUrl($location.path(), $route.current.params);
 						authService.logout();
 						$location.url('/login');

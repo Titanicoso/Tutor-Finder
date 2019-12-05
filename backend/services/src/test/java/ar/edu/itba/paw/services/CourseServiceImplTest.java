@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = TestConfig.class)
 public class CourseServiceImplTest {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Long PROFESSOR_ID = 1L;
     private static final Long SUBJECT_ID = 2L;
     private static final Long INVALID_ID = 666L;

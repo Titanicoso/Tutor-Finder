@@ -18,7 +18,7 @@ import java.util.List;
 @Transactional
 public class AreaServiceImpl implements AreaService {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Logger LOGGER = LoggerFactory.getLogger(AreaServiceImpl.class);
 
     @Autowired

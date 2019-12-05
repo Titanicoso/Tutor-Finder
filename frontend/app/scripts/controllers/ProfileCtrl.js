@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 
 	tutorFinder.controller('ProfileCtrl', ProfileCtrl);
 	
-	ProfileCtrl.$inject = ['$scope', '$rootScope', '$route', '$uibModal', 'authService', 'professorService', 'courseService', 'toastService', '$location'];
-	function ProfileCtrl($scope, $rootScope, $route, $uibModal, authService, professorService, courseService, toastService, $location) {
+	ProfileCtrl.$inject = ['$scope', '$rootScope', '$document', '$route', '$uibModal', 'authService', 'professorService', 'courseService', 'toastService', '$location'];
+	function ProfileCtrl($scope, $rootScope, $document, $route, $uibModal, authService, professorService, courseService, toastService, $location) {
 		$rootScope.appendTitle('PROFILE');
 		var username = $route.current.params.username;
 
@@ -72,9 +72,11 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 		};
 
 		$scope.addTimeslot = function() {
+			var parent = angular.element($document[0].querySelector('.staticProfile'));
 			$uibModal.open({
 				controller: 'TimeslotCtrl',
 				templateUrl: 'views/addTimeslot.html',
+				appendTo: parent,
 				backdrop: 'static'
 			}).result.then(function(answer) {
 				if (answer) {
@@ -88,9 +90,11 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 		};
 
 		$scope.modifyCourse = function(course) {
+			var parent = angular.element($document[0].querySelector('.staticProfile'));
 			$uibModal.open({
 				controller: 'CreateCourseCtrl',
 				templateUrl: 'views/createCourse.html',
+				appendTo: parent,
 				backdrop: 'static',
 				resolve: {
 					course: function() {
@@ -109,9 +113,11 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 		};
 		
 		$scope.editProfile = function() {
+			var parent = angular.element($document[0].querySelector('.staticProfile'));
 			$uibModal.open({
 				controller: 'ModifyProfileCtrl',
 				templateUrl: 'views/modifyProfile.html',
+				appendTo: parent,
 				backdrop: 'static',
 				resolve: {
 					professor: function() {

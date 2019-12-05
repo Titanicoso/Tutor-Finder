@@ -11,6 +11,10 @@ $fa-font-path: '../bower_components/components-font-awesome/fonts';
 
 @import '../../bower_components/angular-material/angular-material.scss';
 
+html {
+  background-color: white;
+}
+
 .browsehappy {
   margin: 0.2em 0;
   background: white;

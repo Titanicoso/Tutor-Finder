@@ -30,7 +30,7 @@ import java.util.Optional;
 @Transactional
 public class ProfessorServiceImpl implements ProfessorService {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Logger LOGGER = LoggerFactory.getLogger(ProfessorServiceImpl.class);
 
     @Autowired

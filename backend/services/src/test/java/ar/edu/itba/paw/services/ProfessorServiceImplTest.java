@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 public class ProfessorServiceImplTest {
 
     private static final String NAME = "Marcos";
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Long INVALID_ID = 666L;
     private static final Long ID = 1L;
     private static final String DESCRIPTION = "Omne duo vim sum nudi uno quod. Latera nullam ad realem passim ii essent ut patere";

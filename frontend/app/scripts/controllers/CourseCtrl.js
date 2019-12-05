@@ -3,8 +3,8 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 
 	tutorFinder.controller('CourseCtrl', CourseCtrl);
 	
-	CourseCtrl.$inject = ['$scope', '$rootScope', '$route', '$uibModal', 'courseService', 'authService', 'toastService', '$location'];
-	function CourseCtrl($scope, $rootScope, $route, $uibModal, courseService, authService, toastService, $location) {
+	CourseCtrl.$inject = ['$scope', '$rootScope', '$document', '$route', '$uibModal', 'courseService', 'authService', 'toastService', '$location'];
+	function CourseCtrl($scope, $rootScope, $document, $route, $uibModal, courseService, authService, toastService, $location) {
 
 		$rootScope.appendTitle('COURSE');
 		$scope.professorId = parseInt($route.current.params.professorId, 10);
@@ -92,9 +92,11 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 		};
 
 		$scope.reserveClass = function() {
+			var parent = angular.element($document[0].querySelector('.staticClass'));
 			$uibModal.open({
 				controller: 'ReserveClassCtrl',
 				templateUrl: 'views/reserveClass.html',
+				appendTo: parent,
 				backdrop: 'static',
 				resolve: {
 					course: function() {

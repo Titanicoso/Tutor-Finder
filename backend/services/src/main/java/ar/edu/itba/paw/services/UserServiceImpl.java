@@ -24,7 +24,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
 
     @Autowired
     private UserDao userDao;
