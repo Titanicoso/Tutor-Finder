@@ -53,9 +53,6 @@ public class CourseServiceImplTest {
     @Mock
     private SubjectService subjectService;
 
-    @Mock
-    private Filter filter;
-
 
     @Before
     public void setUp() {

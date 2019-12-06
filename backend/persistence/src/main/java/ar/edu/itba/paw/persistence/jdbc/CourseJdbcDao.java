@@ -114,7 +114,7 @@ public class CourseJdbcDao implements CourseDao {
     }
 
 
-    public List<Course> filter(Filter filter, int limit, int offset) {
+    /*public List<Course> filter(Filter filter, int limit, int offset) {
         List<Object> params = filter.getQueryParams();
         params.add(limit);
         params.add(offset);
@@ -124,7 +124,7 @@ public class CourseJdbcDao implements CourseDao {
         );
 
         return  courses;
-    }
+    }*/
 
     @Override
     public Course create(final Professor professor, final Subject subject, final String description,
