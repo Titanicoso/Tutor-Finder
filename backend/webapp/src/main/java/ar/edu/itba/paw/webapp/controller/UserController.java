@@ -116,9 +116,14 @@ public class UserController extends BaseController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response schedule(){
         final User loggedUser = loggedUser();
+        final Professor professor = professorService.findById(loggedUser.getId());
+
+        if(professor == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
         final Schedule schedule = scheduleService.getScheduleForProfessor(loggedUser.getId());
-        return Response.ok(schedule).build();
+        return Response.ok(new ScheduleDTO(professor, schedule, uriInfo)).build();
     }
 
     @POST
