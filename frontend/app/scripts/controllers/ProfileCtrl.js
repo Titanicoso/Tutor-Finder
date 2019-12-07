@@ -1,5 +1,5 @@
 'use strict';
-define(['tutorFinder', 'services/authService', 'services/professorService', 'services/courseService', 'controllers/CreateCourseCtrl', 'controllers/ModifyProfileCtrl', 'controllers/TimeslotCtrl'], function(tutorFinder) {
+define(['tutorFinder', 'services/authService', 'services/professorService', 'services/courseService', 'controllers/CreateCourseCtrl', 'controllers/ModifyProfileCtrl', 'controllers/TimeslotCtrl', 'directives/schedule'], function(tutorFinder) {
 
 	tutorFinder.controller('ProfileCtrl', ProfileCtrl);
 	
@@ -71,13 +71,47 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 			});
 		};
 
+		$scope.deleteTimeslot = function() {
+			var parent = angular.element($document[0].querySelector('.staticProfile'));
+			$uibModal.open({
+				controller: 'TimeslotCtrl',
+				templateUrl: 'views/timeslotManagement.html',
+				appendTo: parent,
+				backdrop: 'static',
+				resolve: {
+					schedule: function() {
+						return $scope.schedule;
+					},
+					isDelete: function() {
+						return true;
+					}
+				 }
+			}).result.then(function(answer) {
+				if (answer) {
+					self.getSchedule();
+				}
+			}, function(err) { 
+				switch (err.status) {
+					default: toastService.showAction('OOPS'); break;
+				}
+			});
+		};
+
 		$scope.addTimeslot = function() {
 			var parent = angular.element($document[0].querySelector('.staticProfile'));
 			$uibModal.open({
 				controller: 'TimeslotCtrl',
-				templateUrl: 'views/addTimeslot.html',
+				templateUrl: 'views/timeslotManagement.html',
 				appendTo: parent,
-				backdrop: 'static'
+				backdrop: 'static',
+				resolve: {
+					schedule: function() {
+						return $scope.schedule;
+					},
+					isDelete: function() {
+						return false;
+					}
+				 }
 			}).result.then(function(answer) {
 				if (answer) {
 					self.getSchedule();

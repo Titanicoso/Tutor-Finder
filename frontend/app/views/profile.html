@@ -44,13 +44,16 @@
         <div class="time-content" ng-class="{'time-content-other': !showEditOptions}">
             <div class="row r-center" ng-if="showEditOptions">
                 <div ng-click="addTimeslot()" class="add-time-modal-button button-2" ng-bind="'ADD_TIMESLOT' | translate"></div>
+                <div ng-click="deleteTimeslot()" class="add-time-modal-button button-2" ng-bind="'DELETE_TIMESLOT' | translate"></div>
+            </div>
+            <div class="row r-center" ng-if="showEditOptions">
             </div>
             <div class="schedule">
                 <h2 ng-bind="(showEditOptions ? 'PROFILE_SCHEDULE' : 'SCHEDULE') | translate"></h2>
                 <p ng-bind="(showEditOptions ? 'PROFILE_SCHEDULE_DESCRIPTION' : 'SCHEDULE_DESCRIPTION') | translate"></p>
                 <!-- TODO: ADD SCHEDULE AND CHANGE CONDITION -->
                 <h4 ng-if="!showEditOptions && true" ng-bind="'SCHEDULE_EMPTY' | translate"></h4>
-                <!-- <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include> -->
+                <schedule schedule="schedule"></schedule>
             </div>
         </div> 
     </div>

@@ -1,6 +1,6 @@
 <div class="modify-modal">
     <span class="modal-close" ng-click="close()">&times;</span>
-    <h1 class="center-text" ng-bind="'ADD_TIMESLOT' | translate"></h1>
+    <h1 class="center-text" ng-bind="isDelete ? 'DELETE_TIMESLOT' : 'ADD_TIMESLOT' | translate"></h1>
     <h1 class="center-text"></h1>
     <form class="form" name="form" ng-submit="submit(form)" novalidate>
         <label class="form-label" path="day" ng-bind="'DAY' | translate"></label>
@@ -36,7 +36,7 @@
         <p class="error-text" ng-show="firstSelect && form.start.$invalid" ng-bind="'START_ERROR' | translate"></p>
         <p class="error-text" ng-show="firstSelect && form.end.$invalid" ng-bind="'END_ERROR' | translate"></p>
         <div class="button-container">
-            <input class="button-2" type="submit" value="{{ 'ADD_TIMESLOT' | translate }}" ng-disabled="form.$invalid"/>
+            <input class="button-2" type="submit" value="{{ isDelete ? 'DELETE_TIMESLOT' : 'ADD_TIMESLOT' | translate }}" ng-disabled="form.$invalid"/>
         </div>
     </form>
 </div>

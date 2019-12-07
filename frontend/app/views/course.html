@@ -73,9 +73,7 @@
                 <h2 ng-bind="'SCHEDULE' | translate"></h2>
                 <input ng-if="currentUser == null || currentUser.id != professorId" class="button-2" type="button" value="{{'RESERVE_CLASS' | translate}}" ng-click="reserveClass()"/>
                 <p ng-bind="'SCHEDULE_DESCRIPTION' | translate"></p>
-                <!-- TODO: CHANGE WHEN SCHEDULE ADDED
-                    <ng-include class="navbar" src="'views/components/schedule.html'" /></ng-include> 
-                -->
+                <schedule></schedule>
             </div>
         </div>
     </div>

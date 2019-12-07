@@ -62,13 +62,13 @@ define(['tutorFinder', 'services/subjectService', 'services/courseService', 'ser
 							authService.setRequestRedo({
 								fun: request,
 								params: params,
-								message: 'ERROR_CREATING_COURSE'}
-							);
+								message: $scope.isModifying ? 'ERROR_MODIFYING_COURSE' : 'ERROR_CREATING_COURSE'
+							});
 							$location.url('/login');
 							$modal.close(false);
 							break;
 						}
-						default: toastService.showAction('ERROR_CREATING_COURSE'); break;
+						default: toastService.showAction($scope.isModifying ? 'ERROR_MODIFYING_COURSE' : 'ERROR_CREATING_COURSE'); break;
 					}
 				});
 			}

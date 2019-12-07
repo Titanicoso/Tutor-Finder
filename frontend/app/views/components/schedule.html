@@ -3,28 +3,28 @@
         <th>
         </th>
         <th>
-            <a><spring:message code="day.monday"/></a>
+            <a ng-bind="'MONDAY' | translate"></a>
         </th>
         <th>
-            <a><spring:message code="day.tuesday"/></a>
+            <a ng-bind="'TUESDAY' | translate"></a>
         </th>
         <th>
-            <a><spring:message code="day.wednesday"/></a>
+            <a ng-bind="'WEDNESDAY' | translate"></a>
         </th>
         <th>
-            <a><spring:message code="day.thursday"/></a>
+            <a ng-bind="'THURSDAY' | translate"></a>
         </th>
         <th>
-            <a><spring:message code="day.friday"/></a>
+            <a ng-bind="'FRIDAY' | translate"></a>
         </th>
         <th>
-            <a><spring:message code="day.saturday"/></a>
+            <a ng-bind="'SATURDAY' | translate"></a>
         </th>
         <th>
-            <a><spring:message code="day.sunday"/></a>
+            <a ng-bind="'SUNDAY' | translate"></a>
         </th>
     </tr>
-    <c:forEach var="i" begin="1" end="24">
+    <!-- <c:forEach var="i" begin="1" end="24">
         <c:if test="${schedule.monday.contains(i) || schedule.tuesday.contains(i) || schedule.wednesday.contains(i) || schedule.thursday.contains(i) || schedule.friday.contains(i) || schedule.saturday.contains(i) || schedule.sunday.contains(i)}">
             <tr>
                 <td class="hour">${i}:00 - ${i+1}:00</td>
@@ -86,5 +86,5 @@
                 </c:choose>
             </tr>
         </c:if>
-    </c:forEach>
+    </c:forEach> -->
 </table>

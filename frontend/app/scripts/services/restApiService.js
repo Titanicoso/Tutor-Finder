@@ -60,9 +60,15 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
                 });
         };
 
-        this.delete = function(url) {
+        this.delete = function(url, data) {
 
             var authHeaders = authService.getAuthHeaders();
+            if (data) {
+                authHeaders = authHeaders === null ? {} : authHeaders;
+                authHeaders.data = JSON.stringify(data);
+                authHeaders.headers = authHeaders.headers === undefined ? {} : authHeaders.headers;
+                authHeaders.headers['Content-type'] = 'application/json';
+            }
             return $http.delete(apiBaseUrl + '/' + url, authHeaders)
                 .then(function(response) {
                     return response.data;
@@ -78,6 +84,8 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
             var payload = data;
 
             if (isMultipart) {
+                authHeaders = authHeaders === null ? {} : authHeaders;
+                authHeaders.headers = authHeaders.headers === undefined ? {} : authHeaders.headers; 
                 authHeaders.headers['Content-type'] = undefined;
             } else {
                 payload = JSON.stringify(data);
@@ -98,6 +106,8 @@ define(['tutorFinder', 'services/authService'], function(tutorFinder) {
             var payload = data;
 
             if (isMultipart) {
+                authHeaders = authHeaders === null ? {} : authHeaders;
+                authHeaders.headers = authHeaders.headers === undefined ? {} : authHeaders.headers; 
                 authHeaders.headers['Content-type'] = undefined;
             } else {
                 payload = JSON.stringify(data);

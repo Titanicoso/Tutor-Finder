@@ -49,13 +49,13 @@ define(['tutorFinder', 'directives/fileRead', 'services/userService', 'services/
 							authService.setRequestRedo({
 								fun: request,
 								params: [$scope.professorInput.description, $scope.professorInput.picture],
-								message: 'ERROR_MODIFYING'
+								message: $scope.isModifying ? 'ERROR_MODIFYING' : 'ERROR_UPGRADING'
 							});
 							$location.url('/login');
 							$modal.close(false);
 							break;
 						}
-						default: toastService.showAction('ERROR_MODIFYING'); break;
+						default: toastService.showAction($scope.isModifying ? 'ERROR_MODIFYING' : 'ERROR_UPGRADING'); break;
 					}
 				});
 			}

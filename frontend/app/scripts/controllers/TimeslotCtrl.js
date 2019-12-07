@@ -3,13 +3,14 @@ define(['tutorFinder', 'services/professorService', 'services/authService'], fun
 
 	tutorFinder.controller('TimeslotCtrl', TimeslotCtrl);
 	
-	TimeslotCtrl.$inject = ['$scope', '$uibModalInstance', 'professorService', 'toastService', 'authService', '$location', '$route'];
-	function TimeslotCtrl($scope, $modal, professorService, toastService, authService, $location, $route) {
+	TimeslotCtrl.$inject = ['$scope', '$uibModalInstance', 'professorService', 'toastService', 'authService', '$location', '$route', 'schedule', 'isDelete'];
+	function TimeslotCtrl($scope, $modal, professorService, toastService, authService, $location, $route, schedule, isDelete) {
 		
 		$scope.availableStartTimes = [];
 		$scope.availableEndTimes = [];
 		$scope.timeslot = {day: undefined, start: undefined, end: undefined};
 		$scope.firstSelect = false;
+		$scope.isDelete = isDelete;
 
 		this.initStartTimes = function() {
 			for (var i = 7; i <= 22; i++) {
@@ -36,8 +37,11 @@ define(['tutorFinder', 'services/professorService', 'services/authService'], fun
 
 		$scope.submit = function(form) {
 			if (form.$valid) {
-				professorService.addTimeslot($scope.timeslot.day, $scope.timeslot.start, $scope.timeslot.end)
-				.then(function() {
+
+				var request = isDelete ? professorService.deleteTimeslot($scope.timeslot.day, $scope.timeslot.start, 
+					$scope.timeslot.end) : professorService.addTimeslot($scope.timeslot.day, $scope.timeslot.start, $scope.timeslot.end);
+
+				request.then(function() {
 					$scope.timeslot = {day: undefined, start: undefined, end: undefined};
 					form.$setPristine();
 					$modal.close(true);
@@ -46,21 +50,23 @@ define(['tutorFinder', 'services/professorService', 'services/authService'], fun
 					switch (err.status) {
 						case -1: toastService.showAction('NO_CONNECTION'); break;
 						case 401: {
+							var request = isDelete ? professorService.deleteTimeslot : professorService.addTimeslot;
+
 							if ($scope.currentUser) {
 								toastService.showAction('SESSION_EXPIRED'); 
 							}
 							authService.setRedirectUrl($location.path(), $route.current.params);
 							authService.logout();
 							authService.setRequestRedo({
-								fun: professorService.addTimeslot,
+								fun: request,
 								params: [$scope.timeslot.day, $scope.timeslot.start, $scope.timeslot.end],
-								message: 'ERROR_ADDING_TIMESLOT'
+								message: isDelete ? 'ERROR_DELETING_TIMESLOT' : 'ERROR_ADDING_TIMESLOT'
 							});
 							$location.url('/login');
 							$modal.close(false);
 							break;
 						}
-						default: toastService.showAction('ERROR_ADDING_TIMESLOT'); break;
+						default: toastService.showAction(isDelete ? 'ERROR_DELETING_TIMESLOT' : 'ERROR_ADDING_TIMESLOT'); break;
 					}
 				});
 			}

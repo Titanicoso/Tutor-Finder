@@ -55,6 +55,10 @@ define(['tutorFinder', 'services/restApiService'], function(tutorFinder) {
         this.addTimeslot = function(day, startHour, endHour) {
             return restService.post('user/schedule', {startHour: startHour, endHour: endHour, day: day});
         };
+
+        this.deleteTimeslot = function(day, startHour, endHour) {
+            return restService.delete('user/schedule', {startHour: startHour, endHour: endHour, day: day});
+        };
     }]);
 
 });
