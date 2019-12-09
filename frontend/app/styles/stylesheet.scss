@@ -16,6 +16,11 @@ textarea {
     background-color: white;
 }
 
+.button-2:disabled {
+    background-color: #F7AA88;
+    cursor: default;
+}
+
 .logo {
     height: 50px;
     padding-right: 10px;
