@@ -7,16 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class JwtTokenManager {
@@ -26,9 +23,10 @@ public class JwtTokenManager {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    public String generateToken(final String username) {
+    @Resource(name = "jwtSignKey")
+    private byte[] signingKey;
 
-        byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
+    public String generateToken(final String username) {
 
         return Jwts.builder()
                 .signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
@@ -43,7 +41,6 @@ public class JwtTokenManager {
     public UsernamePasswordAuthenticationToken getAuthentication(final String token) {
         if (!StringUtils.isEmpty(token) && token.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             try {
-                byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
 
                 Jws<Claims> parsedToken = Jwts.parser()
                         .setSigningKey(signingKey)
