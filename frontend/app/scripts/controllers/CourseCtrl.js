@@ -1,10 +1,10 @@
 'use strict';
-define(['tutorFinder', 'services/courseService', 'services/authService', 'controllers/ReserveClassCtrl'], function(tutorFinder) {
+define(['tutorFinder', 'services/courseService', 'services/authService', 'controllers/ReserveClassCtrl', 'services/professorService'], function(tutorFinder) {
 
 	tutorFinder.controller('CourseCtrl', CourseCtrl);
 	
-	CourseCtrl.$inject = ['$scope', '$rootScope', '$document', '$route', '$uibModal', 'courseService', 'authService', 'toastService', '$location'];
-	function CourseCtrl($scope, $rootScope, $document, $route, $uibModal, courseService, authService, toastService, $location) {
+	CourseCtrl.$inject = ['$scope', '$rootScope', '$document', '$route', '$uibModal', 'courseService', 'authService', 'toastService', '$location', 'professorService'];
+	function CourseCtrl($scope, $rootScope, $document, $route, $uibModal, courseService, authService, toastService, $location, professorService) {
 
 		$rootScope.appendTitle('COURSE');
 		$scope.professorId = parseInt($route.current.params.professorId, 10);
@@ -30,11 +30,26 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 
 		$scope.current = {};
 		$scope.current.page = 1;
+		var self = this;
+
+		this.getSchedule = function (professor) {
+			professorService.getProfessorSchedule(professor.username)
+			.then(function(response) {
+				$scope.schedule = response;
+			})
+			.catch(function(err) {
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
+			});
+		};
 
 		courseService.getCourse($scope.professorId, subjectId)
 		.then(function(course) {
 			$scope.course = course;
 			$scope.canComment = $scope.canComment || course.canComment;
+			self.getSchedule(course.professor);
 			return courseService.getComments($scope.professorId, subjectId, 1);
 		})
 		.then(function(comments) {
@@ -101,6 +116,9 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 				resolve: {
 					course: function() {
 						return $scope.course;
+					},
+					schedule: function() {
+						return $scope.schedule;
 					}
 				 }
 			}).result.then(function() {

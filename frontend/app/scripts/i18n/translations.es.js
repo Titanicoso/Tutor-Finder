@@ -121,6 +121,7 @@ define([], function() {
 		SESSION_EXPIRED: 'Venció su sesión, por favor ingrese nuevamente',
 		ADD_TIMESLOT: 'Agregar horario',
 		DELETE_TIMESLOT: 'Eliminar horario',
+		SAME_USER_RESERVATION: 'No puedes hacer una reserva para tu propio curso',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
@@ -160,6 +161,7 @@ define([], function() {
 		ERROR_DENYING: 'Ocurrió un error al intentar denegar la solicitud',
 		ERROR_MODIFYING: 'Ocurrió un error al intentar modificar el perfil',
 		ERROR_UPGRADING: 'Ocurrió un error al intentar registrar el usuario como profesor',
+		ERROR_RESERVING: 'Ocurrió un error al intentar reservar la clase',
 		ERROR_CREATING_COURSE: 'Ocurrió un error al intentar crear el curso',
 		ERROR_MODIFYING_COURSE: 'Ocurrió un error al intentar modificar el curso',
 		ERROR_DELETING_COURSE: 'Ocurrió un error al intentar eliminar el curso',
@@ -175,6 +177,7 @@ define([], function() {
 		ERROR_TITLE: 'Ha habido un error :(',
 		ERROR_MSG: 'No se ha podido efectuar la accion solicitada',
 		TIMESLOT_DAY_ERROR: 'Debe seleccionar un día',
-		ADD_TIMESLOT_ERROR: 'El horario ya fue seleccionado previamente'
+		ADD_TIMESLOT_ERROR: 'El horario ya fue seleccionado previamente',
+		NOT_AVAILABLE_TIME: 'El profesor no esta disponible en el rango horario que eligio'
 	};
 });
