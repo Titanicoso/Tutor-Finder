@@ -18,7 +18,7 @@ define(['tutorFinder', 'services/authService', 'services/toastService'], functio
 	
 		$scope.login = function() {
 			if ($scope.form.$valid) {
-				
+				$scope.error = false;
 				authService.login($scope.loginForm.username, $scope.loginForm.password, $scope.loginForm.rememberMe)
 				.then(function() {
 					var redirect = authService.getRedirectUrl();
@@ -42,7 +42,10 @@ define(['tutorFinder', 'services/authService', 'services/toastService'], functio
 					}
 				})
 				.catch(function(err) {
-					$scope.error = true;
+					switch (err.status) {
+						case -1: toastService.showAction('NO_CONNECTION'); break;
+						default: $scope.error = true; break;
+					}
 				});
 			}
 		};
