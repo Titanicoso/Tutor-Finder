@@ -124,6 +124,7 @@ define([], function() {
 		SAME_USER_RESERVATION: 'No puedes hacer una reserva para tu propio curso',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
+		RESERVE_SUCCESS: 'La reserva fue exitosa',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
 
 		MESSAGE_SIZE_ERROR: 'El mensaje debe tener entre {{min}} y {{max}} caracteres',

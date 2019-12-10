@@ -95,8 +95,8 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 							authService.setRequestRedo({
 								fun: courseService.contact,
 								params: [$scope.professorId, subjectId, $scope.contactInput.body],
-								message: 'ERROR_SENDING_MESSGE'}
-							);
+								message: 'ERROR_SENDING_MESSGE',
+								successMessage: 'CONTACT_SUCCESS'});
 							$location.url('/login');
 							break;
 						}

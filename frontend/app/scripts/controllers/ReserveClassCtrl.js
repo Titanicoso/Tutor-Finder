@@ -1,9 +1,9 @@
 'use strict';
-define(['tutorFinder', 'services/courseService'], function(tutorFinder) {
+define(['tutorFinder', 'services/courseService', 'services/authService', 'services/toastService'], function(tutorFinder) {
 
 	tutorFinder.controller('ReserveClassCtrl', ReserveClassCtrl);	
-	ReserveClassCtrl.$inject = ['$scope', '$uibModalInstance', 'courseService', 'course', 'schedule'];
-	function ReserveClassCtrl($scope, $modal, courseService, course, schedule) {
+	ReserveClassCtrl.$inject = ['$scope', '$uibModalInstance', 'courseService', 'course', 'schedule', 'authService', 'toastService', '$location', '$route'];
+	function ReserveClassCtrl($scope, $modal, courseService, course, schedule, authService, toastService, $location, $route) {
 
 		$scope.minDate = new Date();
 		var self = this;
@@ -163,7 +163,8 @@ define(['tutorFinder', 'services/courseService'], function(tutorFinder) {
 								fun: courseService.reserve,
 								params: [course.professor.id, course.subject.id, $scope.reservation.date, 
 									$scope.reservation.start, $scope.reservation.end],
-								message: 'ERROR_RESERVING'
+								message: 'ERROR_RESERVING',
+								successMessage: 'RESERVE_SUCCESS'
 							});
 							$location.url('/login');
 							break;
