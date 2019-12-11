@@ -7,7 +7,7 @@
             <div class="inputs">
                 <div>
                     <label class="form-label" for="name" ng-bind="'NAME' | translate"></label>
-                    <input class="input-request" type="text" name="name" ng-required="true" ng-pattern="regex" ng-maxlength="128" ng-model="register.name"/>
+                    <input class="input-request" id="register-name" type="text" name="name" ng-required="true" ng-pattern="regex" ng-maxlength="128" ng-model="register.name"/>
                     <p class="error-text" ng-show="form.name.$dirty && (form.name.$error.maxlength || form.name.$error.required)">{{'NAME_SIZE_ERROR' | translate: '{min: 1, max: 128}'}}</p>
                     <p class="error-text" ng-show="form.name.$dirty && form.name.$error.pattern">{{'NAME_PATTERN_ERROR' | translate}}</p>
                 </div>

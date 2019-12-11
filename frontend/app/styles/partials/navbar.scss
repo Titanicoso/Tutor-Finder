@@ -21,11 +21,12 @@
 
 .logo-box {
     grid-area: logo-box;
-    margin-top: 7px;
     width: -webkit-fit-content;
     width: -moz-fit-content;
-    width: fit-content;
-    max-height: 50px;
+    display: grid;
+    align-self: center;
+    width: 50px;
+    height: 50px;
 }
 
 .navbar-buttons {
@@ -106,7 +107,7 @@
         max-width: 85px;
     }
     .navbar .search-input {
-        max-width: 150px;
+        max-width: 100px;
     }
 
     .search-input {
@@ -131,9 +132,5 @@
 
     .navbar-button {
         margin-left: 0px;
-    }
-
-    .navbar .search-input {
-        max-width: 200px;
     }
 }

@@ -3,7 +3,7 @@
         <img alt="{{ 'APP_NAME' | translate }}" class="search-logo" ng-src="images/logo.png" />
         <form ng-submit="search()" novalidate>
             <div class="search-bar">
-                <input class="search-input" type="search" placeholder="{{ 'SEARCH' | translate }}" ng-model="query.query">
+                <input class="search-input" type="search" autofocus placeholder="{{ 'SEARCH' | translate }}" ng-model="query.query">
                 <div class="search-dropdown">
                     <select class="select-searchbar-type" ng-model="query.category">
                         <option value="" disabled="true" ng-bind="'SEARCH_CATEGORY' | translate"></option>

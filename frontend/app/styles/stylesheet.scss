@@ -22,8 +22,8 @@ textarea {
 }
 
 .logo {
-    height: 50px;
-    padding-right: 10px;
+    height: inherit;
+    width: inherit;
 }
 
 .main-view {
@@ -244,7 +244,7 @@ button {
     margin: 40px 0;
     display: grid;
     grid-template-columns: 150px auto;
-    grid-template-rows: 50px 100px;
+    grid-template-rows: 50px auto;
     grid-template-areas:
             "profile-picture profile-name"
             "profile-picture profile-description"
@@ -262,7 +262,7 @@ button {
     display: grid;
     grid-template-columns: 80px auto;
     grid-template-rows: 20px auto;
-    grid-template-areas: 
+    grid-template-areas:
         "profile-picture profile-name"
         "profile-picture profile-description"
 }
@@ -311,15 +311,16 @@ button {
         "description description"
         "class-content       time-content"
         ;
-    
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .class-content {
     grid-area: class-content;
     display: grid;
     margin:25px 0;
-    grid-template-rows: 50px auto;
-    grid-template-areas: 
+    grid-template-rows: auto auto;
+    grid-template-areas:
             "add-class"
             "classes"
             ;
@@ -499,6 +500,7 @@ button {
     font-size: 15px;
     color: #402039;
     width: 100%;
+    height: 100px;
 }
 
 .input-request-filter {
