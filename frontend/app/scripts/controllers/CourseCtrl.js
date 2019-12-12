@@ -1,5 +1,5 @@
 'use strict';
-define(['tutorFinder', 'services/courseService', 'services/authService', 'controllers/ReserveClassCtrl', 'services/professorService'], function(tutorFinder) {
+define(['tutorFinder', 'services/courseService', 'services/authService', 'controllers/ReserveClassCtrl', 'services/professorService', 'directives/schedule'], function(tutorFinder) {
 
 	tutorFinder.controller('CourseCtrl', CourseCtrl);
 	

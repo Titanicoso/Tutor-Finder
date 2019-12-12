@@ -51,9 +51,8 @@
             <div class="schedule">
                 <h2 ng-bind="(showEditOptions ? 'PROFILE_SCHEDULE' : 'SCHEDULE') | translate"></h2>
                 <p ng-bind="(showEditOptions ? 'PROFILE_SCHEDULE_DESCRIPTION' : 'SCHEDULE_DESCRIPTION') | translate"></p>
-                <!-- TODO: ADD SCHEDULE AND CHANGE CONDITION -->
-                <h4 ng-if="!showEditOptions && true" ng-bind="'SCHEDULE_EMPTY' | translate"></h4>
-                <schedule schedule="schedule"></schedule>
+                <h4 ng-if="!showEditOptions && (!schedule || schedule.days.length === 0)" ng-bind="'SCHEDULE_EMPTY' | translate"></h4>
+                <schedule ng-if="schedule && schedule.days.length > 0" schedule="schedule"></schedule>
             </div>
         </div> 
     </div>
