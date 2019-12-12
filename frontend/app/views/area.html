@@ -1,13 +1,15 @@
-<div class="staticSearchResults body" ng-if="area">
+<div class="body" ng-if="area">
+    <div class="staticSearchResults">
+        <div class="content">
+            <div class="search-results">
+                <h3 ng-bind="'AREA_SEARCH' | translate: { area: area.name }"></h3>
+                <h4 ng-if="!courses || courses.data.length < 1" ng-bind="'NO_RESULTS' | translate"></h4>
+                <course-results ng-if="courses && courses.data.length > 0" results="courses.data" /></course-results>
 
-    <div class="search-results">
-        <h3 ng-bind="'AREA_SEARCH' | translate: { area: area.name }"></h3>
-        <h4 ng-if="!courses || courses.data.length < 1" ng-bind="'NO_RESULTS' | translate"></h4>
-        <course-results ng-if="courses && courses.data.length > 0" results="courses.data" /></course-results>
-
-
-        <div class="paged-result-buttons">
-            <ul ng-if="courses.links" uib-pagination total-items="courses.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="current.page" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage(current.page)"></ul>
+                <div class="paged-result-buttons">
+                    <ul ng-if="courses.links" uib-pagination total-items="courses.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="current.page" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage(current.page)"></ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
