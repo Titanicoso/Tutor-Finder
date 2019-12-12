@@ -124,7 +124,7 @@ define([], function() {
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		FORBIDDEN_COMMENT: 'No puede comentar en una clase a la que no asistió',
-
+		DELETE_HELP: 'Todo horario dentro del rango seleccionado será eliminado',
 		MESSAGE_SIZE_ERROR: 'El mensaje debe tener entre {{min}} y {{max}} caracteres',
 		DESCRIPTION_SIZE_ERROR: 'La descripción debe tener entre {{min}} y {{max}} caracteres',
 		COMMENT_SIZE_ERROR: 'El comentario debe tener entre {{min}} y {{max}} caracteres',
