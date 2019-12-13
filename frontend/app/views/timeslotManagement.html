@@ -1,6 +1,6 @@
 <div class="modify-modal">
     <span class="modal-close" ng-click="close()">&times;</span>
-    <h1 class="center-text" ng-bind="isDelete ? 'DELETE_TIMESLOT' : 'ADD_TIMESLOT' | translate"></h1>
+    <h1 class="center-text">{{isDelete ? 'DELETE_TIMESLOT' : 'ADD_TIMESLOT' | translate}} <span class="fa help-icon fa-info-circle" ng-if="isDelete" title="{{'DELETE_HELP' | translate}}"></span></h1>
     <h1 class="center-text"></h1>
     <form class="form" name="form" ng-submit="submit(form)" novalidate>
         <label class="form-label" path="day" ng-bind="'DAY' | translate"></label>

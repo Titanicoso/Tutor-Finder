@@ -12,15 +12,13 @@ define(['tutorFinder', 'services/userService', 'services/authService'], function
 		$scope.restoreResponse = {};
 
 		if (token) {
+			$scope.newPassword = true;
 			userService.forgotPasswordValidity(token)
 			.then(function() {
 				$scope.validToken = true;
 			})
 			.catch(function() {
 				$scope.validToken = false;
-			})
-			.then(function() {
-				$scope.newPassword = true;
 			});
 			$scope.restoreInput = {password: '', repeatPassword: ''};
 		} else {

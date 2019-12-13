@@ -2,23 +2,25 @@
 define(['tutorFinder', 'services/authService', 'services/toastService'], function(tutorFinder) {
 
 	tutorFinder.controller('LoginCtrl', LoginCtrl);
-	
+
 	LoginCtrl.$inject = ['$scope', '$rootScope', '$location', 'authService', 'toastService'];
 	function LoginCtrl($scope, $rootScope, $location, authService, toastService) {
 		$rootScope.appendTitle('LOGIN');
 
-		$scope.loginForm = { 
-			username: '', 
-			password: '', 
-			rememberMe: false 
+    $('#username').focus();
+
+		$scope.loginForm = {
+			username: '',
+			password: '',
+			rememberMe: false
 		};
 
 		$scope.error = false;
 		var self = this;
-	
+
 		$scope.login = function() {
 			if ($scope.form.$valid) {
-				
+				$scope.error = false;
 				authService.login($scope.loginForm.username, $scope.loginForm.password, $scope.loginForm.rememberMe)
 				.then(function() {
 					var redirect = authService.getRedirectUrl();
@@ -45,7 +47,10 @@ define(['tutorFinder', 'services/authService', 'services/toastService'], functio
 					}
 				})
 				.catch(function(err) {
-					$scope.error = true;
+					switch (err.status) {
+						case -1: toastService.showAction('NO_CONNECTION'); break;
+						default: $scope.error = true; break;
+					}
 				});
 			}
 		};

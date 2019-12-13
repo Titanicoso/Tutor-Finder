@@ -2,11 +2,13 @@
 define(['tutorFinder', 'services/authService'], function(tutorFinder) {
 
 	tutorFinder.controller('RegisterCtrl', RegisterCtrl);
-	
+
 	RegisterCtrl.$inject = ['$scope', '$rootScope', '$location', 'authService', 'toastService'];
 	function RegisterCtrl($scope, $rootScope, $location, authService, toastService) {
 		$rootScope.appendTitle('REGISTER');
-		$scope.regex = '[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+';
+    $('#register-name').focus();
+
+    $scope.regex = '[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+';
 		$scope.register = {name: '', lastname: '', email: '', username: '', password: '', repeatPassword: ''};
 
 		$scope.submit = function(form) {

@@ -5,5 +5,5 @@
     <a class="search-result-professor" ng-bind="course.professor.name"></a>
     <a class="search-result-specs" ng-bind="'PRICE_SPEC' | translate: { price: course.price }"></a>
     <a class="search-result-description" ng-bind="course.description"></a>
-    <a class="search-result-rating" ng-bind="'RATING_SPEC' | translate: { rating: course.rating ? course.rating : '-' }"></a>
+    <a class="search-result-rating" ng-bind="'RATING_SPEC' | translate: { rating: course.rating ? (course.rating | number: 1.2) : '-' }"></a>
 </div>

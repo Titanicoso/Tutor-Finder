@@ -12,6 +12,7 @@
 
 .staticSearchResults .content {
     display: grid;
+    margin-bottom: 50px;
     grid-column-gap: 20px;
     grid-template-columns: 25fr 75fr 25fr;
     grid-template-areas: "filter-panel search-results -----"
@@ -90,8 +91,9 @@
     background-color: #dedede;
     justify-self: center;
     padding: 20px;
-    margin-top: 50px;
-    margin-right: 20px;
+    margin: 50px 20px 0 20px;
+    //margin-top: 50px;
+    //margin-right: 20px;
     border-radius: 5px;
     height: fit-content;
     justify-content: center;

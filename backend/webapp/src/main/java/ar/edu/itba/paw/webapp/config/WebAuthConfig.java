@@ -13,7 +13,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -37,8 +36,8 @@ import java.io.StringWriter;
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("classpath:rememberme.key")
-    private Resource rememberMeKey;
+    @Value("classpath:jwtsign.key")
+    private Resource jwtSignKey;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -51,6 +50,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtAuthorizationFilter authorizationFilter;
+
+    private byte[] jwtSignKeyBytes;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -107,13 +108,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable();
     }
 
-    @Override
-    public void configure(final WebSecurity web) throws Exception {
-        web.ignoring()
-                .antMatchers("/resources/css/**", "/resources/js/**", "/resources/images/**",
-                        "/favicon.ico", "/403");
-    }
-
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
@@ -125,10 +119,16 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    private String getRememberMeKey() {
+    @Bean(name="jwtSignKey")
+    public byte[] getJwtSignKey() {
+
+        if (jwtSignKeyBytes != null && jwtSignKeyBytes.length > 0) {
+            return jwtSignKeyBytes;
+        }
+
         final StringWriter stringWriter = new StringWriter();
         try {
-            Reader reader = new InputStreamReader(rememberMeKey.getInputStream());
+            Reader reader = new InputStreamReader(jwtSignKey.getInputStream());
             char[] data = new char[1024];
             int read;
             while ((read = reader.read(data)) != -1) {
@@ -137,7 +137,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return stringWriter.toString();
+
+        jwtSignKeyBytes = stringWriter.toString().getBytes();
+        return jwtSignKeyBytes;
     }
 
 }
