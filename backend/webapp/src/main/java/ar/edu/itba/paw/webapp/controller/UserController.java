@@ -5,7 +5,6 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.auth.JwtTokenManager;
 import ar.edu.itba.paw.webapp.auth.SecurityConstants;
-import ar.edu.itba.paw.webapp.auth.StatelessSuccessHandler;
 import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.dto.form.*;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;

@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.ClassReservationStatus;
-import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.webapp.utils.LocalDateTimeXmlAdapter;
 import org.joda.time.LocalDateTime;
 

@@ -4,7 +4,6 @@ import ar.edu.itba.paw.webapp.validator.FileSize;
 import ar.edu.itba.paw.webapp.validator.FileType;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 

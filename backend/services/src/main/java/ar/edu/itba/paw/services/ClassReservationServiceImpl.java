@@ -5,16 +5,18 @@ import ar.edu.itba.paw.interfaces.persistence.ClassReservationDao;
 import ar.edu.itba.paw.interfaces.service.ClassReservationService;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.ClassReservation;
+import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.Professor;
+import ar.edu.itba.paw.models.User;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.joda.time.LocalDateTime;
 
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @Service
 @Transactional

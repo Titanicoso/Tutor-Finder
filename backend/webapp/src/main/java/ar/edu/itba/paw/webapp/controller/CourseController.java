@@ -5,7 +5,6 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.dto.CommentDTO;
 import ar.edu.itba.paw.webapp.dto.CourseDTO;
-import ar.edu.itba.paw.webapp.dto.ErrorDTO;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.dto.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;

@@ -9,8 +9,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.thymeleaf.TemplateEngine;
 
-import javax.persistence.Basic;
-
 @ComponentScan({ "ar.edu.itba.paw.services"})
 @Configuration
 public class TestConfig {

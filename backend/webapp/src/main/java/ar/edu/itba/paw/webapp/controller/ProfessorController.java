@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.*;
-import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.PagedResults;
+import ar.edu.itba.paw.models.Professor;
+import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.webapp.dto.CourseDTO;
 import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
 import ar.edu.itba.paw.webapp.dto.ScheduleDTO;

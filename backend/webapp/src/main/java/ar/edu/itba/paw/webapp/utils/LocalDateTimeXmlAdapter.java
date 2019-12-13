@@ -1,9 +1,10 @@
 package ar.edu.itba.paw.webapp.utils;
 
-import java.util.Date;
+import org.joda.time.LocalDateTime;
+
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import org.joda.time.LocalDateTime;
+import java.util.Date;
 
 @XmlTransient
 public class LocalDateTimeXmlAdapter extends XmlAdapter<Date, LocalDateTime> {

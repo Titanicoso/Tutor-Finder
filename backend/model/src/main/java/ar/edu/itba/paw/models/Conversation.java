@@ -4,7 +4,6 @@ import org.hibernate.annotations.Formula;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
-import java.util.LinkedList;
 import java.util.List;
 
 @Entity

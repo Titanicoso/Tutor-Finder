@@ -2,7 +2,6 @@ package ar.edu.itba.paw.interfaces.persistence;
 
 import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.Course;
-import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import org.joda.time.LocalDateTime;
 
