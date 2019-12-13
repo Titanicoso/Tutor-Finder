@@ -79,13 +79,14 @@ FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 
 CREATE TABLE IF NOT EXISTS course_requests (
 id BIGSERIAL PRIMARY KEY,
-student_id BIGINT NOT NULL,
-professor_id BIGINT NOT NULL,
+course_user_id BIGINT NOT NULL,
+course_subject_id BIGINT NOT NULL,
+student_user_id BIGINT NOT NULL,
 day INT NOT NULL,
-start_hour INT NOT NULL,
-end_hour INT NOT NULL,
+starttime TIMESTAMP NOT NULL,
+endtime TIMESTAMP NOT NULL,
 status INT NOT NULL,
-comment VARCHAR(200),
-FOREIGN KEY(student_id) REFERENCES users(user_id) ON DELETE CASCADE,
-FOREIGN KEY(professor_id) REFERENCES professors(user_id) ON DELETE CASCADE
+comment VARCHAR(255),
+FOREIGN KEY(student_user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+FOREIGN KEY(course_user_id, course_subject_id) courses(user_id, subject_id) ON DELETE CASCADE
 );
