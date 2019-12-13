@@ -23,7 +23,8 @@ define(['tutorFinder', 'services/authService', 'controllers/ModifyProfileCtrl', 
 		};
 
 		$rootScope.resetFilters = function() {
-			$rootScope.filters = {query: '', category: 'course'};
+			var category = $rootScope.filters.category ? $rootScope.filters.category : 'course';
+			$rootScope.filters = {query: '', category: category};
 		};
 
 		$scope.home = function() {

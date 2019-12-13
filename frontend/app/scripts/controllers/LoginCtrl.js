@@ -29,6 +29,9 @@ define(['tutorFinder', 'services/authService', 'services/toastService'], functio
 					if (requestRedo !== undefined) {
 						var request = requestRedo.fun.apply(null, requestRedo.params);
 						request.then(function() {
+							if (requestRedo.successMessage) {
+								toastService.showAction(requestRedo.successMessage);
+							}
 							self.redirect(redirect);
 						})
 						.catch(function(err) {

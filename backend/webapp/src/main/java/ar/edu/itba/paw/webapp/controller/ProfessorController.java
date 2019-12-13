@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.dto.CourseDTO;
 import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
+import ar.edu.itba.paw.webapp.dto.ScheduleDTO;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.slf4j.Logger;
@@ -131,7 +132,7 @@ public class ProfessorController extends BaseController{
         }
 
         final Schedule schedule = ss.getScheduleForProfessor(professor.getId());
-        return Response.ok(schedule).build();
+        return Response.ok(new ScheduleDTO(professor, schedule, uriInfo)).build();
     }
 
     @GET
