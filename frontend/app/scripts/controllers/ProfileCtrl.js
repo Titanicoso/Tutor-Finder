@@ -1,28 +1,31 @@
 'use strict';
-define(['tutorFinder', 'services/authService', 'services/professorService', 'services/courseService', 'controllers/CreateCourseCtrl', 'controllers/ModifyProfileCtrl', 'controllers/TimeslotCtrl', 'directives/schedule'], function(tutorFinder) {
+define(['tutorFinder', 'services/authService', 'services/professorService', 'services/courseService', 'controllers/CreateCourseCtrl', 'controllers/ModifyProfileCtrl', 'controllers/TimeslotCtrl', 'directives/schedule', 'services/subjectService'], function(tutorFinder) {
 
 	tutorFinder.controller('ProfileCtrl', ProfileCtrl);
 	
-	ProfileCtrl.$inject = ['$scope', '$rootScope', '$document', '$route', '$uibModal', 'authService', 'professorService', 'courseService', 'toastService', '$location'];
-	function ProfileCtrl($scope, $rootScope, $document, $route, $uibModal, authService, professorService, courseService, toastService, $location) {
+	ProfileCtrl.$inject = ['$scope', '$rootScope', '$document', '$route', '$uibModal', 'authService', 'professorService', 'courseService', 'toastService', '$location', 'subjectService'];
+	function ProfileCtrl($scope, $rootScope, $document, $route, $uibModal, authService, professorService, courseService, toastService, $location, subjectService) {
 		$rootScope.appendTitle('PROFILE');
 		var username = $route.current.params.username;
-
-		if (!$scope.currentUser) { 
-			$scope.currentUser = authService.getCurrentUser();
-		}
 		
-		var currentUser = $scope.currentUser;
+		$scope.$on('user_update', function() {
+			if (!username || ($scope.currentUser && $scope.currentUser.username === username)) {
+				$scope.showEditOptions = true;
+				$scope.professor = $scope.currentUser;
+				username = $scope.currentUser.username;
+			}
+		});
+
 		$scope.showEditOptions = false;
 
 		$scope.current = {};
 		$scope.current.page = 1;
 		var self = this;
 
-		if (!username || (currentUser && currentUser.username === username)) {
+		if (!username || ($scope.currentUser && $scope.currentUser.username === username)) {
 			$scope.showEditOptions = true;
-			$scope.professor = currentUser;
-			username = currentUser.username;
+			$scope.professor = $scope.currentUser;
+			username = $scope.currentUser.username;
 		}
 		
 		this.getSchedule = function () {
@@ -38,8 +41,45 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 			});
 		};
 
+		this.getAvailableSubjects = function(course, isRemove) {
+			if ($scope.showEditOptions) {
+
+				if (course) {
+					$scope.availableSubjects = $scope.availableSubjects ? $scope.availableSubjects : [];
+					if (isRemove) {
+						$scope.availableSubjects = $scope.availableSubjects.filter(function(subject) {
+							return subject !== course.subject;
+						});
+					} else {
+						$scope.availableSubjects = $scope.availableSubjects.push(course.subject);
+					}
+				}
+
+				subjectService.getAvailable()
+				.then(function(subjects) {
+					$scope.availableSubjects = subjects;
+				})
+				.catch(function(err) {
+					switch (err.status) {
+						case -1: toastService.showAction('NO_CONNECTION'); break;
+						case 401: {
+							if ($scope.currentUser) {
+								toastService.showAction('SESSION_EXPIRED'); 
+							} 
+							authService.setRedirectUrl($location.path(), $route.current.params);
+							authService.logout();
+							$location.url('/login');
+							break;
+						}
+						default: toastService.showAction('OOPS'); break;
+					}
+				});
+			}
+		};
+
 		$scope.refresh = function() {
 			self.getSchedule();
+			self.getAvailableSubjects();
 			professorService.getProfessor(username)
 			.then(function(response) {
 				$scope.professor = response;
@@ -133,10 +173,16 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 				resolve: {
 					course: function() {
 						return course;
+					},
+					availableSubjects: function() {
+						return $scope.availableSubjects;
 					}
 				 }
 			}).result.then(function(answer) {
 				if (answer) {
+					if (!course) {
+						self.getAvailableSubjects();
+					}
 					$scope.getPage($scope.current.page);
 				}
 			}, function(err) { 
@@ -173,6 +219,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 		$scope.deleteCourse = function(course) {
 			courseService.delete(course.professor.id, course.subject.id)
 			.then(function() {
+				self.getAvailableSubjects(course.subject, false);
 				$scope.getPage($scope.current.page);
 			})
 			.catch(function(err) { 

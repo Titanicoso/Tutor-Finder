@@ -14,10 +14,6 @@ define(['tutorFinder', 'services/conversationService', 'services/authService'], 
 			return;
 		}
 
-		if (!$scope.currentUser) { 
-			$scope.currentUser = authService.getCurrentUser();
-		}
-
 		$scope.message = {text: ''};
 
 		this.refresh = function() {

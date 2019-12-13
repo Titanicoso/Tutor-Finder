@@ -17,9 +17,9 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 			return;
 		}
 
-		if (!$scope.currentUser) { 
-			$scope.currentUser = authService.getCurrentUser();
-		}
+		$scope.$on('user_update', function() {
+			$scope.canComment = $scope.currentUser === null;
+		});
 
 		$scope.contactInput = {body: ''};
 		$scope.contactSuccess = false;

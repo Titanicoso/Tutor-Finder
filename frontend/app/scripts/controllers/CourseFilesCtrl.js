@@ -16,10 +16,6 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 			return;
 		}
 
-		if (!$scope.currentUser) { 
-			$scope.currentUser = authService.getCurrentUser();
-		}
-
 		$scope.courseFile = {description: '', file: undefined, size: 0};
 
 		$scope.$watch('courseFile.size', function(newVal, oldVal) {

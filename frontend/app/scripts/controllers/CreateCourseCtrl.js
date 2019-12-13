@@ -1,36 +1,16 @@
 'use strict';
-define(['tutorFinder', 'services/subjectService', 'services/courseService', 'services/authService'], function(tutorFinder) {
+define(['tutorFinder', 'services/courseService', 'services/authService'], function(tutorFinder) {
 
 	tutorFinder.controller('CreateCourseCtrl', CreateCourseCtrl);
 	
-	CreateCourseCtrl.$inject = ['$scope', '$uibModalInstance', 'course', 'subjectService', 'courseService', 'toastService', 'authService', '$location', '$route'];
-	function CreateCourseCtrl($scope, $modal, course, subjectService, courseService, toastService, authService, $location, $route) {
+	CreateCourseCtrl.$inject = ['$scope', '$uibModalInstance', 'course', 'courseService', 'toastService', 'authService', '$location', '$route', 'availableSubjects'];
+	function CreateCourseCtrl($scope, $modal, course, courseService, toastService, authService, $location, $route, availableSubjects) {
 		$scope.isModifying = course !== undefined && course !== null;
 		
 		if ($scope.isModifying) {
 			$scope.courseInput = {description: course.description, price: course.price};
 		} else {
-			subjectService.getAvailable()
-			.then(function(subjects) {
-				$scope.availableSubjects = subjects;
-			})
-			.catch(function(err) {
-				switch (err.status) {
-					case -1: toastService.showAction('NO_CONNECTION'); break;
-					case 401: {
-						if ($scope.currentUser) {
-							toastService.showAction('SESSION_EXPIRED'); 
-						} 
-						authService.setRedirectUrl($location.path(), $route.current.params);
-						authService.logout();
-						$location.url('/login');
-						$modal.close(false);
-						break;
-					}
-					default: toastService.showAction('OOPS'); break;
-				}
-			});
-
+			$scope.availableSubjects = availableSubjects;
 			$scope.courseInput = {subject: undefined, description: undefined, price: undefined};
 		}
 
