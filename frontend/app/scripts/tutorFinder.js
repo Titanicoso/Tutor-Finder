@@ -80,7 +80,15 @@ define([
 				$rootScope.$on('$routeChangeError', function(event, current, previous, error) {
 					if (current && current.$$route) {
 						var path = current.$$route.originalPath;
-						var params = current.params;
+
+						if (Object.keys(current.pathParams).length > 0) {
+							for (var key in current.pathParams) {
+								path = path.replace(':' + key, current.pathParams[key]);
+							}
+						} else {
+							var params = current.params;
+						}
+
 
 						if (error) {
 							authService.setRedirectUrl(path, params);
