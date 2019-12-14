@@ -56,7 +56,7 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 		$scope.availableEndTimes = [];
 
 		this.initStartTimes = function() {
-			for (var i = 7; i <= 22; i++) {
+			for (var i = 1; i <= 23; i++) {
 				$scope.availableStartTimes.push(i);
 			}
 		};

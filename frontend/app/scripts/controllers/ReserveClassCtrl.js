@@ -15,6 +15,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'servic
 			}
 
 			var day = date.getDay();
+			day = day === 0 ? 7 : day;
 
 			var filtered = schedule.days.filter(function(element) {
 				return element.day === day;
@@ -38,6 +39,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'servic
 			}
 
 			var day = $scope.reservation.date.getDay();
+			day = day === 0 ? 7 : day;
 
 			var filtered = schedule.days.filter(function(element) {
 				return element.day === day;
@@ -49,7 +51,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'servic
 				return;
 			}
 
-			for (var i = 7; i <= 22; i++) {
+			for (var i = 1; i <= 23; i++) {
 				var contained = filtered[0].ranges.some(function(range) { 
 					return range.start <= i && range.end > i;
 				});
@@ -61,7 +63,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'servic
 		};
 
 		this.initStartTimes = function() {
-			for (var i = 7; i <= 22; i++) {
+			for (var i = 1; i <= 23; i++) {
 				$scope.availableStartTimes.push(i);
 			}
 		};
@@ -78,6 +80,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'servic
 			}
 
 			var day = $scope.reservation.date.getDay();
+			day = day === 0 ? 7 : day;
 
 			var filtered = schedule.days.filter(function(element) {
 				return element.day === day;
@@ -121,6 +124,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'servic
 			}
 
 			var day = $scope.reservation.date.getDay();
+			day = day === 0 ? 7 : day;
 
 			var filtered = schedule.days.filter(function(element) {
 				return element.day === day;

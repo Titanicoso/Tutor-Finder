@@ -13,7 +13,7 @@ define(['tutorFinder', 'services/professorService', 'services/authService'], fun
 		$scope.isDelete = isDelete;
 
 		this.initStartTimes = function() {
-			for (var i = 7; i <= 22; i++) {
+			for (var i = 1; i <= 23; i++) {
 				$scope.availableStartTimes.push(i);
 			}
 		};

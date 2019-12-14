@@ -9,6 +9,7 @@ define(['tutorFinder'], function(tutorFinder) {
 			controller: ['$scope', function($scope) {
 				
 				$scope.availableHours = [];
+				var self = this;
 
 				this.getAvailableHours = function() {
 					var hours = [];
@@ -31,6 +32,11 @@ define(['tutorFinder'], function(tutorFinder) {
 				};
 
 				this.getAvailableHours();
+
+				
+				$scope.$watch('schedule', function(newVal, oldVal) {
+					self.getAvailableHours();
+				}, true);
 				
 				$scope.range = function(start, end) {
 					var range = [];
