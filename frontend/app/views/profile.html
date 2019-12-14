@@ -17,12 +17,15 @@
                     {{ 'ADD_COURSE' | translate }}
                 </div>
             </div>
-            <div class="classes" ng-if="courses">
+            <div class="classes">
                 <div>
                     <h2 ng-bind="(showEditOptions ? 'PROFILE_COURSES' : 'PROFESSOR_COURSES') | translate"></h2>
                     <p ng-bind="(showEditOptions ? 'PROFILE_COURSES_DESCRIPTION' : 'PROFESSOR_COURSES_DESCRIPTION') | translate"></p>
                 </div>
-                <h4 ng-if="!showEditOptions && courses.data.length < 1" ng-bind="'NO_COURSES' | translate"></h4>
+                <h4 ng-if="!loading && !showEditOptions && courses.data.length < 1" ng-bind="'NO_COURSES' | translate"></h4>
+                <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading">
+                    <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
+                </div>
 
                 <div class="class" ng-repeat="course in courses.data">
                     <a class="class-button" ng-href="#!/course/?professorId={{course.professor.id}}&subjectId={{course.subject.id}}"></a>

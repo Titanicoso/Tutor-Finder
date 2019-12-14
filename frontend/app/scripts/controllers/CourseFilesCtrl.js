@@ -56,6 +56,7 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 		};
 
 		this.refresh = function() {
+			$scope.loading = true;
 			courseFileService.getCourseFiles($scope.professorId, subjectId)
 			.then(function(files) {
 				$scope.courseFiles = files; 
@@ -75,6 +76,9 @@ define(['tutorFinder', 'services/courseFileService', 'services/authService'], fu
 					case 403: toastService.showAction('FORBIDDEN_COURSE_FILES'); $location.url('/'); break;
 					default: toastService.showAction('OOPS'); break;
 				}
+			})
+			.then(function() {
+				$scope.loading = false;
 			});
 		};
 

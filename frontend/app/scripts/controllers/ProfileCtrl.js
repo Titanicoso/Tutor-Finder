@@ -80,6 +80,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 		$scope.refresh = function() {
 			self.getSchedule();
 			self.getAvailableSubjects();
+			$scope.loading = true;
 			professorService.getProfessor(username)
 			.then(function(response) {
 				$scope.professor = response;
@@ -93,12 +94,16 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 					case -1: toastService.showAction('NO_CONNECTION'); break;
 					default: toastService.showAction('OOPS'); break;
 				}
+			})
+			.then(function() {
+				$scope.loading = false;
 			});
 		};
 
 		$scope.refresh();
 
 		$scope.getPage = function(number) {
+			$scope.loading = true;
 			professorService.getProfessorCourses(username, number)
 			.then(function(courses) {
 				$scope.courses = courses;
@@ -108,6 +113,9 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 					case -1: toastService.showAction('NO_CONNECTION'); break;
 					default: toastService.showAction('OOPS'); break;
 				}
+			})
+			.then(function() {
+				$scope.loading = false;
 			});
 		};
 

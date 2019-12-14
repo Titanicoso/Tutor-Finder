@@ -4,7 +4,10 @@
     <div class="content my-reservation">
         <div class="search-results w-100 rm-10-b m-t-20">
             <h3 class="search-data" ng-bind="'CONTENTS' | translate"></h3>
-            <h1 ng-if="!courseFiles || courseFiles.length < 1" ng-bind="'NO_CONTENTS' | translate"></h1>
+            <h1 ng-if="!loading && (!courseFiles || courseFiles.length < 1)" ng-bind="'NO_CONTENTS' | translate"></h1>
+            <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading">
+                <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
+            </div>
             <div class="reservation-course-result" ng-repeat="file in courseFiles">
                 <div class="search-result-img">
                     <div class="button-2 relative" type="submit">

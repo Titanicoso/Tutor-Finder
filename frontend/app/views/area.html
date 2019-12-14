@@ -3,7 +3,10 @@
         <div class="content">
             <div class="search-results">
                 <h3 ng-bind="'AREA_SEARCH' | translate: { area: area.name }"></h3>
-                <h4 ng-if="!courses || courses.data.length < 1" ng-bind="'NO_RESULTS' | translate"></h4>
+                <h4 ng-if="!loading && (!courses || courses.data.length < 1)" ng-bind="'NO_RESULTS' | translate"></h4>
+                <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading">
+                    <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
+                </div>
                 <course-results ng-if="courses && courses.data.length > 0" results="courses.data" /></course-results>
 
                 <div class="paged-result-buttons">

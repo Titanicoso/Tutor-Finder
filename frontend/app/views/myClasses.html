@@ -3,7 +3,10 @@
         <div class="justify-center">
             <div class="search-results w-100">
                 <h3 class="search-data" ng-bind="'REQUESTS' | translate"></h3>
-                <h1 ng-if="!requests || requests.data.length < 1" ng-bind="'NO_REQUESTS' | translate"></h1>
+                <h1 ng-if="!loading && (!requests || requests.data.length < 1)" ng-bind="'NO_REQUESTS' | translate"></h1>
+                <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading">
+                    <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
+                </div>
                 <div ng-if="requests && requests.data.length > 0">
                     <div class="reservation-course-result" ng-repeat="request in requests.data">
                         <a class="conversation-link" ng-href="#!/course/?professorId={{request.course.professor.id}}&subjectId={{request.course.subject.id}}"></a>

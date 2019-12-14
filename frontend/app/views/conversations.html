@@ -5,9 +5,12 @@
         <div class="inbox-message">
             <p class="inbox-title" ng-bind="'INBOX' | translate"></p>
         </div>
-        <div ng-if="!conversations || conversations.data.length < 1" >
+        <div ng-if="!loading && (!conversations || conversations.data.length < 1)" >
             <h1 ng-bind="'NO_CONVERSATIONS' | translate"></h1>
             <p class="help-message" ng-bind="'CONVERSATIONS_HELP' | translate"></p>
+        </div>
+        <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading">
+            <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
         </div>
         <div class="chat" ng-repeat="conversation in conversations.data">
             <a class="conversation-link" ng-href="#!/conversation/{{conversation.id}}"></a>

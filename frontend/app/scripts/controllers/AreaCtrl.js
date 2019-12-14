@@ -28,6 +28,7 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 			}
 		});
 
+		$scope.loading = true;
 		areaService.getArea(id)
 		.then(function(area) {
 			$scope.area = area;
@@ -46,6 +47,7 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 		this.getCourses = function(page) {
 			areaService.getAreaCourses(id, page)
 			.then(function(results) {
+				$scope.loading = false;
 				$scope.courses = results;
 				$scope.current.page = page;
 				$scope.current.previous = page;
@@ -55,6 +57,9 @@ define(['tutorFinder', 'services/areaService', 'directives/courseResults'], func
 					case -1: toastService.showAction('NO_CONNECTION'); break;
 					default: toastService.showAction('OOPS'); break;
 				}
+			})
+			.then(function() {
+				$scope.loading = false;
 			});
 		};
 

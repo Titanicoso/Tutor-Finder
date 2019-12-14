@@ -27,6 +27,7 @@ define(['tutorFinder', 'services/professorService', 'services/authService'], fun
 		};
 
 		this.getRequests = function(page) {
+			$scope.loading = true;
 			professorService.getFullRequests(page)
 			.then(function(requests) {
 				$scope.requests = requests;
@@ -47,6 +48,9 @@ define(['tutorFinder', 'services/professorService', 'services/authService'], fun
 					}
 					default: toastService.showAction('OOPS'); break;
 				}
+			})
+			.then(function() {
+				$scope.loading = false;
 			});
 		};
 

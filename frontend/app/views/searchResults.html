@@ -59,7 +59,10 @@
             </form>
             <div class="search-results" ng-switch="lastSearch.category">
                 <h3 class="search-data" ng-if="lastSearch.query.length > 0" ng-bind="'SEARCH_MESSAGE' | translate: { term: lastSearch.query }"></h3>
-                <h1 ng-if="!results || (results.data && results.data.length < 1)" ng-bind="'NO_RESULTS' | translate"></h1>
+                <h1 ng-if="!loading && (!results || (results.data && results.data.length < 1))" ng-bind="'NO_RESULTS' | translate"></h1>
+                <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading">
+                    <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
+                </div>
 
                 <area-results ng-switch-when="area" results="results.data"></area-results>
                 <professor-results ng-switch-when="professor" results="results.data"></professor-results>

@@ -2,7 +2,10 @@
     <div class="content">
         <div class="search-results w-100">
             <h3 class="search-data" ng-bind="'RESERVATIONS' | translate"></h3>
-            <h1 ng-if="!reservations || reservations.data.length < 1" ng-bind="'NO_RESERVATIONS' | translate"></h1>
+            <h1 ng-if="!loading && (!reservations || reservations.data.length < 1)" ng-bind="'NO_RESERVATIONS' | translate"></h1>
+            <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading">
+                <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
+            </div>
             <div ng-if="reservations && reservations.data.length > 0">
                 <div class="reservation-course-result" ng-repeat="reservation in reservations.data">
                     <a class="conversation-link" ng-href="#!/course/?professorId={{reservation.course.professor.id}}&subjectId={{reservation.course.subject.id}}"></a>

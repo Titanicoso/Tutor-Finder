@@ -72,7 +72,10 @@
             <h2 ng-bind="'SCHEDULE' | translate"></h2>
             <input ng-if="currentUser == null || currentUser.id != professorId" class="button-2" type="button" value="{{'RESERVE_CLASS' | translate}}" ng-click="reserveClass()"/>
             <p ng-bind="'SCHEDULE_DESCRIPTION' | translate"></p>
-            <h4 ng-if="!schedule || schedule.days.length === 0" ng-bind="'SCHEDULE_EMPTY' | translate"></h4>
+            <h4 ng-if="!loading && (!schedule || schedule.days.length === 0)" ng-bind="'SCHEDULE_EMPTY' | translate"></h4>
+            <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading" class="schedule-loader">
+                <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
+            </div>
             <schedule ng-if="schedule && schedule.days.length > 0" schedule="schedule"></schedule>
         </div>
     </div>

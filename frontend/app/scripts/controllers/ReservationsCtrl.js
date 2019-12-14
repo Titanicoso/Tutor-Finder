@@ -27,6 +27,7 @@ define(['tutorFinder', 'services/userService', 'services/authService'], function
 		};
 
 		this.getReservations = function(page) {
+			$scope.loading = true;
 			userService.getFullReservations(page)
 			.then(function(reservations) {
 				$scope.reservations = reservations;
@@ -47,6 +48,9 @@ define(['tutorFinder', 'services/userService', 'services/authService'], function
 					}
 					default: toastService.showAction('OOPS'); break;
 				}
+			})
+			.then(function() {
+				$scope.loading = false;
 			});
 		};
 

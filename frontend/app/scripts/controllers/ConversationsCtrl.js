@@ -27,6 +27,7 @@ define(['tutorFinder', 'services/conversationService'], function(tutorFinder) {
 		};
 
 		this.getConversations = function(page) {
+			$scope.loading = true;
 			conversationService.getConversations(page)
 			.then(function(conversations) {
 				$scope.conversations = conversations;
@@ -47,6 +48,9 @@ define(['tutorFinder', 'services/conversationService'], function(tutorFinder) {
 					}
 					default: toastService.showAction('OOPS'); break;
 				}
+			})
+			.then(function() {
+				$scope.loading = false;
 			});
 		};
 

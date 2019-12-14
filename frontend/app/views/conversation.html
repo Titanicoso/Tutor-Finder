@@ -3,6 +3,9 @@
 <div class="conversation">
     <div class="content">
         <div class="conversation-messages">
+            <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading">
+                <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
+            </div>
             <div class="message" ng-repeat="message in messages" ng-class="{own: message.sender.id === currentUser.id}">
                 <h5 class="message-text" ng-bind="message.sender.name + ': ' + message.text"></h5>
                     <h6 class="conversation-last-time" ng-bind="'SENT_TIME' | translate: { date: message.created } "></h6>

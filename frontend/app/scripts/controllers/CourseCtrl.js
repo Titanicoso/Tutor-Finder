@@ -33,6 +33,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 		var self = this;
 
 		this.getSchedule = function (professor) {
+			$scope.loading = true;
 			professorService.getProfessorSchedule(professor.username)
 			.then(function(response) {
 				$scope.schedule = response;
@@ -42,6 +43,9 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 					case -1: toastService.showAction('NO_CONNECTION'); break;
 					default: toastService.showAction('OOPS'); break;
 				}
+			})
+			.then(function() {
+				$scope.loading = false;
 			});
 		};
 

@@ -17,6 +17,7 @@ define(['tutorFinder', 'services/conversationService', 'services/authService'], 
 		$scope.message = {text: ''};
 
 		this.refresh = function() {
+			$scope.loading = true;
 			conversationService.getMessages(id)
 			.then(function(messages) {
 				$scope.messages = messages;
@@ -36,6 +37,9 @@ define(['tutorFinder', 'services/conversationService', 'services/authService'], 
 					case 403: toastService.showAction('FORBIDDEN_CONVERSATION'); $location.url('/'); break;
 					default: toastService.showAction('OOPS'); break;
 				}
+			})
+			.then(function() {
+				$scope.loading = false;
 			});
 		};
 

@@ -6,6 +6,7 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 	SearchCtrl.$inject = ['$scope', '$rootScope', '$route', '$location', 'areaService', 'courseService', 'professorService', 'toastService'];
 	function SearchCtrl($scope, $rootScope, $route, $location, areaService, courseService, professorService, toastService) {
 		$rootScope.appendTitle('SEARCH_RESULTS');
+		$scope.loading = false;
 
 		this.getFilters = function() {
 			var parameters = {};
@@ -104,7 +105,7 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 				default: request = courseService.filterCourses(filters.query, filters.startHour, filters.endHour,
 					 filters.minPrice, filters.maxPrice, filters.days, filters.page); break;
 			}
-
+			$scope.loading = true;
 			request.then(function(results) {
 				$scope.results = results;
 				$rootScope.filters = filters;
@@ -115,6 +116,9 @@ define(['tutorFinder', 'services/areaService', 'services/courseService', 'servic
 					case -1: toastService.showAction('NO_CONNECTION'); break;
 					default: toastService.showAction('OOPS'); break;
 				}
+			})
+			.then(function() {
+				$scope.loading = false;
 			});
 		};
 
