@@ -64,11 +64,11 @@
                     <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
                 </div>
 
-                <area-results ng-switch-when="area" results="results.data"></area-results>
-                <professor-results ng-switch-when="professor" results="results.data"></professor-results>
-                <course-results ng-switch-default results="results.data"></course-results>
+                <area-results ng-if="!loading" ng-switch-when="area" results="results.data"></area-results>
+                <professor-results ng-if="!loading" ng-switch-when="professor" results="results.data"></professor-results>
+                <course-results ng-if="!loading" ng-switch-default results="results.data"></course-results>
             
-                <div class="paged-result-buttons">
+                <div class="paged-result-buttons" ng-if="!loading">
                     <ul ng-if="results.links" uib-pagination total-items="results.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="filters.page" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage()"></ul>
                 </div>
             </div>
