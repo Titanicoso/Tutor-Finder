@@ -122,6 +122,8 @@ define([], function() {
 		ADD_TIMESLOT: 'Agregar horario',
 		DELETE_TIMESLOT: 'Eliminar horario',
 		SAME_USER_RESERVATION: 'No puedes hacer una reserva para tu propio curso',
+		REPEATED_USERNAME: 'El nombre de usuario ya esta en uso',
+		REPEATED_EMAIL: 'El correo electrónico ya esta en uso',
 
 		CONTACT_SUCCESS: '¡El mensaje fue enviado!',
 		RESERVE_SUCCESS: 'La reserva fue exitosa',

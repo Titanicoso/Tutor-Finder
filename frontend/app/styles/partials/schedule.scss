@@ -21,6 +21,10 @@
     height: fit-content;
 }
 
+.schedule-loader {
+    grid-area: schedule-tabla;
+}
+
 .schedule h2 {
     grid-area: schedule-titulo;
 }

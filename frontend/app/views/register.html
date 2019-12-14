@@ -22,11 +22,13 @@
                     <input class="input-request" type="email" name="email" ng-required="true" ng-maxlength="512" ng-model="register.email"/>
                     <p class="error-text" ng-show="form.email.$dirty && (form.email.$error.maxlength || form.email.$error.required)">{{'EMAIL_SIZE_ERROR' | translate: '{min: 1, max: 512}'}}</p>
                     <p class="error-text" ng-show="form.email.$dirty && form.email.$error.email">{{'EMAIL_FORMAT_ERROR' | translate}}</p>
+                    <p class="error-text" ng-show="repeatedEmail">{{'REPEATED_EMAIL' | translate}}</p>
                 </div>
                 <div>
                     <label class="form-label" for="username" ng-bind="'USERNAME' | translate"></label>
                     <input class="input-request" type="text" name="username" ng-required="true" ng-maxlength="128" ng-model="register.username"/>
                     <p class="error-text" ng-show="form.username.$dirty && form.username.$invalid">{{'USERNAME_SIZE_ERROR' | translate: '{min: 1, max: 128}'}}</p>
+                    <p class="error-text" ng-show="repeatedUsername">{{'REPEATED_USERNAME' | translate}}</p>
                 </div>
                 <div>
                     <label class="form-label" for="password" ng-bind="'PASSWORD' | translate"></label>
