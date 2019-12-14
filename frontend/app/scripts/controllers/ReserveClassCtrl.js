@@ -51,15 +51,17 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'servic
 				return;
 			}
 
+			var startTimes = [];
 			for (var i = 1; i <= 23; i++) {
 				var contained = filtered[0].ranges.some(function(range) { 
 					return range.start <= i && range.end > i;
 				});
 
 				if (contained) {
-					$scope.availableStartTimes.push(i);
+					startTimes.push(i);
 				}
 			}
+			$scope.availableStartTimes = startTimes;
 		};
 
 		this.initStartTimes = function() {

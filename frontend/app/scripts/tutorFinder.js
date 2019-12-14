@@ -30,7 +30,8 @@ define([
 			'$translateProvider',
 			'$locationProvider',
 			'$httpProvider',
-			function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $locationProvider, $httpProvider) {
+			'$mdDateLocaleProvider',
+			function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $locationProvider, $httpProvider, $mdDateLocaleProvider) {
 
 				tutorFinder.controller = $controllerProvider.register;
 				tutorFinder.directive = $compileProvider.directive;
@@ -60,6 +61,13 @@ define([
 
 				$translateProvider.translations('preferredLanguage', i18n);
 				$translateProvider.preferredLanguage('preferredLanguage');
+
+				if (i18n) {
+					$mdDateLocaleProvider.months = i18n.MONTHS;
+					$mdDateLocaleProvider.shortMonths = i18n.SHORT_MONTHS;
+					$mdDateLocaleProvider.days = i18n.TRANSLATE_DAYS;
+					$mdDateLocaleProvider.shortDays = i18n.SHORT_DAYS;
+				}
 			}])
 			.run(['$rootScope', '$location', 'authService', 'toastService', function($rootScope, $location, authService, toastService) {
 				$rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
@@ -80,13 +88,14 @@ define([
 				$rootScope.$on('$routeChangeError', function(event, current, previous, error) {
 					if (current && current.$$route) {
 						var path = current.$$route.originalPath;
+						var params = undefined;
 
 						if (Object.keys(current.pathParams).length > 0) {
 							for (var key in current.pathParams) {
 								path = path.replace(':' + key, current.pathParams[key]);
 							}
 						} else {
-							var params = current.params;
+							params = current.params;
 						}
 
 

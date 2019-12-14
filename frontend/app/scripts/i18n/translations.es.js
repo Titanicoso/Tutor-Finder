@@ -181,6 +181,13 @@ define([], function() {
 		ERROR_MSG: 'No se ha podido efectuar la accion solicitada',
 		TIMESLOT_DAY_ERROR: 'Debe seleccionar un día',
 		ADD_TIMESLOT_ERROR: 'El horario ya fue seleccionado previamente',
-		NOT_AVAILABLE_TIME: 'El profesor no esta disponible en el rango horario que eligio'
+		NOT_AVAILABLE_TIME: 'El profesor no esta disponible en el rango horario que eligio',
+
+		MONTHS: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+		'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+		SHORT_MONTHS: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
+		'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+		TRANSLATE_DAYS: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'],
+		SHORT_DAYS: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá']
 	};
 });
