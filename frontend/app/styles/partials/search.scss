@@ -138,7 +138,7 @@
     padding: 20px;
     display: grid;
     background-color: white;
-    height: 100%;
+    max-height: 100%;
     align-content: center;
     grid-template-columns: 170px auto;
     grid-template-areas: "search-result-img search-result-title       search-result-specs"
