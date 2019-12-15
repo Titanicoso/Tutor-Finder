@@ -28,9 +28,14 @@ define(['tutorFinder'], function(tutorFinder) {
 						});
 					});
 
+          hours.sort(sortNumber);
 					$scope.availableHours = hours;
 				};
 
+        function sortNumber(a, b) {
+          return a - b;
+        }
+        
 				this.getAvailableHours();
 
 				
