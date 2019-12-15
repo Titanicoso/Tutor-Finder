@@ -13,7 +13,7 @@ public class EditProfessorProfileForm {
     @FormDataParam("description")
     private String description;
 
-    @FileSize(min= 1, max = 81920, message = "{FileSize.editProfessorProfileForm.picture}")
+    @FileSize(min= 1, max = 81920, required = false, message = "{FileSize.editProfessorProfileForm.picture}")
     @FileType(message = "{FileType.editProfessorProfileForm.picture}")
     @FormDataParam("picture")
     private FormDataBodyPart picture;
