@@ -28,13 +28,12 @@ define(['tutorFinder'], function(tutorFinder) {
 						});
 					});
 
-          hours.sort(sortNumber);
+					hours.sort(function(a, b) {
+						return a - b;
+					});
+					
 					$scope.availableHours = hours;
 				};
-
-        function sortNumber(a, b) {
-          return a - b;
-        }
         
 				this.getAvailableHours();
 

@@ -9,8 +9,8 @@
             <h3 class="profile-description m-0-10" ng-bind="professor.description"></h3>
         </div>
         <div class="class-content" ng-class="{'class-content-other': !showEditOptions }">
-            <div ng-if="showEditOptions && availableSubjects && availableSubjects.length > 0" class="row r-center">
-                <div class="add-class button-2 relative">
+            <div ng-if="showEditOptions" class="row r-center">
+                <div class="add-class button-2 relative" ng-if="availableSubjects && availableSubjects.length > 0">
                     <a class="class-button" href="javascript:;" ng-click="modifyCourse()"></a>
                     {{ 'ADD_COURSE' | translate }}
                 </div>
