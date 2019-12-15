@@ -77,6 +77,19 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 			}
 		};
 
+		this.getProfessor = function() {
+			professorService.getProfessor(username)
+			.then(function(response) {
+				$scope.professor = response;
+			})
+			.catch(function(err) {
+				switch (err.status) {
+					case -1: toastService.showAction('NO_CONNECTION'); break;
+					default: toastService.showAction('OOPS'); break;
+				}
+			});
+		};
+
 		$scope.refresh = function() {
 			self.getSchedule();
 			self.getAvailableSubjects();
@@ -215,7 +228,7 @@ define(['tutorFinder', 'services/authService', 'services/professorService', 'ser
 			}).result.then(function(answer) {
 				if (answer) {
 					$scope.professor.image_url = undefined;
-					$scope.refresh();
+					self.getProfessor();
 				}
 			}, function(err) { 
 				switch (err.status) {

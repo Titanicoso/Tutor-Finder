@@ -1,5 +1,5 @@
 'use strict';
-define([], function() {
+define(['moment'], function(moment) {
 
 	return {
 		SEARCH: 'Buscar...',
@@ -188,6 +188,13 @@ define([], function() {
 		SHORT_MONTHS: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
 		'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
 		TRANSLATE_DAYS: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'],
-		SHORT_DAYS: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá']
+		SHORT_DAYS: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+		DATE_FORMAT: function (date) {
+			return moment(date).format('DD/MM/YYYY');
+		},
+		DATE_PARSE: function(dateString) {
+			var m = moment(dateString, 'DD/MM/YYYY');
+			return m.isValid() ? m.toDate() : new Date(NaN);
+		}
 	};
 });

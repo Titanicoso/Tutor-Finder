@@ -32,7 +32,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'servic
 		$scope.reservationError = undefined;
 
 		$scope.daySelected = function() {
-			if ($scope.reservation.date === undefined) {
+			if ($scope.reservation.date === undefined || $scope.reservation.date === null) {
 				$scope.availableStartTimes = [];
 				$scope.availableEndTimes = [];
 				return;
@@ -75,7 +75,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'servic
 				$scope.reservation.end = undefined;
 			}
 
-			if ($scope.reservation.date === undefined) {
+			if ($scope.reservation.date === undefined || $scope.reservation.date === null) {
 				$scope.availableStartTimes = [];
 				$scope.availableEndTimes = [];
 				return;
@@ -121,7 +121,7 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'servic
 		};
 
 		this.validate = function() {
-			if ($scope.reservation.date === undefined) {
+			if ($scope.reservation.date === undefined || $scope.reservation.date === null) {
 				return false;
 			}
 

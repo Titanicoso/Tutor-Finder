@@ -67,6 +67,8 @@ define([
 					$mdDateLocaleProvider.shortMonths = i18n.SHORT_MONTHS;
 					$mdDateLocaleProvider.days = i18n.TRANSLATE_DAYS;
 					$mdDateLocaleProvider.shortDays = i18n.SHORT_DAYS;
+					$mdDateLocaleProvider.formatDate = i18n.DATE_FORMAT;
+					$mdDateLocaleProvider.parseDate = i18n.DATE_PARSE;
 				}
 			}])
 			.run(['$rootScope', '$location', 'authService', 'toastService', function($rootScope, $location, authService, toastService) {
