@@ -13,23 +13,29 @@ public class UserDTO {
     private String name;
     private String lastname;
     private String email;
+    private boolean isProfessor;
+    private URI url;
 
     public UserDTO(){}
 
-    public UserDTO(final User user, final URI baseUri){
+    public UserDTO(final User user, final URI baseUri, final boolean isProfessor){
         this.id = user.getId();
         this.username = user.getUsername();
         this.name = user.getName();
         this.lastname = user.getLastname();
         this.email = user.getEmail();
+        this.isProfessor = isProfessor;
+        this.url = baseUri.resolve("user");
     }
 
-    public UserDTO(Long id, String username, String name, String lastName, String email) {
+    public UserDTO(Long id, String username, String name, String lastName, String email, boolean isProfessor, URI baseUri) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.lastname = lastName;
         this.email = email;
+        this.isProfessor = isProfessor;
+        this.url = baseUri.resolve("user");
     }
 
     public long getId() {
@@ -70,5 +76,21 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isProfessor() {
+        return isProfessor;
+    }
+
+    public void setProfessor(boolean professor) {
+        isProfessor = professor;
+    }
+
+    public URI getUrl() {
+        return url;
+    }
+
+    public void setUrl(URI url) {
+        this.url = url;
     }
 }

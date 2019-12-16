@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,9 +88,10 @@ public class CourseFileController extends BaseController {
             return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
 
-        //TODO: Verificar si el header es necesario
+        byte[] encoded = Base64.getEncoder().encode(courseFile.getContent());
+
         return Response
-                .ok(courseFile.getContent(), MediaType.valueOf(courseFile.getType()))
+                .ok(new String(encoded), MediaType.valueOf(courseFile.getType()))
                 .header("Content-Disposition","attachment; filename=\"" + courseFile.getName() +"\"")
                 .build();
     }
@@ -106,8 +108,8 @@ public class CourseFileController extends BaseController {
         final CourseFile courseFile;
 
         try {
-            courseFile = cfs.save(professorId, subjectId, currentUser, form.getFile().getName(),
-                    form.getDescription(), form.getFile().getContentDisposition().getType(), form.getFile().getValueAs(byte[].class));
+            courseFile = cfs.save(professorId, subjectId, currentUser, form.getFile().getContentDisposition().getFileName(),
+                    form.getDescription(), form.getFile().getMediaType().toString(), form.getFile().getValueAs(byte[].class));
         }  catch (UserAuthenticationException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
         }

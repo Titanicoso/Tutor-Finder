@@ -7,7 +7,10 @@ import ar.edu.itba.paw.interfaces.persistence.CourseDao;
 import ar.edu.itba.paw.interfaces.service.CourseService;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.SubjectService;
-import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.models.PagedResults;
+import ar.edu.itba.paw.models.Professor;
+import ar.edu.itba.paw.models.Subject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +34,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = TestConfig.class)
 public class CourseServiceImplTest {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Long PROFESSOR_ID = 1L;
     private static final Long SUBJECT_ID = 2L;
     private static final Long INVALID_ID = 666L;
@@ -52,9 +55,6 @@ public class CourseServiceImplTest {
 
     @Mock
     private SubjectService subjectService;
-
-    @Mock
-    private Filter filter;
 
 
     @Before
@@ -105,7 +105,7 @@ public class CourseServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Course> results = courseService.filterCourses(null,null, null, null, null, NAME, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test
@@ -239,7 +239,7 @@ public class CourseServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Course> results = courseService.findCourseByProfessorId(PROFESSOR_ID, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test
@@ -292,7 +292,7 @@ public class CourseServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Course> results = courseService.filterByAreaId(AREA_ID, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test

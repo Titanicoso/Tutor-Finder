@@ -1,0 +1,31 @@
+<table style="width:100%; background-color: white">
+    <tr>
+        <th>
+        </th>
+        <th>
+            <a ng-bind="'MONDAY' | translate"></a>
+        </th>
+        <th>
+            <a ng-bind="'TUESDAY' | translate"></a>
+        </th>
+        <th>
+            <a ng-bind="'WEDNESDAY' | translate"></a>
+        </th>
+        <th>
+            <a ng-bind="'THURSDAY' | translate"></a>
+        </th>
+        <th>
+            <a ng-bind="'FRIDAY' | translate"></a>
+        </th>
+        <th>
+            <a ng-bind="'SATURDAY' | translate"></a>
+        </th>
+        <th>
+            <a ng-bind="'SUNDAY' | translate"></a>
+        </th>
+    </tr>
+    <tr ng-repeat="hour in availableHours">
+        <td class="hour">{{hour}}:00 - {{hour + 1}}:00</td>
+        <td ng-repeat="day in range(1, 8)" ng-class="{'selected-time': dayContains(day, hour)}" />
+    </tr>
+</table>

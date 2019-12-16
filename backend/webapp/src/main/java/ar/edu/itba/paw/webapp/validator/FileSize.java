@@ -3,10 +3,8 @@ package ar.edu.itba.paw.webapp.validator;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
-import java.nio.file.Files;
 
 import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
@@ -21,6 +19,8 @@ public @interface FileSize {
     long min() default 0;
 
     long max() default Long.MAX_VALUE;
+
+    boolean required() default true;
 
     @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
     @Retention(RUNTIME)

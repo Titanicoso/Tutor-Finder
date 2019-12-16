@@ -1,0 +1,29 @@
+<div class="register">
+    <div class="content">
+        <div class="button-container">
+            <h1 class="form-label" ng-bind="'LOGIN' | translate"></h1>
+        </div>
+
+        <form class="form" ng-submit="login()" name="form" novalidate>
+            <div>
+                <label class="form-label" for="username" ng-bind="'USERNAME' | translate"></label>
+                <input type="text" name="username" id="username" ng-model="loginForm.username" class="input-request" required>
+            </div>
+            <div>
+                <label class="form-label" for="password" ng-bind="'PASSWORD' | translate"></label>
+                <input type="password" id="password" name="password" ng-model="loginForm.password" class="input-request" required>
+            </div>
+            <div>
+                <label class="form-label"><input type="checkbox" ng-model="loginForm.rememberMe"> {{'REMEMBER_ME' | translate}}</label>
+            </div>
+            <div class="button-container">
+                <a ng-href="#!/register" class="button-2" ng-bind="'REGISTER' | translate"></a>
+                <input class="button-2" type="submit" value="{{'LOGIN' | translate}}">
+            </div>
+            <div class="forgot-password-link">
+                <a class="link" ng-href="#!/forgotPassword" ng-bind="'FORGOT_PASSWORD' | translate"></a>
+            </div>
+            <p class="login-error" ng-if="error">{{'LOGIN_ERROR' | translate}}</p>
+        </form>
+    </div>
+</div>

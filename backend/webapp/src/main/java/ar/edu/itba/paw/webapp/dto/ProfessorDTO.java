@@ -21,19 +21,16 @@ public class ProfessorDTO extends UserDTO {
     @XmlElement(name = "schedule_url")
     private URI scheduleUrl;
 
-    private URI url;
-
     public ProfessorDTO() {}
 
     public ProfessorDTO(final Professor professor, final UriInfo uriInfo){
         super(professor.getId(), professor.getUsername(), professor.getName(),
-                professor.getLastname(), professor.getEmail());
+                professor.getLastname(), professor.getEmail(), true, uriInfo.getBaseUri());
 
         this.description = professor.getDescription();
-        this.imageUrl = uriInfo.getBaseUri().resolve("/professors/" + professor.getUsername() + "/image");
+        this.imageUrl = uriInfo.getBaseUri().resolve("professors/" + professor.getUsername() + "/image");
         this.coursesUrl = uriInfo.getAbsolutePathBuilder().path("/courses").build();
         this.scheduleUrl = uriInfo.getAbsolutePathBuilder().path("/schedule").build();
-        this.url = uriInfo.getAbsolutePathBuilder().build();
     }
 
     public String getDescription() {
@@ -66,13 +63,5 @@ public class ProfessorDTO extends UserDTO {
 
     public void setScheduleUrl(URI scheduleUrl) {
         this.scheduleUrl = scheduleUrl;
-    }
-
-    public URI getUrl() {
-        return url;
-    }
-
-    public void setUrl(URI url) {
-        this.url = url;
     }
 }

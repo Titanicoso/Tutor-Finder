@@ -1,0 +1,42 @@
+<div class="modify-modal">
+    <span class="modal-close" ng-click="close()">&times;</span>
+    <h1 class="center-text">{{isDelete ? 'DELETE_TIMESLOT' : 'ADD_TIMESLOT' | translate}} <span class="fa help-icon fa-info-circle" ng-if="isDelete" title="{{'DELETE_HELP' | translate}}"></span></h1>
+    <h1 class="center-text"></h1>
+    <form class="form" name="form" ng-submit="submit(form)" novalidate>
+        <label class="form-label" path="day" ng-bind="'DAY' | translate"></label>
+        <select class="input-request course-select" path="day" ng-required="true" name="day" ng-model="timeslot.day">
+            <option selected="selected" disabled="true" value="" ng-bind="'DAY' | translate"></option>
+            <option ng-value="1" ng-bind="'MONDAY' | translate"></option>
+            <option ng-value="2" ng-bind="'TUESDAY' | translate"></option>
+            <option ng-value="3" ng-bind="'WEDNESDAY' | translate"></option>
+            <option ng-value="4" ng-bind="'THURSDAY' | translate"></option>
+            <option ng-value="5" ng-bind="'FRIDAY' | translate"></option>
+            <option ng-value="6" ng-bind="'SATURDAY' | translate"></option>
+            <option ng-value="7" ng-bind="'SUNDAY' | translate"></option>
+        </select>
+        <p class="error-text" ng-show="form.day.$dirty && form.day.$invalid" ng-bind="'TIMESLOT_DAY_ERROR' | translate"></p>
+        <div class="responsiveRow">
+            <h3 ng-bind="'SELECT_HOUR' | translate"></h3>
+            <div class="row">
+                <div class="m-10-b rm-10-b">
+                    <select class="select-subject no-border b-r-5 no-margin m-r-5 filter-input" ng-required="true" name="start" ng-model="timeslot.start" ng-change="startSelected()">
+                        <option selected="selected" disabled="true" value="" ng-bind="'FROM' | translate"></option>
+                        <option ng-repeat="hour in availableStartTimes" value="{{hour}}">{{hour}}:00</option>
+                    </select>
+                </div>
+                -
+                <div class="m-l-5">
+                    <select class="select-subject no-border b-r-5 no-margin filter-input" ng-required="true" name="end" ng-model="timeslot.end" ng-change="endSelected()">
+                        <option selected="selected" disabled="true" value="" ng-bind="'UNTIL' | translate"></option>
+                        <option ng-repeat="hour in availableEndTimes" value="{{hour}}">{{hour}}:00</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <p class="error-text" ng-show="firstSelect && form.start.$invalid" ng-bind="'START_ERROR' | translate"></p>
+        <p class="error-text" ng-show="firstSelect && form.end.$invalid" ng-bind="'END_ERROR' | translate"></p>
+        <div class="button-container">
+            <input class="button-2" type="submit" value="{{ isDelete ? 'DELETE_TIMESLOT' : 'ADD_TIMESLOT' | translate }}" ng-disabled="form.$invalid"/>
+        </div>
+    </form>
+</div>

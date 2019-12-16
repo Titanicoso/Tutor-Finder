@@ -1,13 +1,11 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.exceptions.EmailAlreadyInUseException;
-import ar.edu.itba.paw.exceptions.ProfessorWithoutUserException;
 import ar.edu.itba.paw.exceptions.UsernameAlreadyInUseException;
 import ar.edu.itba.paw.exceptions.UsernameAndEmailAlreadyInUseException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,9 +22,7 @@ import java.util.Optional;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)

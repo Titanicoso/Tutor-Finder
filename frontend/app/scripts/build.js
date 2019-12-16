@@ -1,7 +1,7 @@
 /* global paths */
 'use strict';
 require.config({
-    baseUrl: '/scripts',
+    baseUrl: 'scripts',
     paths: {
         affix: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/affix',
         alert: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/alert',
@@ -23,7 +23,12 @@ require.config({
         scrollspy: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/scrollspy',
         tab: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tab',
         tooltip: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip',
-        transition: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/transition'
+        transition: '../../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/transition',
+        'angular-material': '../../bower_components/angular-material/angular-material',
+        'angular-animate': '../../bower_components/angular-animate/angular-animate',
+        'angular-messages': '../../bower_components/angular-messages/angular-messages',
+        'angular-aria': '../../bower_components/angular-aria/angular-aria',
+        'angular-bootstrap': '../../bower_components/angular-bootstrap/ui-bootstrap-tpls'
     },
     shim: {
         angular: {
@@ -32,6 +37,31 @@ require.config({
             ]
         },
         'angular-route': {
+            deps: [
+                'angular'
+            ]
+        },
+        'angular-animate': {
+            deps: [
+                'angular'
+            ]
+        },
+        'angular-messages': {
+            deps: [
+                'angular'
+            ]
+        },
+        'angular-aria': {
+            deps: [
+                'angular'
+            ]
+        },
+        'angular-bootstrap': {
+            deps: [
+                'angular'
+            ]
+        },
+        'angular-material': {
             deps: [
                 'angular'
             ]

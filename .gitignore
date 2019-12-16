@@ -6,8 +6,18 @@ frontend/node/*
 frontend/bower_components/*
 
 frontend/\.idea/
+backend/\.idea/
 
 frontend/dist/
 frontend/\.tmp/
 
 frontend/package-lock\.json
+
+frontend/.vscode/*
+.vscode/*
+
+frontend/.sass-cache/
+frontend/app/styles/*.css
+frontend/app/styles/*.css.map
+frontend/app/styles/partials/*.css
+frontend/app/styles/partials/*.css.map

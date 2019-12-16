@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = TestConfig.class)
 public class ConversationServiceImplTest {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Long ID = 1L;
     private static final Long USER_ID = 7L;
     private static final Long PROFESSOR_ID = 5L;
@@ -104,7 +104,7 @@ public class ConversationServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Conversation> results = conversationService.findByUserId(ID, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test

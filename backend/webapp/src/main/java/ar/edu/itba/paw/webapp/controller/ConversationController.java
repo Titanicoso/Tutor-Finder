@@ -21,7 +21,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//TODO: Chequear badRequest en resultados paginados
 @Path("conversations")
 @Component
 public class ConversationController extends BaseController {
@@ -51,7 +50,7 @@ public class ConversationController extends BaseController {
 
         final GenericEntity<List<ConversationDTO>> entity = new GenericEntity<List<ConversationDTO>>(
                 conversations.getResults().stream()
-                        .map(conversation -> new ConversationDTO(conversation, uriInfo.getBaseUri()))
+                        .map(conversation -> new ConversationDTO(conversation, uriInfo))
                         .collect(Collectors.toList())
         ){};
 
@@ -75,7 +74,7 @@ public class ConversationController extends BaseController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        return Response.ok(new ConversationDTO(conversation, uriInfo.getBaseUri())).build();
+        return Response.ok(new ConversationDTO(conversation, uriInfo)).build();
     }
 
     @GET

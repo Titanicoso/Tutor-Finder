@@ -18,7 +18,7 @@ import java.util.Optional;
 @Transactional
 public class CourseServiceImpl implements CourseService {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseServiceImpl.class);
 
     @Autowired
@@ -57,15 +57,7 @@ public class CourseServiceImpl implements CourseService {
         final List<Course> courses = courseDao.findByProfessorId(professor_id, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = courseDao.totalByProfessorId(professor_id);
 
-        final PagedResults<Course> pagedResults =
-                pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
     }
 
     @Override
@@ -79,15 +71,7 @@ public class CourseServiceImpl implements CourseService {
         final List<Course> courses = courseDao.filterByAreaId(areaId, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = courseDao.totalByAreaId(areaId);
 
-        final PagedResults<Course> pagedResults =
-                pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
 
     }
 
@@ -99,39 +83,11 @@ public class CourseServiceImpl implements CourseService {
             LOGGER.error("Attempted to find 0 or negative page number");
             return null;
         }
-        LOGGER.debug("Creating filter builder");
-        FilterBuilder fb = new FilterBuilder();
 
-        if((days != null && !days.isEmpty()) || startHour != null || endHour != null) {
-            LOGGER.debug("Adding filter by timeslot");
-            if(days != null) {
-                for (Integer day : days) {
-                    fb = fb.filterByTimeslot(day, startHour, endHour);
-                }
-            } else {
-                fb = fb.filterByTimeslot(null, startHour, endHour);
-            }
-        }
-        if(minPrice != null || maxPrice != null) {
-            LOGGER.debug("Adding filter with price");
-            fb = fb.filterByPrice(minPrice, maxPrice);
-        }
-        if(searchText != null) {
-            LOGGER.debug("Adding filter by search text containing {}", searchText);
-            fb = fb.filterByName(searchText);
-        }
         final List<Course> courses = courseDao.filter(days, startHour, endHour, minPrice, maxPrice, searchText, PAGE_SIZE, PAGE_SIZE * (page -1));
         final long total = courseDao.totalByFilter(days, startHour, endHour, minPrice, maxPrice, searchText);
 
-        final PagedResults<Course> pagedResults =
-                pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(courses, total, page, PAGE_SIZE);
     }
 
     @Override
@@ -224,15 +180,7 @@ public class CourseServiceImpl implements CourseService {
         final List<Comment> comments = courseDao.getComments(course, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = courseDao.totalComments(course);
 
-        final PagedResults<Comment> pagedResults =
-                pagedResultBuilder.getPagedResults(comments, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(comments, total, page, PAGE_SIZE);
     }
 
     @Override

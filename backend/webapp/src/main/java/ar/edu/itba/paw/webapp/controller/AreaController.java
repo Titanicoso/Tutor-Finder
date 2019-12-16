@@ -20,7 +20,6 @@ import javax.ws.rs.core.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//TODO: Chequear minimo y maximo de paginacion error
 @Path("areas")
 @Component
 public class AreaController extends BaseController {
@@ -115,7 +114,7 @@ public class AreaController extends BaseController {
 
         final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
                 results.getResults().stream()
-                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .map(course -> new CourseDTO(course, uriInfo))
                         .collect(Collectors.toList())
         ){};
 

@@ -1,0 +1,198 @@
+@media only screen and (max-width: 1500px) {
+  .staticSearchResults .content {
+      grid-template-columns: 40fr 80fr 15fr;
+  }
+}
+@media only screen and (max-width: 1000px) {
+  .navbar {
+      grid-template-columns: 10fr 45fr 25fr;
+  }
+
+  .staticSearchResults .content {
+      grid-template-columns: auto;
+      grid-template-areas: "filter-panel" "search-results";
+      padding: 5px;
+  }
+
+  .staticSearchResults .content form{
+      display: flex;
+      justify-content: center;
+  }
+
+  .r-filter-title{
+      //width: 180px;
+      width: fit-content;
+  }
+
+  .filter-panel {
+      max-width: 550px;
+      margin: 0;
+      margin-top: 25px;
+      padding: 3% 5%;
+  }
+
+  .staticSearchResults .responsiveRow {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: center;
+  }
+
+  .staticSearchResults .responsiveRow h3 {
+      margin-right: 10px;
+  }
+
+  .staticSearchResults .responsiveColumn {
+      display: flex;
+      flex-direction: column;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .navbar {
+      grid-template-columns: 15fr 30fr 35fr;
+  }
+
+  .search-input {
+      width: 300px;
+      border: 1px solid grey;
+  }
+
+  .course {
+      padding: 10px;
+      grid-template-columns: 100fr;
+      grid-template-areas: "class" "contact" "schedule" "coments" "coment-form";
+  }
+
+  .contact {
+      max-width: 550px;
+      margin: 20px 0;
+  }
+
+  .schedule {
+      min-width: 550px;
+      margin: 20px 0;
+  }
+
+  .staticProfile .schedule {
+      min-width: 550px;
+  }
+
+/*
+    * {
+        font-size: 20px;
+    }
+*/
+  th, td {
+      padding: 2px;
+  }
+
+  .staticProfile {
+      grid-template-columns: 100fr;
+
+  }
+
+  .staticProfile .content {
+      padding: 10px;
+      grid-template-columns: 100fr;
+      grid-template-rows: auto auto auto;
+      grid-template-areas: "description" "class-content" "time-content";
+  }
+
+  .classes {
+      max-width: 550px;
+      min-width: 300px;
+  }
+
+  .profile-profesor {
+      max-width: 550px;
+  }
+
+  .responsiveRow {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: center;
+  }
+
+  .responsiveRow h3 {
+      margin-right: 10px;
+  }
+
+  .responsiveColumn {
+      display: flex;
+      flex-direction: column;
+  }
+  .text-center-responsive{
+      text-align: center;
+  }
+
+  .responsiveDelete {
+      display: none;
+  }
+
+  .rm-10-b {
+      margin: 0;
+  }
+
+  .input-request-filter {
+      width:100px;
+  }
+
+  .search-results {
+      //margin-right: 0;
+      max-width: 550px;
+  }
+
+  .conversation-messages {
+      max-height: 200px;
+  }
+
+  .conversations {
+      grid-template-columns: 100fr;
+      grid-template-areas: "navbar " "....." "content" "......";
+  }
+
+  .register-form {
+      grid-template-columns: auto 312px auto;
+  }
+
+  .class-content {
+      grid-template-rows: auto auto auto;
+  }
+
+  .dropdown-button{
+      padding: 0 20px;
+  }
+
+  .select-search-type {
+      max-width: 80px;
+  }
+
+  .chat-box {
+      height: 70px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .navbar-button {
+      overflow: hidden;
+  }
+
+  .navbar-buttons > .navbar-button {
+      font-size: small;
+      max-width: 65px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .search-input {
+      width: 150px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+    * {
+        /*font-size: 25px;*/
+    }
+
+}

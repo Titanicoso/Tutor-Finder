@@ -1,0 +1,25 @@
+<link rel="stylesheet" type="text/css" href="styles/partials/conversations.css">
+
+<div class="conversations">
+    <div class="content flex-content">
+        <div class="inbox-message">
+            <p class="inbox-title" ng-bind="'INBOX' | translate"></p>
+        </div>
+        <div ng-if="!loading && (!conversations || conversations.data.length < 1)" >
+            <h1 ng-bind="'NO_CONVERSATIONS' | translate"></h1>
+            <p class="help-message" ng-bind="'CONVERSATIONS_HELP' | translate"></p>
+        </div>
+        <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading">
+            <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
+        </div>
+        <div class="chat" ng-repeat="conversation in conversations.data">
+            <a class="conversation-link" ng-href="#!/conversation/{{conversation.id}}"></a>
+            <a class="conversation-subject-name" ng-bind="conversation.subject.name"></a>
+            <h2 class="conversation-participants" ng-bind="conversation.professor.name + ' - ' + conversation.user.name"></h2>
+            <h6 class="conversation-last-time" ng-bind="'SENT_TIME' | translate: { date: conversation.latest_message } "></h6>
+        </div>
+        <div class="paged-result-buttons">
+            <ul ng-if="conversations.links" uib-pagination total-items="conversations.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="current.page" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage(current.page)"></ul>
+        </div>
+    </div>
+</div>

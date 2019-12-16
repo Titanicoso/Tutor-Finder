@@ -3,15 +3,10 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.webapp.dto.ClassReservationDTO;
-import ar.edu.itba.paw.webapp.dto.CourseDTO;
-import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
-import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
-import ar.edu.itba.paw.webapp.dto.form.EditProfessorProfileForm;
-import ar.edu.itba.paw.webapp.dto.form.RegisterAsProfessorForm;
-import ar.edu.itba.paw.webapp.dto.form.RegisterForm;
-import ar.edu.itba.paw.webapp.dto.form.ResetPasswordRequestForm;
-import ar.edu.itba.paw.webapp.form.ResetPasswordForm;
+import ar.edu.itba.paw.webapp.auth.JwtTokenManager;
+import ar.edu.itba.paw.webapp.auth.SecurityConstants;
+import ar.edu.itba.paw.webapp.dto.*;
+import ar.edu.itba.paw.webapp.dto.form.*;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,7 +38,13 @@ public class UserController extends BaseController {
     private PasswordResetService passwordResetService;
 
     @Autowired
+    private ScheduleService scheduleService;
+
+    @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private JwtTokenManager tokenManager;
 
     @Context
     private UriInfo uriInfo;
@@ -57,7 +58,7 @@ public class UserController extends BaseController {
         final Professor professor = professorService.findById(loggedUser.getId());
 
         if(professor == null) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            return Response.ok(new UserDTO(loggedUser, uriInfo.getBaseUri(), false)).build();
         }
         return Response.ok(new ProfessorDTO(professor, uriInfo)).build();
     }
@@ -101,26 +102,97 @@ public class UserController extends BaseController {
 
         final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
                 results.getResults().stream()
-                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .map(course -> new CourseDTO(course, uriInfo))
                         .collect(Collectors.toList())
         ){};
 
         return Response.ok(entity).links(links).build();
     }
 
-
+    //TODO: Might need to be revised
     @GET
     @Path("/schedule")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response schedule(){
-        //TODO fill in when schedule model is revised.
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        final User loggedUser = loggedUser();
+        final Professor professor = professorService.findById(loggedUser.getId());
+
+        if(professor == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        final Schedule schedule = scheduleService.getScheduleForProfessor(loggedUser.getId());
+        return Response.ok(new ScheduleDTO(professor, schedule, uriInfo)).build();
+    }
+
+    @POST
+    @Path("/schedule")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response createTimeslot(@Valid final ScheduleForm form) {
+
+        final User currentUser = loggedUser();
+
+        if(!form.validForm()) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            addError(errors, "profile.add_schedule.timeError", "endHour");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
+        }
+
+        final List<Timeslot> timeslots;
+        try {
+            timeslots = scheduleService.reserveTimeSlot(currentUser.getId(), form.getDay(),
+                    form.getStartHour(), form.getEndHour());
+        } catch (NonexistentProfessorException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (TimeslotAllocatedException e) {
+            final ValidationErrorDTO error = getErrors("TimeslotAllocatedError");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
+        }
+
+        if(timeslots == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        final URI uri = uriInfo.getBaseUriBuilder().path("/user/schedule").build();
+        return Response.created(uri).build();
+    }
+
+    @DELETE
+    @Path("/schedule")
+    @Consumes(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response RemoveTimeslot(@Valid final ScheduleForm form) {
+
+        final User loggedUser = loggedUser();
+
+        if(!form.validForm()) {
+            final ValidationErrorDTO errors = new ValidationErrorDTO();
+            addError(errors, "profile.add_schedule.timeError", "endHour");
+            return Response.status(Response.Status.CONFLICT).entity(errors).build();
+        }
+
+        final boolean removed;
+
+        try {
+            removed = scheduleService.removeTimeSlot(loggedUser.getId(),
+                    form.getDay(), form.getStartHour(), form.getEndHour());
+        } catch (NonexistentProfessorException e) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(!removed) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        return Response.noContent().build();
     }
 
     @GET
     @Path("/reservations")
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response reservations(@DefaultValue("1") @QueryParam("page") final int page) {
+    public Response reservations(@DefaultValue("1") @QueryParam("page") final int page,
+                                 @DefaultValue("false") @QueryParam("fullDetail") final boolean fullDetail) {
         final User loggedUser = loggedUser();
 
         final PagedResults<ClassReservation> classReservations =  userService.pagedReservations(loggedUser.getId(), page);
@@ -132,11 +204,20 @@ public class UserController extends BaseController {
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, classReservations);
 
-        final GenericEntity<List<ClassReservationDTO>> entity = new GenericEntity<List<ClassReservationDTO>>(
-                classReservations.getResults().stream()
-                        .map(reservation -> new ClassReservationDTO(reservation, uriInfo))
-                        .collect(Collectors.toList())
-        ){};
+        final GenericEntity<?> entity;
+        if (fullDetail) {
+            entity = new GenericEntity<List<FullDetailClassReservationDTO>>(
+                    classReservations.getResults().stream()
+                            .map(reservation -> new FullDetailClassReservationDTO(reservation, uriInfo))
+                            .collect(Collectors.toList())
+            ) { };
+        } else {
+            entity = new GenericEntity<List<ClassReservationDTO>>(
+                    classReservations.getResults().stream()
+                            .map(reservation -> new ClassReservationDTO(reservation, uriInfo))
+                            .collect(Collectors.toList())
+            ) { };
+        }
 
         return Response.ok(entity).links(links).build();
     }
@@ -144,7 +225,8 @@ public class UserController extends BaseController {
     @GET
     @Path("/reservations/{id}")
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response reservation(@PathParam("id") final long id) {
+    public Response reservation(@PathParam("id") final long id,
+                                @DefaultValue("false") @QueryParam("fullDetail") final boolean fullDetail) {
         final User loggedUser = loggedUser();
 
         final ClassReservation classReservation = classReservationService.findById(id);
@@ -157,13 +239,18 @@ public class UserController extends BaseController {
             return Response.status(Response.Status.FORBIDDEN).entity(error).build();
         }
 
+        if (fullDetail) {
+            return Response.ok(new FullDetailClassReservationDTO(classReservation, uriInfo)).build();
+        }
+
         return Response.ok(new ClassReservationDTO(classReservation, uriInfo)).build();
     }
 
     @GET
     @Path("/requests")
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response requests(@DefaultValue("1") @QueryParam("page") final int page) {
+    public Response requests(@DefaultValue("1") @QueryParam("page") final int page,
+                             @DefaultValue("false") @QueryParam("fullDetail") final boolean fullDetail) {
         final User loggedUser = loggedUser();
 
         final PagedResults<ClassReservation> classRequests;
@@ -180,11 +267,20 @@ public class UserController extends BaseController {
 
         final Link[] links = linkBuilder.buildLinks(uriInfo, classRequests);
 
-        final GenericEntity<List<ClassReservationDTO>> entity = new GenericEntity<List<ClassReservationDTO>>(
-                classRequests.getResults().stream()
-                        .map(request -> new ClassReservationDTO(request, uriInfo))
-                        .collect(Collectors.toList())
-        ){};
+        final GenericEntity<?> entity;
+        if (fullDetail) {
+            entity = new GenericEntity<List<FullDetailClassReservationDTO>>(
+                    classRequests.getResults().stream()
+                            .map(request -> new FullDetailClassReservationDTO(request, uriInfo))
+                            .collect(Collectors.toList())
+            ) { };
+        } else {
+            entity = new GenericEntity<List<ClassReservationDTO>>(
+                    classRequests.getResults().stream()
+                            .map(request -> new ClassReservationDTO(request, uriInfo))
+                            .collect(Collectors.toList())
+            ) { };
+        }
 
         return Response.ok(entity).links(links).build();
     }
@@ -192,8 +288,9 @@ public class UserController extends BaseController {
     @GET
     @Path("/requests/{id}")
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response request(@PathParam("id") final long id) {
-        return reservation(id);
+    public Response request(@PathParam("id") final long id,
+                            @DefaultValue("false") @QueryParam("fullDetail") final boolean fullDetail) {
+        return reservation(id, fullDetail);
     }
 
     @PUT
@@ -257,9 +354,6 @@ public class UserController extends BaseController {
         return Response.ok().build();
     }
 
-    //TODO: Maybe url encoded
-    //TODO: Frontend has to check password repetition
-    //TODO: Automatic authentication?
     @POST
     @Path("/forgot_password/{token}")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
@@ -279,10 +373,32 @@ public class UserController extends BaseController {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
+        final String jwtToken = tokenManager.generateToken(changedUser.getUsername());
+
+        return Response
+                .ok()
+                .header(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + jwtToken)
+                .build();
+    }
+
+    @GET
+    @Path("/forgot_password/{token}")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response tokenValidity(@PathParam("token") final String token) {
+
+        if(token.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        final PasswordResetToken passwordResetToken = passwordResetService.findByToken(token);
+
+        if(passwordResetToken == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
         return Response.ok().build();
     }
     
-    //TODO: Maybe change to /users
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON, })
     @Produces(value = { MediaType.APPLICATION_JSON, })
@@ -310,11 +426,15 @@ public class UserController extends BaseController {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
+        final String token = tokenManager.generateToken(user.getUsername());
+
         final URI uri = uriInfo.getBaseUri().resolve("/user");
-        return Response.created(uri).build();
+        return Response
+                .created(uri)
+                .header(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token)
+                .build();
     }
 
-    //TODO: Check if modify can be the same form
     @POST
     @Consumes(value = { MediaType.MULTIPART_FORM_DATA, })
     @Produces(value = { MediaType.APPLICATION_JSON, })

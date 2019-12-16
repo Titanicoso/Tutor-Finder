@@ -1,7 +1,7 @@
 'use strict';
 define(function() {
 	// Add languages here
-	var userLang, listOfSupportedLanguages = ['en'];
+	var userLang, listOfSupportedLanguages = ['es', 'en'];
 
 	// to avoid being called in non browser environments
 	if (typeof navigator === 'object') {
@@ -9,9 +9,9 @@ define(function() {
 		userLang = userLang.split('-')[0];
 	}
 
-	// Set English as default language
+	// Set Spanish as default language
 	if (userLang === undefined || listOfSupportedLanguages.indexOf(userLang) < 0) {
-		userLang = 'en';
+		userLang = 'es';
 	}
 	return {
 		load: function (name, require, load) {

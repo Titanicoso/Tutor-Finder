@@ -18,7 +18,7 @@ import java.util.List;
 @Transactional
 public class AreaServiceImpl implements AreaService {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Logger LOGGER = LoggerFactory.getLogger(AreaServiceImpl.class);
 
     @Autowired
@@ -51,14 +51,7 @@ public class AreaServiceImpl implements AreaService {
         final List<Area> areas = areaDao.filterAreasByName(name, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = areaDao.totalAreasByName(name);
 
-        final PagedResults<Area> pagedResults = pagedResultBuilder.getPagedResults(areas, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(areas, total, page, PAGE_SIZE);
     }
 
 }

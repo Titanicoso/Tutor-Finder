@@ -30,7 +30,7 @@ public class CourseFileDTO {
 
         final Course course = file.getCourse();
 
-        this.courseUrl = baseUri.resolve("/courses/" + course.getProfessor().getId() + "_" +
+        this.courseUrl = baseUri.resolve("courses/" + course.getProfessor().getId() + "_" +
                 course.getSubject().getId());
         this.contentUri = baseUri.resolve(this.courseUrl + "/files/" + id);
     }

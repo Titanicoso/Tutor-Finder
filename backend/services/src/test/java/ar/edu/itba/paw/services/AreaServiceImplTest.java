@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 public class AreaServiceImplTest {
 
     private static final String NAME = "Mate";
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
 
 
     @InjectMocks
@@ -84,7 +84,7 @@ public class AreaServiceImplTest {
         final Integer INVALID_PAGE = 999;
 
         final PagedResults<Area> results = areaService.filterAreasByName(NAME, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test

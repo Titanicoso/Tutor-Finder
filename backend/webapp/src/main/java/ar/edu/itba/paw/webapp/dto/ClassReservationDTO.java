@@ -3,30 +3,32 @@ package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.ClassReservationStatus;
 import ar.edu.itba.paw.models.Course;
+import ar.edu.itba.paw.webapp.utils.LocalDateTimeXmlAdapter;
+import org.joda.time.LocalDateTime;
 
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.net.URI;
 
 @XmlRootElement
 public class ClassReservationDTO {
 
     private long id;
-//    private UserDTO student;
+    private UserDTO student;
 
     @XmlElement(name = "course_url")
     private URI courseUrl;
 
-    //TODO: Check data type
     @XmlElement(name = "start_time")
-    private String startTime;
+    @XmlJavaTypeAdapter(type = LocalDateTime.class, value = LocalDateTimeXmlAdapter.class)
+    private LocalDateTime startTime;
 
-    //TODO: Check data type
     @XmlElement(name = "end_time")
-    private String endTime;
+    @XmlJavaTypeAdapter(type = LocalDateTime.class, value = LocalDateTimeXmlAdapter.class)
+    private LocalDateTime endTime;
 
-    //TODO: Check representation
     private ClassReservationStatus status;
     private String comment;
 
@@ -38,8 +40,9 @@ public class ClassReservationDTO {
     public ClassReservationDTO(final ClassReservation cs, final UriInfo uriInfo) {
         this.id = cs.getClassRequestId();
         this.comment = cs.getComment();
-        this.endTime = cs.getEndTime().toString();
-        this.startTime = cs.getStartTime().toString();
+        this.endTime = cs.getEndTime();
+        this.startTime = cs.getStartTime();
+        this.student = new UserDTO(cs.getStudent(), uriInfo.getBaseUri(), false);
 
         switch(cs.getStatus()) {
             case 0: this.status = ClassReservationStatus.APPROVED; break;
@@ -48,7 +51,7 @@ public class ClassReservationDTO {
         }
 
         final Course course = cs.getCourse();
-        this.courseUrl = uriInfo.getBaseUri().resolve("/courses/" + course.getProfessor().getId() + "_" +
+        this.courseUrl = uriInfo.getBaseUri().resolve("courses/" + course.getProfessor().getId() + "_" +
                 course.getSubject().getId());
 
         this.url = uriInfo.getAbsolutePathBuilder().path(String.valueOf(id)).build();
@@ -62,11 +65,11 @@ public class ClassReservationDTO {
         return courseUrl;
     }
 
-    public String getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public String getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
@@ -90,11 +93,11 @@ public class ClassReservationDTO {
         this.courseUrl = courseUrl;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
@@ -108,5 +111,13 @@ public class ClassReservationDTO {
 
     public void setUrl(URI url) {
         this.url = url;
+    }
+
+    public UserDTO getStudent() {
+        return student;
+    }
+
+    public void setStudent(UserDTO student) {
+        this.student = student;
     }
 }

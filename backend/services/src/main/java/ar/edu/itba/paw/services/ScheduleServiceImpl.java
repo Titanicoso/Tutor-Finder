@@ -7,6 +7,7 @@ import ar.edu.itba.paw.interfaces.service.ProfessorService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Schedule;
+import ar.edu.itba.paw.models.TimeRange;
 import ar.edu.itba.paw.models.Timeslot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -83,41 +83,37 @@ public class ScheduleServiceImpl implements ScheduleService {
         LOGGER.debug("Getting schedule for professor with id {}", professorId);
         final Professor professor = ps.findById(professorId);
 
-        List<Integer> monday = new ArrayList<>();
-        List<Integer> tuesday = new ArrayList<>();
-        List<Integer> wednesday = new ArrayList<>();
-        List<Integer> thursday = new ArrayList<>();
-        List<Integer> friday = new ArrayList<>();
-        List<Integer> saturday = new ArrayList<>();
-        List<Integer> sunday = new ArrayList<>();
-
         List<Timeslot> timeslots = sd.getTimeslotsForProfessor(professor);
-        for (Timeslot t: timeslots) {
-            switch (t.getDay()){
-                case 1:
-                    monday.add(t.getHour());
-                    break;
-                case 2:
-                    tuesday.add(t.getHour());
-                    break;
-                case 3:
-                    wednesday.add(t.getHour());
-                    break;
-                case 4:
-                    thursday.add(t.getHour());
-                    break;
-                case 5:
-                    friday.add(t.getHour());
-                    break;
-                case 6:
-                    saturday.add(t.getHour());
-                    break;
-                case 7:
-                    sunday.add(t.getHour());
-                    break;
-            }
-        }
 
-        return new Schedule(monday,tuesday, wednesday, thursday, friday, saturday, sunday);
+        Map<Integer, List<TimeRange>> days = new HashMap<>();
+
+        timeslots.stream()
+                .sorted(Comparator.comparingInt(Timeslot::getDay).thenComparingInt(Timeslot::getHour))
+                .forEachOrdered(t -> {
+                    List<TimeRange> timeRanges = days.get(t.getDay());
+
+                    if (timeRanges == null) {
+                        timeRanges = new ArrayList<>();
+                    }
+
+                    final Optional<TimeRange> range = timeRanges.stream().filter(r ->
+                            r.getStartHour() == t.getHour() + 1 ||
+                            r.getEndHour().equals(t.getHour())).findFirst();
+
+                    if (range.isPresent()) {
+                        TimeRange timeRange = range.get();
+                        if (t.getHour().equals(timeRange.getEndHour())) {
+                            timeRange.setEndHour(t.getHour() + 1);
+                        } else {
+                            timeRange.setStartHour(t.getHour());
+                        }
+                    } else {
+                        TimeRange timeRange = new TimeRange(t.getHour(), t.getHour() + 1);
+                        timeRanges.add(timeRange);
+                    }
+                    days.put(t.getDay(), timeRanges);
+                });
+
+        return new Schedule(days);
     }
 }

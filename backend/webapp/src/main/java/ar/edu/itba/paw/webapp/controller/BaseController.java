@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.core.Response;
 import java.util.Locale;
-import java.util.Map;
 
 @Component
 public class BaseController {

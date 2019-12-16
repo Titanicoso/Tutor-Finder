@@ -11,7 +11,7 @@ public class FileTypeValidator implements ConstraintValidator<FileType, FormData
 
    public boolean isValid(FormDataBodyPart file, ConstraintValidatorContext context) {
       if(file != null)
-         return (file.getContentDisposition().getType().equals("image/jpeg") || file.getContentDisposition().getType().equals("image/png"));
+         return (file.getMediaType().toString().equals("image/jpeg") || file.getMediaType().toString().equals("image/png"));
       return true;
    }
 }

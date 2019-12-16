@@ -28,7 +28,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -84,7 +83,7 @@ public class EmailServiceImpl implements EmailService {
         LOGGER.debug("Creating Password Restore Email for user with id {} and token {}", user.getId(), token);
         final Context ctx = new Context();
         ctx.setVariable("mail", user.getEmail());
-        ctx.setVariable("url", getContextUri() + "/resetPassword?token=" + token);
+        ctx.setVariable("url", getContextUri() + "forgotPassword?token=" + token);
         final String subject = messageSource.getMessage("mail.restorepass.subject", null, LocaleContextHolder.getLocale());
 
         final String resource = htmlString(restorePassword);
@@ -151,7 +150,7 @@ public class EmailServiceImpl implements EmailService {
         ctx.setVariable("lastname", from.getLastname());
         ctx.setVariable("subject", conversation.getSubject().getName());
         ctx.setVariable("message", sentMessage.getText());
-        ctx.setVariable("url", getContextUri() + "Conversation?id=" + conversation.getId());
+        ctx.setVariable("url", getContextUri() + "conversation/" + conversation.getId());
         final String subject = messageSource.getMessage("mail.newmessage.subject", null, LocaleContextHolder.getLocale());
 
         final String resource = htmlString(contactMail);
@@ -203,6 +202,6 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private String getContextUri() {
-        return env.getProperty("base.url");
+        return env.getProperty("ui.url");
     }
 }

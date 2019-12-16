@@ -1,0 +1,82 @@
+
+<div class="staticClass">
+    <div class="content course" ng-if="course">
+        <div class="class-profile w-95">
+            <h1 class="title center-text" ng-bind="course.subject.name"></h1>
+            <h4 class="description center-text" ng-bind="course.description"></h4>
+            <div class="profile round-background">
+                <a class="profile-picture" ng-href="#!/professor/{{ course.professor.username }}">
+                    <img class="profile-picture" alt="Profile picture" ng-src="{{ course.professor.image_url }}"/>
+                </a>
+                <div class="profile-name" ng-bind="course.professor.name + ' ' + course.professor.lastname"></div>
+                <div class="profile-description" ng-bind="course.professor.description"></div>
+            </div>
+        </div>
+        <div class="contact" ng-if="currentUser == null || currentUser.id != professorId">
+            <div class="button-container">
+                <h2 class="form-label" ng-bind="'CONTACT' | translate"></h2>
+            </div>
+            <form class="form" ng-submit="contact(contactForm)" name="contactForm" novalidate>
+                <div>
+                    <label class="form-label" for="body" ng-bind="'BODY' | translate"></label>
+                    <textarea class="input-request chat-box" type="text" name="body" rows="5" cols="5" ng-required="true" ng-maxlength="1024" ng-model="contactInput.body"></textarea>
+                    <p class="error-text" ng-show="contactForm.$dirty && contactForm.$invalid">{{'MESSAGE_SIZE_ERROR' | translate: '{ min: 1, max: 1024 }'}}</p>
+                </div>
+                <div>
+                    <p class="success-text no-margin" ng-show="contactSuccess" ng-bind="'CONTACT_SUCCESS' | translate"></p>
+                </div>
+                <div class="button-container">
+                    <input class="button-2 no-margin" type="submit" ng-disabled="contactForm.$invalid" value="{{'SEND' | translate}}"/>
+                </div>
+            </form>
+        </div>
+
+        <div class="comment" ng-if="currentUser == null || currentUser.id != professorId">
+            <div class="button-container">
+                <h2 class="form-label" ng-bind="'COMMENT' | translate"></h2>
+            </div>
+            <form class="form" ng-submit="comment(commentForm)" name="commentForm" novalidate>
+                <div>
+                    <label class="form-label" for="body" ng-bind="'COMMENT_BODY' | translate"></label>
+                    <textarea class="input-request chat-box" type="text" name="body" rows="5" cols="5" ng-required="true" ng-maxlength="1024" ng-model="commentInput.body"></textarea>
+                    <p class="error-text" ng-show="commentForm.body.$dirty && commentForm.body.$invalid">{{'COMMENT_SIZE_ERROR' | translate: '{ min: 1, max: 1024 }'}}</p>
+                </div>
+                <div>
+                    <label class="form-label" for="rating" ng-bind="'RATING' | translate"></label>
+                    <input class="input-request" type="number" name="rating" step="1" ng-min="1" ng-max="5" min="1" max="5" ng-required="true" ng-model="commentInput.rating"/>
+                    <p class="error-text" ng-show="commentForm.rating.$dirty && commentForm.rating.$invalid">{{'RATING_ERROR' | translate: '{ min: 1, max: 5 }'}}</p>
+                    <p class="error-text" ng-show="commentError">{{commentError | translate}}</p>
+                </div>
+
+                <div class="button-container">
+                    <input class="button-2" type="submit" title="{{!canComment ? 'FORBIDDEN_COMMENT' : '' | translate}}" ng-disabled="commentForm.$invalid || !canComment" value="{{'SEND' | translate}}"/>
+                </div>
+            </form:form>
+        </div>
+
+        <div class="comments flex-content" ng-if="comments && comments.data.length > 0">
+            <div>
+                <h2 ng-bind="'COMMENT_TITLE' | translate"></h2>
+            </div>
+            <div class="message message-comment" ng-repeat="comment in comments.data">
+                <h5 class="message-text" ng-bind="comment.sender.username + ': ' + comment.comment"></h5>
+                <h6 class="conversation-last-time message-comment-time">{{ 'SENT_TIME' | translate: { date: comment.created } }}</h6>
+            </div>
+
+            <div class="paged-result-buttons">
+                <ul ng-if="comments.links" uib-pagination total-items="comments.links.last.number" next-text="&#8250;" previous-text="&#8249;" items-per-page="1" ng-model="current.page" max-size="5" class="pagination-md" boundary-link-numbers="true" ng-change="getPage(current.page)"></ul>
+            </div>
+        </div>
+
+        <div class="schedule w-95">
+            <h2 ng-bind="'SCHEDULE' | translate"></h2>
+            <input ng-if="currentUser == null || currentUser.id != professorId" class="button-2" type="button" value="{{'RESERVE_CLASS' | translate}}" ng-click="reserveClass()"/>
+            <p ng-bind="'SCHEDULE_DESCRIPTION' | translate"></p>
+            <h4 ng-if="!loading && (!schedule || schedule.days.length === 0)" ng-bind="'SCHEDULE_EMPTY' | translate"></h4>
+            <div layout="row" layout-sm="column" layout-align="space-around" ng-if="loading" class="schedule-loader">
+                <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <schedule ng-if="schedule && schedule.days.length > 0" schedule="schedule"></schedule>
+        </div>
+    </div>
+</div>

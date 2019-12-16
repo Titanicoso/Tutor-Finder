@@ -1,45 +1,117 @@
 'use strict';
-define(['routes',
+define([
+	'routes',
 	'services/dependencyResolverFor',
 	'i18n/i18nLoader!',
 	'angular',
 	'angular-route',
+	'angular-material',
+	'angular-animate',
+	'angular-aria',
+	'angular-messages',
 	'bootstrap',
-	'angular-translate'],
+	'angular-bootstrap',
+	'angular-translate'
+	],
 	function(config, dependencyResolverFor, i18n) {
 		var tutorFinder = angular.module('tutorFinder', [
 			'ngRoute',
-			'pascalprecht.translate'
+			'ngMaterial',
+			'ngMessages',
+			'pascalprecht.translate',
+			'ui.bootstrap'
 		]);
-		tutorFinder
-			.config(
-				['$routeProvider',
-				'$controllerProvider',
-				'$compileProvider',
-				'$filterProvider',
-				'$provide',
-				'$translateProvider',
-				function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider) {
+		tutorFinder.config([
+			'$routeProvider',
+			'$controllerProvider',
+			'$compileProvider',
+			'$filterProvider',
+			'$provide',
+			'$translateProvider',
+			'$locationProvider',
+			'$httpProvider',
+			'$mdDateLocaleProvider',
+			function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $locationProvider, $httpProvider, $mdDateLocaleProvider) {
 
-					tutorFinder.controller = $controllerProvider.register;
-					tutorFinder.directive = $compileProvider.directive;
-					tutorFinder.filter = $filterProvider.register;
-					tutorFinder.factory = $provide.factory;
-					tutorFinder.service = $provide.service;
+				tutorFinder.controller = $controllerProvider.register;
+				tutorFinder.directive = $compileProvider.directive;
+				tutorFinder.filter = $filterProvider.register;
+				tutorFinder.factory = $provide.factory;
+				tutorFinder.service = $provide.service;
 
-					if (config.routes !== undefined) {
-						angular.forEach(config.routes, function(route, path) {
-							$routeProvider.when(path, {templateUrl: route.templateUrl, resolve: dependencyResolverFor(['controllers/' + route.controller]), controller: route.controller, gaPageTitle: route.gaPageTitle});
+				if (config.routes !== undefined) {
+					angular.forEach(config.routes, function(route, path) {
+						var resolved = dependencyResolverFor(['controllers/' + route.controller]);
+						angular.forEach(route.resolve, function(resolver, property) {
+							resolved[property] = resolver;
 						});
-					}
-					if (config.defaultRoutePath !== undefined) {
-						$routeProvider.otherwise({redirectTo: config.defaultRoutePath});
-					}
 
-					$translateProvider.translations('preferredLanguage', i18n);
-					$translateProvider.preferredLanguage('preferredLanguage');
-				}])
-				.value('apiBaseUrl', 'http://localhost:8080/api');
+						$routeProvider.when(path, {
+							templateUrl: route.templateUrl, 
+							resolve: resolved, 
+							controller: route.controller, gaPageTitle: route.gaPageTitle,
+							roles: route.roles,
+							reloadOnSearch: route.reloadOnSearch !== undefined ? route.reloadOnSearch : true
+						});
+					});
+				}
+				if (config.defaultRoutePath !== undefined) {
+					$routeProvider.otherwise({redirectTo: config.defaultRoutePath});
+				}
+
+				$translateProvider.translations('preferredLanguage', i18n);
+				$translateProvider.preferredLanguage('preferredLanguage');
+
+				if (i18n) {
+					$mdDateLocaleProvider.months = i18n.MONTHS;
+					$mdDateLocaleProvider.shortMonths = i18n.SHORT_MONTHS;
+					$mdDateLocaleProvider.days = i18n.TRANSLATE_DAYS;
+					$mdDateLocaleProvider.shortDays = i18n.SHORT_DAYS;
+					$mdDateLocaleProvider.formatDate = i18n.DATE_FORMAT;
+					$mdDateLocaleProvider.parseDate = i18n.DATE_PARSE;
+				}
+			}])
+			.run(['$rootScope', '$location', 'authService', 'toastService', function($rootScope, $location, authService, toastService) {
+				$rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+					if (current && current.$$route) {
+						var path = current.$$route.originalPath;
+
+						if (path !== '/login' && path !== '/register') {
+							authService.setRedirectUrl(undefined, undefined);
+							authService.setRequestRedo(undefined);
+						}
+
+						if (path !== '/searchResults') {
+							$rootScope.resetFilters();
+						}
+					}
+				});
+
+				$rootScope.$on('$routeChangeError', function(event, current, previous, error) {
+					if (current && current.$$route) {
+						var path = current.$$route.originalPath;
+						var params = undefined;
+
+						if (Object.keys(current.pathParams).length > 0) {
+							for (var key in current.pathParams) {
+								path = path.replace(':' + key, current.pathParams[key]);
+							}
+						} else {
+							params = current.params;
+						}
+
+
+						if (error) {
+							authService.setRedirectUrl(path, params);
+							$location.url('/login');
+						} else {
+							toastService.showAction('FORBIDDEN_ERROR');
+							$location.url('/');
+						}
+					}
+				});
+			}])
+			.value('apiBaseUrl', 'http://localhost:8080/api');
 		return tutorFinder;
 	}
 );

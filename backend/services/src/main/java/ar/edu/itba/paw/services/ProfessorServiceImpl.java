@@ -4,12 +4,10 @@ import ar.edu.itba.paw.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.ProfessorDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.service.ProfessorService;
-import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.ClassReservation;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.exceptions.ProfessorWithoutUserException;
 import ar.edu.itba.paw.services.utils.PaginationResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +28,7 @@ import java.util.Optional;
 @Transactional
 public class ProfessorServiceImpl implements ProfessorService {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Logger LOGGER = LoggerFactory.getLogger(ProfessorServiceImpl.class);
 
     @Autowired
@@ -72,15 +70,7 @@ public class ProfessorServiceImpl implements ProfessorService {
         final List<Professor> professors = professorDao.filterByFullName(fullName, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = professorDao.totalProfessorsByFullName(fullName);
 
-        final PagedResults<Professor> pagedResults =
-                pagedResultBuilder.getPagedResults(professors, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(professors, total, page, PAGE_SIZE);
     }
 
     @Override
@@ -284,14 +274,6 @@ public class ProfessorServiceImpl implements ProfessorService {
         final List<ClassReservation> reservations = professorDao.getPagedClassRequests(professorId, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = professorDao.totalClassRequests(professorId);
 
-        final PagedResults<ClassReservation> pagedResults =
-                pagedResultBuilder.getPagedResults(reservations, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(reservations, total, page, PAGE_SIZE);
     }
 }

@@ -4,11 +4,7 @@ import ar.edu.itba.paw.exceptions.NonexistentConversationException;
 import ar.edu.itba.paw.exceptions.SameUserException;
 import ar.edu.itba.paw.exceptions.UserNotInConversationException;
 import ar.edu.itba.paw.interfaces.persistence.ConversationDao;
-import ar.edu.itba.paw.interfaces.service.ConversationService;
-import ar.edu.itba.paw.interfaces.service.ProfessorService;
-import ar.edu.itba.paw.interfaces.service.SubjectService;
-import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.interfaces.service.EmailService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.utils.PaginationResultBuilder;
 import org.slf4j.Logger;
@@ -24,7 +20,7 @@ import java.util.List;
 @Transactional
 public class ConversationServiceImpl implements ConversationService {
 
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Logger LOGGER = LoggerFactory.getLogger(ConversationServiceImpl.class);
 
     @Autowired
@@ -138,15 +134,7 @@ public class ConversationServiceImpl implements ConversationService {
         final List<Conversation> conversations = conversationDao.findByUserId(userId, PAGE_SIZE, PAGE_SIZE * (page - 1));
         final long total = conversationDao.totalConversationsByUserId(userId);
 
-        final PagedResults<Conversation> pagedResults =
-                pagedResultBuilder.getPagedResults(conversations, total, page, PAGE_SIZE);
-
-        if(pagedResults == null) {
-            LOGGER.error("Page number exceeds total page count");
-            return null;
-        }
-
-        return pagedResults;
+        return pagedResultBuilder.getPagedResults(conversations, total, page, PAGE_SIZE);
     }
 
     @Transactional

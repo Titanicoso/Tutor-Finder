@@ -16,12 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
-
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -142,8 +139,6 @@ public class ConversationHibernateDaoTest {
 
         assertNotNull(conversations);
         assertEquals(CONVERSATION_NUMBER, conversations.size());
-
-        assertEquals(CONVERSATION_ID, conversations.get(0).getId());
     }
 
     @Test

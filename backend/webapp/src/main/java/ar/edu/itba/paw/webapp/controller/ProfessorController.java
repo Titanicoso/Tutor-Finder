@@ -4,9 +4,10 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.Course;
 import ar.edu.itba.paw.models.PagedResults;
 import ar.edu.itba.paw.models.Professor;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.Schedule;
 import ar.edu.itba.paw.webapp.dto.CourseDTO;
 import ar.edu.itba.paw.webapp.dto.ProfessorDTO;
+import ar.edu.itba.paw.webapp.dto.ScheduleDTO;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.utils.PaginationLinkBuilder;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 public class ProfessorController extends BaseController{
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ar.edu.itba.paw.webapp.old_controller.UserController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfessorController.class);
 
     @Autowired
     @Qualifier("userServiceImpl")
@@ -88,9 +89,7 @@ public class ProfessorController extends BaseController{
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response professor(@PathParam("username") final String username){
         final Professor professor = ps.findByUsername(username);
-        //TODO: define behaviour for when professor is the person who is makeing the request.
-        final User loggedUser = loggedUser();
-        final boolean isProfessor = isProfessor();
+
         if(professor == null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -116,7 +115,7 @@ public class ProfessorController extends BaseController{
 
         final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
                 results.getResults().stream()
-                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .map(course -> new CourseDTO(course, uriInfo))
                         .collect(Collectors.toList())
         ){};
 
@@ -128,9 +127,15 @@ public class ProfessorController extends BaseController{
     @GET
     @Path("/{username}/schedule")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response professorSchedule(@PathParam("username") final String username){
-        //TODO fill in when schedule model is revised.
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    public Response professorSchedule(@PathParam("username") final String username) {
+        final Professor professor = ps.findByUsername(username);
+
+        if(professor == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        final Schedule schedule = ss.getScheduleForProfessor(professor.getId());
+        return Response.ok(new ScheduleDTO(professor, schedule, uriInfo)).build();
     }
 
     @GET

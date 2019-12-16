@@ -22,9 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static junit.framework.TestCase.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -33,7 +31,7 @@ import static org.mockito.Mockito.when;
 public class ProfessorServiceImplTest {
 
     private static final String NAME = "Marcos";
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 5;
     private static final Long INVALID_ID = 666L;
     private static final Long ID = 1L;
     private static final String DESCRIPTION = "Omne duo vim sum nudi uno quod. Latera nullam ad realem passim ii essent ut patere";
@@ -106,7 +104,7 @@ public class ProfessorServiceImplTest {
         final Integer INVALID_PAGE = 666;
 
         final PagedResults<Professor> results = professorService.filterByFullName(NAME, INVALID_PAGE);
-        assertNull(results);
+        assertEquals(0L, results.getResults().size());
     }
 
     @Test

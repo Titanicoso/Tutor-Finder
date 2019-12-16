@@ -94,7 +94,7 @@ INSERT into messages (message_id, conversation_id, sender_id, message, created) 
 INSERT into messages (message_id, conversation_id, sender_id, message, created) values (2,1,3,'Hola2', '2017-09-21 05:08:26.793');
 Insert into courses (user_id, subject_id, description, price) values (5, 1, 'Curso de algebra', 240);
 INSERT into schedules (user_id, day, hour) values (5, 2, 2);
-INSERT into reset_password_tokens (id, user_id, token, expires) values (1,5,'123e4567-e89b-12d3-a456-556642440000', '2019-09-21 05:08:26.793');
+INSERT into reset_password_tokens (id, user_id, token, expires) values (1,5,'123e4567-e89b-12d3-a456-556642440000', '2021-09-21 05:08:26.793');
 INSERT into reset_password_tokens (id, user_id, token, expires) values (2,2,'123e4567-e89b-10d1-a112-131415161718', '2017-09-21 05:08:26.793');
 INSERT into course_requests (id, comment, endtime, starttime, status, course_user_id, course_subject_id, student_user_id)
             values (1, '', '2018-09-21 05:00:00.000', '2018-09-21 06:00:00.000', 2, 5, 1, 2);

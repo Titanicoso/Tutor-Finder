@@ -5,7 +5,6 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.dto.CommentDTO;
 import ar.edu.itba.paw.webapp.dto.CourseDTO;
-import ar.edu.itba.paw.webapp.dto.ErrorDTO;
 import ar.edu.itba.paw.webapp.dto.ValidationErrorDTO;
 import ar.edu.itba.paw.webapp.dto.form.ClassReservationForm;
 import ar.edu.itba.paw.webapp.dto.form.CommentForm;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-//TODO: Chequear badRequest en resultados paginados
 @Path("courses")
 @Component
 public class CourseController extends BaseController{
@@ -62,13 +60,20 @@ public class CourseController extends BaseController{
                            @PathParam("subject") final long subjectId){
 
         final Course course = courseService.findCourseByIds(professorId, subjectId);
+        final User loggedUser = loggedUser();
+
         if(course == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
+        if (loggedUser != null) {
+            final boolean canComment = classReservationService.hasAcceptedReservation(loggedUser, course);
+            return Response.ok(new CourseDTO(course, uriInfo, canComment)).build();
+        }
+
         LOGGER.debug("Creating view for Course with professor id {} and subject id {}", professorId, subjectId);
 
-        return Response.ok(new CourseDTO(course, uriInfo.getBaseUri())).build();
+        return Response.ok(new CourseDTO(course, uriInfo)).build();
     }
 
     @GET
@@ -123,7 +128,7 @@ public class CourseController extends BaseController{
 
         final GenericEntity<List<CourseDTO>> entity = new GenericEntity<List<CourseDTO>>(
                 courses.getResults().stream()
-                        .map(course -> new CourseDTO(course, uriInfo.getBaseUri()))
+                        .map(course -> new CourseDTO(course, uriInfo))
                         .collect(Collectors.toList())
         ){};
 

@@ -1,7 +1,7 @@
 /* eslint-env node */
+'use strict';
 
 module.exports = function (grunt) {
-  'use strict';
   require('load-grunt-tasks')(grunt);
 
   require('time-grunt')(grunt);
@@ -14,15 +14,6 @@ module.exports = function (grunt) {
   grunt.initConfig({
     yeoman: appConfig,
     connect: {
-      proxies: [
-        {
-          context: '/api',
-          host: 'localhost',
-          port: 8080,
-          https: false,
-          changeOrigin: false
-        }
-      ],
       options: {
         port: 9000,
         hostname: 'localhost',
@@ -33,7 +24,6 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect) {
             return [
-              require('grunt-connect-proxy/lib/utils').proxyRequest,
             connect.static('.tmp'),
             connect().use('/bower_components', connect.static('./bower_components')),
             connect.static(appConfig.app)
@@ -109,6 +99,9 @@ module.exports = function (grunt) {
     },
 
     eslint: {
+      options: {
+        fix: true
+      },
       all: [
       '<%= yeoman.app %>/scripts/**/*.js',
       'test/spec/**/*.js',
@@ -211,7 +204,7 @@ module.exports = function (grunt) {
     usemin: {
       html: ['<%= yeoman.dist %>/**/*.html'],
       css: ['<%= yeoman.dist %>/styles/**/*.css'],
-      imagesAndViews: ['<%= yeoman.dist %>/scripts/**/*.js', '<%= yeoman.dist %>/views/**/*.html'],
+      imagesAndViews: ['<%= yeoman.dist %>/**/*.html', '<%= yeoman.dist %>/scripts/**/*.js', '<%= yeoman.dist %>/views/**/*.html'],
       options: {
         assetsDirs: ['<%= yeoman.dist %>', '<%= yeoman.dist %>/images'],
         patterns: {
@@ -332,6 +325,11 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '.',
           src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
+          dest: '<%= yeoman.dist %>'
+        }, {
+          expand: true,
+          cwd: '.',
+          src: 'bower_components/components-font-awesome/fonts/*',
           dest: '<%= yeoman.dist %>'
         }, {
           expand: true,
@@ -471,7 +469,6 @@ module.exports = function (grunt) {
       'concurrent:server',
       'autoprefixer',
       'bower',
-      'configureProxies',
       'connect:livereload',
       'watch'
     ]);

@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.interfaces.persistence;
 
-import ar.edu.itba.paw.exceptions.TimeslotAllocatedException;
 import ar.edu.itba.paw.models.Professor;
 import ar.edu.itba.paw.models.Timeslot;
 

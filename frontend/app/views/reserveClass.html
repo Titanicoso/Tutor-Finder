@@ -1,0 +1,40 @@
+<div class="modify-modal">
+    <span class="modal-close" ng-click="close()">&times;</span>
+    <h1 class="center-text" ng-bind="'RESERVE_CLASS' | translate"></h1>
+    <form class="form" name="form" ng-submit="submit(form)" novalidate>
+        <md-input-container>
+            <label>{{'SELECT_DAY' | translate}}</label>
+            <md-datepicker ng-model="reservation.date" name="date" md-min-date="minDate" md-date-filter="availableDays" ng-change="daySelected(); change()"></md-datepicker>
+            <div ng-messages="form.date.$error">
+                <div ng-message="valid">{{'VALID_DATE' | translate}}</div>
+                <div ng-message="mindate">{{'FUTURE_DATE' | translate}}</div>
+                <div ng-message="datefilter">{{'NOT_AVAILABLE_DAY' | translate}}</div>
+            </div>
+        </md-input-container>
+        <div class="responsiveRow">
+            <h3 ng-bind="'SELECT_HOUR' | translate"></h3>
+            <div class="row">
+                <div class="m-10-b rm-10-b">
+                    <select class="select-subject no-border b-r-5 no-margin m-r-5 filter-input" ng-required="true" name="start" ng-model="reservation.start" ng-change="startSelected(); change()">
+                        <option selected="selected" disabled="true" value="" ng-bind="'FROM' | translate"></option>
+                        <option ng-repeat="hour in availableStartTimes" value="{{hour}}">{{hour}}:00</option>
+                    </select>
+                </div>
+                -
+                <div class="m-l-5">
+                    <select class="select-subject no-border b-r-5 no-margin filter-input" ng-required="true" name="end" ng-model="reservation.end" ng-change="change()">
+                        <option selected="selected" disabled="true" value="" ng-bind="'UNTIL' | translate"></option>
+                        <option ng-repeat="hour in availableEndTimes" value="{{hour}}">{{hour}}:00</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <p class="error-text" ng-if="firstSelect && form.start.$invalid" ng-bind="'START_ERROR' | translate"></p>
+        <p class="error-text" ng-if="firstSelect && form.end.$invalid" ng-bind="'END_ERROR' | translate"></p>
+        <p class="error-text" ng-if="!validRange" ng-bind="'NOT_AVAILABLE_TIME' | translate"></p>
+        <p class="error-text" ng-if="reservationError" ng-bind="reservationError | translate"></p>
+        <div class="button-container">
+            <input class="button-2" type="submit" value="{{ 'RESERVE' | translate }}" ng-disabled="form.$invalid || !validRange"/>
+        </div>
+    </form>
+</div>

@@ -1,30 +1,27 @@
 package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.CorsFilter;
-import ar.edu.itba.paw.webapp.auth.JwtAuthenticationFilter;
 import ar.edu.itba.paw.webapp.auth.JwtAuthorizationFilter;
+import ar.edu.itba.paw.webapp.auth.StatelessSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,21 +30,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("classpath:rememberme.key")
-    private Resource rememberMeKey;
+    @Value("classpath:jwtsign.key")
+    private Resource jwtSignKey;
 
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
     private AuthenticationEntryPoint entryPoint;
+
+    @Autowired
+    private StatelessSuccessHandler statelessSuccessHandler;
+
+    @Autowired
+    private JwtAuthorizationFilter authorizationFilter;
+
+    private byte[] jwtSignKeyBytes;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -61,8 +65,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsFilter corsFilter() {
-        CorsFilter filter = new CorsFilter();
-        return filter;
+        return new CorsFilter();
     }
 
     @Bean
@@ -76,36 +79,33 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 
-    // TODO verify if the antmatchers should not be removed
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager()))
+                    .addFilterAfter(authorizationFilter, CorsFilter.class)
                 .exceptionHandling()
                     .authenticationEntryPoint(entryPoint)
                     .accessDeniedPage("/403")
                 .and().authorizeRequests()
-                    .antMatchers("/login/**", "/register/**", "/forgotPassword/**", "/resetPassword/**").anonymous()
-                    .antMatchers("/logout/**", "/sendMessage/**", "/Conversations/**", "/api/register/**",
-                            "/Conversation/**", "/reserveClass/**", "/reservations/**", "/postComment/**", "/courseFiles/**",
-                            "/downloadFile/**").authenticated()
-                    .antMatchers("/registerAsProfessor/**").hasRole("USER")
-                    .antMatchers("/createCourse/**", "/Profile/**", "/CreateTimeSlot/**",
-                            "/editProfessorProfile/**", "/RemoveTimeSlot/**", "/deleteCourse/**", "/classRequests/**",
-                            "/denyClassRequest/**", "/approveClassRequest/**", "/uploadFiles/**", "/deleteFile/**").hasRole("PROFESSOR")
+                    .antMatchers(HttpMethod.GET, "/api/user/password_reset/**").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/authenticate/**", "/api/user", "/api/user/password_reset/**").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/conversations/**", "/api/courses/*/contact", "/api/courses/*/comments", "/api/courses/*/reservations").authenticated()
+                    .antMatchers(HttpMethod.GET, "/api/conversations/**", "/api/courses/*/files/**", "/api/user", "/api/user/reservations/**").authenticated()
+                    .antMatchers(HttpMethod.POST,"api/user/upgrade").hasRole("USER")
+                    .antMatchers(HttpMethod.GET, "/api/user/requests/**", "/api/user/courses", "/api/user/schedule", "/api/subjects/available").hasRole("PROFESSOR")
+                    .antMatchers(HttpMethod.DELETE, "/api/user/requests/**", "/api/courses/*/files/**", "/api/courses/*", "/api/user/schedule").hasRole("PROFESSOR")
+                    .antMatchers(HttpMethod.PUT, "/api/user/requests/**", "/api/courses/*", "/api/courses/*/files/**", "/api/user/").hasRole("PROFESSOR")
+                    .antMatchers(HttpMethod.POST, "/api/courses", "/api/user/schedule").hasRole("PROFESSOR")
                     .anyRequest().permitAll()
+                .and().formLogin()
+                    .usernameParameter("username").passwordParameter("password")
+                    .loginProcessingUrl("/api/authenticate")
+                    .successHandler(statelessSuccessHandler)
+                    .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 .and().csrf().disable();
-    }
-
-    @Override
-    public void configure(final WebSecurity web) throws Exception {
-        web.ignoring()
-                .antMatchers("/resources/css/**", "/resources/js/**", "/resources/images/**",
-                        "/favicon.ico", "/403");
     }
 
     @Autowired
@@ -119,10 +119,16 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    private String getRememberMeKey() {
+    @Bean(name="jwtSignKey")
+    public byte[] getJwtSignKey() {
+
+        if (jwtSignKeyBytes != null && jwtSignKeyBytes.length > 0) {
+            return jwtSignKeyBytes;
+        }
+
         final StringWriter stringWriter = new StringWriter();
         try {
-            Reader reader = new InputStreamReader(rememberMeKey.getInputStream());
+            Reader reader = new InputStreamReader(jwtSignKey.getInputStream());
             char[] data = new char[1024];
             int read;
             while ((read = reader.read(data)) != -1) {
@@ -131,7 +137,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return stringWriter.toString();
+
+        jwtSignKeyBytes = stringWriter.toString().getBytes();
+        return jwtSignKeyBytes;
     }
 
 }
