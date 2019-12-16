@@ -35,8 +35,9 @@ define(['tutorFinder', 'services/authService', 'services/toastService'], functio
 							self.redirect(redirect);
 						})
 						.catch(function(err) {
-							if (requestRedo.errorMessage) {
-								toastService.showAction(requestRedo.errorMessage);
+							if (requestRedo.errorFun) {
+								var message = requestRedo.errorFun(err);
+								toastService.showAction(message);
 							} else {
 								toastService.showAction(requestRedo.message);
 							}

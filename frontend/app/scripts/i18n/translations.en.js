@@ -182,6 +182,8 @@ define([], function() {
     TIMESLOT_DAY_ERROR: 'You must select a day',
     ADD_TIMESLOT_ERROR: 'The timeslot has already been selected',
     NOT_AVAILABLE_TIME: 'The professor is not available at that time',
+    SAME_USER_CONTACT: 'You are not allowed to send messages to yourself',
+    SAME_USER_COMENT: 'You are not allowed to comment in your own course',
 
     MONTHS: ['January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'],

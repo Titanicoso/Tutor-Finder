@@ -182,6 +182,8 @@ define(['moment'], function(moment) {
 		TIMESLOT_DAY_ERROR: 'Debe seleccionar un día',
 		ADD_TIMESLOT_ERROR: 'El horario ya fue seleccionado previamente',
 		NOT_AVAILABLE_TIME: 'El profesor no esta disponible en el rango horario que eligio',
+		SAME_USER_CONTACT: 'No puede enviarse un mensaje a si mismo',
+		SAME_USER_COMENT: 'No puede comentar en su propio curso',
 
 		MONTHS: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
 		'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],

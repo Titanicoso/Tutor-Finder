@@ -99,6 +99,13 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 							authService.setRequestRedo({
 								fun: courseService.contact,
 								params: [$scope.professorId, subjectId, $scope.contactInput.body],
+								errorFun: function(err) {
+									switch (err.status) {
+										case -1: return 'NO_CONNECTION';
+										case 400: return 'SAME_USER_CONTACT';
+										default: return 'ERROR_SENDING_MESSGE';
+									}
+								},
 								message: 'ERROR_SENDING_MESSGE',
 								successMessage: 'CONTACT_SUCCESS'});
 							$location.url('/login');
@@ -157,7 +164,14 @@ define(['tutorFinder', 'services/courseService', 'services/authService', 'contro
 								fun: courseService.comment,
 								params: [$scope.professorId, subjectId, $scope.commentInput.body, $scope.commentInput.rating],
 								message: 'ERROR_DENYING',
-								errorMessage: 'FORBIDDEN_COMMENT'
+								errorFun: function(err) {
+									switch (err.status) {
+										case -1: return 'NO_CONNECTION';
+										case 400: return 'SAME_USER_COMENT';
+										case 403: return 'FORBIDDEN_COMMENT';
+										default: return 'ERROR_DENYING';
+									}
+								}
 							});
 							$location.url('/login');
 							break;

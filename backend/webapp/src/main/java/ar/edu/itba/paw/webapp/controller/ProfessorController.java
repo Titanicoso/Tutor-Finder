@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class ProfessorController extends BaseController{
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ar.edu.itba.paw.webapp.old_controller.UserController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfessorController.class);
 
     @Autowired
     @Qualifier("userServiceImpl")
