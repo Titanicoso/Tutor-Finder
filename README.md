@@ -1,4 +1,5 @@
 # Tutor Finder
+This is a web app created to match students with professors and have them arrange classes.
 
 ## Getting Started
 
@@ -8,7 +9,7 @@ Create the database
 ```
 createdb paw -O root
 ```
- in this case under the user root, you can use whichever user you want as long as it can create databases
+The user specified for the database creation must be root with password root.
 
 ## Running the tests
 
@@ -17,6 +18,15 @@ To run the full test battery with maven installed simply run
 ```
 mvn test
 ```
+
+## Building
+To build the project just run:
+
+```
+mvn clean install
+```
+
+The result will be a war you can deploy.
 
 ## Built With
 
@@ -28,4 +38,4 @@ mvn test
 * **Francisco Delgado**  - [fdelgado96](https://github.com/fdelgado96)
 * **Sebastian Favaron**
 * **Rodrigo Manuel Navarro Lajous**
-* **Agustín Calatayud**
+* **Agustín Calatayud** - [titanicoso](https://github.com/Titanicoso)
